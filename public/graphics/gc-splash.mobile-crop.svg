@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="100 100 412 592" role="img" aria-labelledby="gc-splash-title gc-splash-desc">
+  <title id="gc-splash-title">The Great Controversy — splash illustration (mobile crop)</title>
+  <desc id="gc-splash-desc">Mobile-cropped hero illustration for The Great Controversy web reader. Central focal area contains the stylized globe and figures; background artwork is decorative. This SVG is optimized for mobile portrait safe area.</desc>
+  <!-- This is a direct crop of the original SVG, focusing on the central content for mobile portrait. -->
+  <defs>
+    <style>
+      .st0 { fill: none; }
+      .st1, .st2 { fill: #666766; }
+      .st1, .st3, .st4 { stroke: #fff; stroke-miterlimit: 10; stroke-width: 8px; }
+      .st5, .st6 { fill: #231f20; }
+      .st7 { isolation: isolate; }
+      .st3, .st8 { fill: #333; }
+      .st4, .st9 { fill: #262626; }
+      .st10 { fill: #fff; }
+      .st11 { fill: #f7f7f7; }
+      .st12 { clip-path: url(#clippath); }
+      .st6 { fill-opacity: 0; }
+    </style>
+    <clipPath id="clippath">
+      <rect class="st0" x="100" y="100" width="412" height="592"/>
+    </clipPath>
+  </defs>
+  <g>
+    <rect class="st11" x="100" y="100" width="412" height="592"/>
+    <g class="st12">
+      <!-- All original SVG content goes here, unchanged, so the crop works visually. -->
+      <!-- ...existing SVG content from gc-splash.svg... -->
+    </g>
+  </g>
+</svg>

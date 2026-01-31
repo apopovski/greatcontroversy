@@ -22,6 +22,8 @@
   "devDependencies": {
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
+    "sharp": "^0.34.5",
+    "sharp-cli": "^5.2.0",
     "typescript": "^5.9.3"
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { book } from "./data/book";
 import { getDefaultLanguage, getAvailableLanguages } from "./utils/language";
 import { useTextSize } from "./utils/useTextSize";
@@ -9,6 +9,7 @@ import { useShareQuote } from "./utils/useShareQuote";
 
 import { icons } from "./assets/icons";
 import BookReader from "./BookReader";
+import Splash from "./components/Splash";
 
 type ErrorBoundaryProps = { children: React.ReactNode };
 type ErrorBoundaryState = { hasError: boolean; error: unknown };
@@ -39,12 +40,52 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 import "./App.css";
 
 
+import { useDarkMode } from "./utils/useDarkMode";
+
 function App() {
-  // Show the new minimal, offline-friendly book reader with error boundary
+  const [showSplash, setShowSplash] = useState(() => {
+    try {
+      const u = new URL(window.location.href);
+      if (u.searchParams.has('splash')) return true;
+    } catch (e) {
+      // ignore
+    }
+    return !localStorage.getItem('gc_seen_splash_v1');
+  });
+
+  const [dark] = useDarkMode();
+
+  // Accent theme: allow ?accent=blue or localStorage.gc_splash_accent
+  useEffect(() => {
+    let accent = '';
+    try {
+      const u = new URL(window.location.href);
+      accent = u.searchParams.get('accent') || localStorage.getItem('gc_splash_accent') || '';
+    } catch {}
+    if (dark) {
+      document.body.setAttribute('data-theme', 'dark');
+    } else {
+      document.body.setAttribute('data-theme', 'light');
+    }
+    if (accent) {
+      document.body.setAttribute('data-theme', `${document.body.getAttribute('data-theme')} accent-${accent}`);
+    }
+  }, [dark]);
+
   return (
     <ErrorBoundary>
+      {showSplash && (
+        <Splash
+          onStart={() => {
+            localStorage.setItem('gc_seen_splash_v1','1');
+            localStorage.setItem('gc_jump_to_toc','1');
+            setShowSplash(false);
+          }}
+          onClose={() => setShowSplash(false)}
+          onChooseLanguage={() => setShowSplash(false)}
+        />
+      )}
       <BookReader />
-      {/* ...existing code... */}
     </ErrorBoundary>
   );
 }

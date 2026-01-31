@@ -17,8 +17,19 @@ jobs:
         with:
           node-version: 18
 
+      - name: Debug environment
+        run: |
+          echo "== environment =="
+          uname -a || true
+          node -v
+          npm -v
+          pwd
+          ls -la
+
       - name: Install dependencies
-        run: npm install
+        run: npm ci --prefer-offline --no-audit --progress=false
+        env:
+          CI: true
 
       - name: Build
         run: npm run build

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="gc-splash-mobile" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 612 792" role="img" aria-labelledby="gc-splash-mobile-title gc-splash-mobile-desc">
+  <title id="gc-splash-mobile-title">The Great Controversy — splash illustration (mobile)</title>
+  <desc id="gc-splash-mobile-desc">Mobile-optimized version of the splash; original portrait artwork sized for phone layouts.</desc>
+  <rect width="612" height="792" fill="#ffffff" />
+  <!-- This file intentionally references the canonical SVG so you can keep a single source of truth. -->
+  <image xlink:href="gc-splash.svg" href="gc-splash.svg" x="0" y="0" width="612" height="792" preserveAspectRatio="xMidYMid meet" />
+</svg>

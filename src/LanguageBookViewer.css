@@ -93,6 +93,26 @@
     font-size: 0.98rem;
     padding: 0.5em 0.2em;
   }
+
+  /* Ensure text inside the reader can be selected and copied; some ebook
+     HTML may include user-select:none or overlays that prevent selection. */
+  .modern-reader-html,
+  .modern-reader-html * {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+  }
+
+/* When the full BookReader app is active we may need to hide the
+   legacy language viewer (some dev pages accidentally mount both).
+   This class is applied by `BookReader` at runtime and ensures the
+   alternate viewer is non-interactive and removed from accessibility
+   trees so it cannot intercept pointer events or selection. */
+.gc-hidden-by-bookreader {
+  display: none !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
 }
 
 body.dark .modern-reader-container,

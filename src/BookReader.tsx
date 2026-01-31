@@ -1,7 +1,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import './BookReader.css';
-import { MdMenu, MdLanguage, MdSearch, MdDarkMode, MdLightMode } from 'react-icons/md';
+import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode } from 'react-icons/md';
 
 type TocEntry = { title: string; href: string };
 
@@ -128,9 +128,9 @@ function getHighlightedHtml(html: string, q: string | null) {
 function applyDropcap(html: string, langKey: string, chapterIndex: number, toc: TocEntry[]) {
   try {
     const name = LANGUAGE_NAMES[langKey] || '';
+    // Do not apply dropcap for Arabic languages (RTL layouts often need custom handling)
     if (name.toLowerCase() === 'arabic') return html;
-    // Apply dropcap to the opening paragraph of the chapter being rendered.
-    // (skip for Arabic languages)
+    if (typeof chapterIndex !== 'number' || chapterIndex < 0) return html;
     const doc = new DOMParser().parseFromString(html || '', 'text/html');
     // Strip any styles or stylesheet links from the parsed chapter to avoid
     // overriding the main app styles when we insert the processed HTML.
@@ -154,11 +154,15 @@ function applyDropcap(html: string, langKey: string, chapterIndex: number, toc: 
     // Prefer the first paragraph (or blockquote) after the chapter heading
     let p: Element | null = null;
     const heading = doc.body.querySelector('h1,h2,h3,h4,h5,h6');
-    // If the chapter heading indicates meta sections like "Information about this Book"
-    // or "Introduction", do not apply the visual dropcap.
+    // If the chapter heading indicates meta sections like "Information about this Book",
+    // "Introduction" or "Preface/Foreword", do not apply the visual dropcap.
     if (heading) {
       const ht = (heading.textContent || '').trim();
-      if (/information\s+about.*book/i.test(ht) || /^\s*introduction\b/i.test(ht)) return html;
+      if (/information\s+about.*book/i.test(ht) || /^\s*introduction\b/i.test(ht) || /\b(preface|foreword)\b/i.test(ht)) return html;
+    }
+    // Also check the TOC entry (if provided) for Preface/Introduction and skip
+    if (Array.isArray(toc) && toc[chapterIndex] && /^(?:\s*(?:preface|introduction|foreword)\b)/i.test((toc[chapterIndex].title || '').trim())) {
+      return html;
     }
     if (heading) {
       // walk siblings until we find a paragraph or blockquote with text
@@ -180,6 +184,7 @@ function applyDropcap(html: string, langKey: string, chapterIndex: number, toc: 
       const txt = tn.nodeValue || '';
       const trimmed = txt.replace(/^\s+/, '');
       if (trimmed.length) {
+        // Preserve an initial opening quote as part of the dropcap if present
         const quoteChars = ['"', '“', '”', '«', '»', '\u2018', '\u2019', '\u201E'];
         let take = 1;
         if (quoteChars.includes(trimmed[0]) && trimmed.length >= 2) take = 2;
@@ -188,6 +193,7 @@ function applyDropcap(html: string, langKey: string, chapterIndex: number, toc: 
         const rest = txt.substr(leading.length + take);
         const frag = doc.createDocumentFragment();
         const span = doc.createElement('span');
+        // Insert a stylized dropcap span (CSS will render it to span up to ~3 lines)
         span.className = 'dropcap';
         span.textContent = drop;
         frag.appendChild(doc.createTextNode(leading));
@@ -219,11 +225,21 @@ export default function BookReader() {
   const [showChaptersMenu, setShowChaptersMenu] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [showOpeningToc, setShowOpeningToc] = useState(() => {
+    try {
+      return localStorage.getItem('reader-opening-toc') !== '0';
+    } catch {
+      return true;
+    }
+  });
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<{ idx: number; occ: number }[]>([]);
   const [searchIdx, setSearchIdx] = useState(0);
   const [highlighted, setHighlighted] = useState<string | null>(null);
-  const [pendingScroll, setPendingScroll] = useState<number | null>(null);
+  const [pendingScroll, setPendingScroll] = useState<{ idx: number; occ: number } | null>(null);
+
+  // theme state: keep in React state so UI updates immediately when toggled
+  const [isDark, setIsDark] = useState(() => localStorage.getItem('reader-dark') === '1');
 
   const contentRef = useRef<HTMLDivElement | null>(null);
   const langBtnRef = useRef<HTMLButtonElement | null>(null);
@@ -242,21 +258,54 @@ export default function BookReader() {
     return () => mq.removeEventListener?.('change', fn);
   }, []);
 
+  // Persist theme preference and apply to document element
   useEffect(() => {
+    try {
+      localStorage.setItem('reader-dark', isDark ? '1' : '0');
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    } catch {
+      // ignore storage errors in strict environments
+    }
+  }, [isDark]);
+
+  useEffect(() => {
+    // When language changes, clear previous content immediately and try to
+    // load the selected language folder's index.html. We try a couple of
+    // URL formats (encoded and raw) because some language folder names
+    // contain characters that can be tricky when served from the dev server.
     setLoading(true);
-    const url = `./book-content/html/${encodeURIComponent(lang)}/index.html`;
-    fetch(url)
-      .then((r) => r.text())
+    setToc([]);
+    setChapters([]);
+    setChapterIdx(0);
+
+    const tryFetch = async (paths: string[]) => {
+      for (const p of paths) {
+        try {
+          const r = await fetch(p);
+          if (!r.ok) continue;
+          const html = await r.text();
+          return html;
+        } catch (e) {
+          // continue to next candidate
+        }
+      }
+      throw new Error('Not found');
+    };
+
+    const encoded = `./book-content/html/${encodeURIComponent(lang)}/index.html`;
+    const raw = `./book-content/html/${lang}/index.html`;
+    tryFetch([encoded, raw])
       .then((html) => {
         const doc = new DOMParser().parseFromString(html, 'text/html');
         // Try several strategies to locate a table-of-contents
         let tocRoot: Element | null = doc.querySelector('nav[type="toc"]') || doc.querySelector('nav.toc') || doc.querySelector('.toc') || doc.querySelector('#toc') || doc.querySelector('ol');
         const entries: TocEntry[] = [];
+        const isInfoPage = (t: string) => /^\s*information\s+about.*book/i.test(t.trim());
         if (tocRoot) {
           tocRoot.querySelectorAll('a').forEach((a) => {
             const href = a.getAttribute('href') || '';
             const title = (a.textContent || '').trim();
-            if (href && title) entries.push({ title, href });
+            if (href && title && !isInfoPage(title)) entries.push({ title, href });
           });
         }
         // Fallback: collect anchors that reference in-page ids and point to existing elements
@@ -271,6 +320,7 @@ export default function BookReader() {
             if (!doc.getElementById(id)) return;
             const title = (a.textContent || '').trim();
             if (!title) return;
+            if (isInfoPage(title)) return;
             if (seen.has(href)) return;
             seen.add(href);
             entries.push({ title, href });
@@ -303,8 +353,22 @@ export default function BookReader() {
         });
         setChapters(chapterHtmls);
         setLoading(false);
+        // Show the opening TOC when chapters are available (first load)
+        try {
+          const show = localStorage.getItem('reader-opening-toc');
+          if (show === null) setShowOpeningToc(true);
+        } catch {
+          // ignore
+        }
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+        // failed to load selected language — leave chapters empty so the UI
+        // clearly indicates content isn't available rather than silently
+        // showing the previous language's content.
+        setToc([]);
+        setChapters([]);
+        setLoading(false);
+      });
   }, [lang]);
 
   function runSearch() {
@@ -354,6 +418,44 @@ export default function BookReader() {
       setTimeout(() => {
         if (m) m.style.outline = '';
       }, 1200);
+      return;
+    }
+
+    // Fallback: if marks are not present (sanitization or markup changed),
+    // locate the nth occurrence of the highlighted query in the text nodes
+    // and scroll the containing node into view.
+    const q = (highlighted || '').trim();
+    if (!q) return;
+    try {
+      const re = new RegExp(escapeRegExp(q), 'gi');
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null as any);
+      let node: Node | null = walker.nextNode();
+      let count = 0;
+      while (node) {
+        const txt = (node.nodeValue || '');
+        let m2: RegExpExecArray | null;
+        while ((m2 = re.exec(txt)) !== null) {
+          if (count === occurrence) {
+            // create a range around this match
+            const range = document.createRange();
+            range.setStart(node, m2.index);
+            range.setEnd(node, m2.index + m2[0].length);
+            const parent = range.startContainer.parentElement || (range.startContainer as any).parentNode as HTMLElement | null;
+            if (parent) {
+              try { parent.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch { parent.scrollIntoView(); }
+              parent.style.outline = '3px solid rgba(50,100,255,0.14)';
+              setTimeout(() => { if (parent) parent.style.outline = ''; }, 1200);
+            }
+            range.detach?.();
+            return;
+          }
+          count++;
+          if (re.lastIndex === m2.index) re.lastIndex++;
+        }
+        node = walker.nextNode();
+      }
+    } catch {
+      // ignore fallback errors
     }
   }
 
@@ -376,9 +478,11 @@ export default function BookReader() {
     const el = contentRef.current;
     if (!el) return;
     const tryScroll = () => {
+      // only attempt when the displayed chapter matches the pending target
+      if (chapterIdx !== pendingScroll.idx) return false;
       const marks = el.querySelectorAll('.search-highlight');
-      if (marks.length > pendingScroll) {
-        scrollToHighlight(pendingScroll);
+      if (marks.length > pendingScroll.occ) {
+        scrollToHighlight(pendingScroll.occ);
         setPendingScroll(null);
         return true;
       }
@@ -390,8 +494,10 @@ export default function BookReader() {
     }, 150);
     const timeout = setTimeout(() => {
       clearInterval(interval);
-      // final attempt
-      scrollToHighlight(pendingScroll as number);
+      // final attempt only if chapter matches
+      if (chapterIdx === (pendingScroll as { idx: number; occ: number }).idx) {
+        scrollToHighlight((pendingScroll as { idx: number; occ: number }).occ);
+      }
       setPendingScroll(null);
     }, 1200);
     return () => {
@@ -411,26 +517,28 @@ export default function BookReader() {
 
   return (
     <div className="reader-root">
-      <div className="reader-title-above-nav">
-        {displayTitle}
-      </div>
       {/* Language title removed — header icons now indicate language */}
       <header className="reader-header-bar">
         <div className="reader-header-bar-inner" style={{ width: isDesktop ? `${pageWidth}px` : '100%' }}>
           <div className="reader-header-controls">
-            {/* Previous chapter button */}
-            <button
-              className="reader-prev-chapter"
-              aria-label="Previous chapter"
-              disabled={chapterIdx <= 0}
-              onClick={() => {
-                if (chapterIdx > 0) setChapterIdx(chapterIdx - 1);
+            {/* Localized book title on the left */}
+            <div
+              className="reader-header-title"
+              style={{ marginLeft: 0, fontWeight: 600 }}
+              role="button"
+              tabIndex={0}
+              onClick={() => setShowOpeningToc(true)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setShowOpeningToc(true);
+                }
               }}
-              style={{marginRight: 4}}
+              aria-label={`Open contents for ${displayTitle}`}
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-            </button>
-            {/* Chapter menu (burger) */}
+              {displayTitle}
+            </div>
+            {/* Chapter menu (burger) - leftmost */}
             <button
               className="reader-burger-icon"
               ref={burgerBtnRef}
@@ -466,6 +574,20 @@ export default function BookReader() {
             >
               <MdMenu size={28} />
             </button>
+
+            {/* Previous chapter button */}
+            <button
+              className="reader-prev-chapter"
+              aria-label="Previous chapter"
+              disabled={chapterIdx <= 0}
+              onClick={() => {
+                if (chapterIdx > 0) setChapterIdx(chapterIdx - 1);
+              }}
+              style={{ marginLeft: 8 }}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+
             {/* Next chapter button */}
             <button
               className="reader-next-chapter"
@@ -474,59 +596,60 @@ export default function BookReader() {
               onClick={() => {
                 if (chapterIdx < chapters.length - 1) setChapterIdx(chapterIdx + 1);
               }}
-              style={{marginLeft: 4}}
+              style={{ marginLeft: 4 }}
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
             </button>
-            <button
-              ref={langBtnRef}
-              className="reader-lang-icon"
-              onClick={(e) => {
-                e.stopPropagation();
-                const btn = langBtnRef.current;
-                if (btn) {
-                  const r = btn.getBoundingClientRect();
-                  setLangPanelStyle({ position: 'fixed', top: r.bottom + 8, left: r.left, minWidth: 220 });
-                }
-                setShowLangMenu((v) => !v);
-              }}
-              aria-label="Language"
-            >
-              <MdLanguage size={26} />
-            </button>
-            {/* Search icon - visible on mobile and desktop (previously only desktop) */}
-            <button
-              className="reader-search-icon"
-              ref={searchBtnRef}
-              onClick={() => {
-                const btn = searchBtnRef.current;
-                if (btn) {
-                  const r = btn.getBoundingClientRect();
-                  setSearchPanelStyle({ position: 'fixed', top: r.bottom + 8, left: r.left, minWidth: 320 });
-                }
-                setShowSearch(true);
-                setTimeout(() => {
-                  const el = document.querySelector('.reader-search-input') as HTMLInputElement | null;
-                  el?.focus();
-                }, 120);
-              }}
-              aria-label="Search"
-            >
-              <MdSearch size={24} />
-            </button>
-            {/* Title now shown above the header */}
-            <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
+
+            {/* Spacer to push utilities to the right */}
+            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+              {/* Search icon */}
+              <button
+                className="reader-search-icon"
+                ref={searchBtnRef}
+                onClick={() => {
+                  const btn = searchBtnRef.current;
+                  if (btn) {
+                    const r = btn.getBoundingClientRect();
+                    setSearchPanelStyle({ position: 'fixed', top: r.bottom + 8, left: r.left, minWidth: 320 });
+                  }
+                  setShowSearch(true);
+                  setTimeout(() => {
+                    const el = document.querySelector('.reader-search-input') as HTMLInputElement | null;
+                    el?.focus();
+                  }, 120);
+                }}
+                aria-label="Search"
+              >
+                <MdSearch size={24} />
+              </button>
+
+              {/* Language selector */}
+              <button
+                ref={langBtnRef}
+                className="reader-lang-icon"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const btn = langBtnRef.current;
+                  if (btn) {
+                    const r = btn.getBoundingClientRect();
+                    setLangPanelStyle({ position: 'fixed', top: r.bottom + 8, left: r.left, minWidth: 220 });
+                  }
+                  setShowLangMenu((v) => !v);
+                }}
+                aria-label="Language"
+              >
+                <MdTranslate size={26} />
+              </button>
+
               <button
                 className="reader-darkmode-toggle"
-                onClick={() => {
-                  const next = localStorage.getItem('reader-dark') === '1' ? '0' : '1';
-                  localStorage.setItem('reader-dark', next);
-                  document.documentElement.setAttribute('data-theme', next === '1' ? 'dark' : 'light');
-                }}
+                onClick={() => setIsDark((d) => !d)}
                 aria-label="Toggle dark mode"
               >
-                {localStorage.getItem('reader-dark') === '1' ? <MdDarkMode size={22} /> : <MdLightMode size={22} />}
+                {isDark ? <MdDarkMode size={22} /> : <MdLightMode size={22} />}
               </button>
+
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <button
                   className="reader-text-size-btn"
@@ -604,11 +727,43 @@ export default function BookReader() {
         </>
       )}
 
+      {showOpeningToc && (
+        <div className="reader-opening-toc" onClick={() => { /* click backdrop does nothing */ }}>
+          <div className="opening-toc-card" onClick={(e) => e.stopPropagation()}>
+            <div className="reader-modal-header">
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <strong style={{ fontSize: '1.1rem' }}>Contents</strong>
+                <span style={{ color: 'var(--reader-modal-fg)', opacity: 0.8 }}> — select a chapter to begin</span>
+              </div>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.9rem' }}>
+                  <input type="checkbox" defaultChecked={localStorage.getItem('reader-opening-toc') !== '0'} onChange={(e) => {
+                    try { localStorage.setItem('reader-opening-toc', e.target.checked ? '1' : '0'); } catch {}
+                  }} /> Show on startup
+                </label>
+                <button onClick={() => setShowOpeningToc(false)}>✕</button>
+              </div>
+            </div>
+            <div style={{ paddingTop: 8, display: 'grid', gap: 6, maxHeight: '64vh', overflow: 'auto' }}>
+              {toc.length === 0 && <div style={{ padding: 12 }}>No contents available</div>}
+              {toc.map((t, i) => (
+                <button key={t.href} className={i === chapterIdx ? 'active' : ''} onClick={() => { setChapterIdx(i); setShowOpeningToc(false); }} style={{ textAlign: 'left', padding: '10px 12px', borderRadius: 10, border: 'none', background: 'transparent', cursor: 'pointer' }}>
+                  <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                    <div className="reader-toc-num">{i + 1}</div>
+                    <div className="reader-toc-title" style={{ fontWeight: i === chapterIdx ? 700 : 500 }}>{t.title}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       <main className="reader-main">
         {loading ? (
           <div>Loading…</div>
         ) : (
-          <div className="reader-wrapper" style={{ width: isDesktop ? `${pageWidth}px` : '100%', fontSize: `${textSize}px` }}>
+          <div className="reader-wrapper" style={{ width: isDesktop ? `${pageWidth}px` : '100%', fontSize: `${textSize}px`, position: 'relative' }}>
             <div ref={contentRef} className="reader-book-html" dangerouslySetInnerHTML={{ __html: displayedHtml }} />
             <footer className="reader-footer">
               <div className="reader-footer-inner">
@@ -672,9 +827,13 @@ export default function BookReader() {
                         // ensure highlights are enabled for the target chapter
                         setHighlighted((searchQuery || '').trim() || null);
                         // defer actual scrolling until the rendered HTML contains the highlights
-                        setPendingScroll(r.occ);
+                        setPendingScroll({ idx: r.idx, occ: r.occ });
                       }}
                   >
+                    {/* Chapter label: show the TOC title when available, fallback to Chapter N */}
+                    <div className="reader-search-chapter">
+                      {toc && toc[r.idx] && toc[r.idx].title ? toc[r.idx].title : `Chapter ${r.idx + 1}`}
+                    </div>
                     <div style={{ fontSize: '0.95rem', color: 'inherit' }} dangerouslySetInnerHTML={{ __html: snippet.replace(new RegExp(escapeRegExp(searchQuery), 'gi'), (m) => `<mark class=\"search-highlight\">${m}</mark>`) }} />
                   </button>
                 );

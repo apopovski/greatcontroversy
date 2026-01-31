@@ -27,7 +27,7 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
 
 /* Header (fixed overlay) */
 .reader-header-bar{position:fixed;top:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:center;background:var(--reader-header);border-bottom:1px solid var(--reader-border);z-index:1200;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
-.reader-header-bar-inner{width:100%;max-width:1200px;padding:0 16px;display:flex;align-items:center}
+.reader-header-bar-inner{width:100%;max-width:1200px;padding:0 12px;display:flex;align-items:center;margin:0 auto}
 .reader-header-controls{display:flex;align-items:center;width:100%;gap:12px}
 .reader-title-above-nav{padding:8px 16px 0;text-align:center;font-weight:700}
 
@@ -78,38 +78,113 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
 
 .reader-modal-header{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .reader-toc-list{list-style:none;margin:8px 0 0;padding:0}
-.reader-toc-list li{margin:0 0 6px}
-.reader-toc-list button{width:100%;text-align:left;padding:8px;border:none;background:none;border-radius:6px;cursor:pointer}
+.reader-toc-list li{margin:0}
+/* Subtle divider under each chapter for improved visual separation */
+.reader-toc-list button{width:100%;text-align:left;padding:10px 8px;border:none;background:none;border-radius:6px;cursor:pointer;font-size:1.05rem;line-height:1.18;display:grid;grid-template-columns:max-content 1fr;column-gap:12px;align-items:start;border-bottom:1px solid var(--reader-border)}
+.reader-toc-list li:last-child .reader-toc-num + .reader-toc-title, .reader-toc-list li:last-child button{border-bottom:0}
+.reader-toc-list button .reader-toc-num{opacity:0.85;white-space:nowrap;font-weight:600;color:var(--reader-modal-fg)}
+.reader-toc-list button .reader-toc-title{display:block}
+.reader-toc-list button .full-title{grid-column:1/-1}
 .reader-toc-list button.active{background:rgba(100,110,255,0.08);font-weight:700}
 
 .reader-lang-panel ul{list-style:none;margin:0;padding:0}
 .reader-lang-panel li{margin:0}
-.reader-lang-panel button{width:100%;text-align:left;padding:8px;border:0;background:none;cursor:pointer}
+.reader-lang-panel button{width:100%;text-align:left;padding:8px;border:0;background:none;cursor:pointer;font-size:1.05rem;line-height:1.18}
 
 /* Search highlights and dropcap */
-.search-highlight{background:var(--reader-highlight);padding:0 0.08em;border-radius:3px}
+.search-highlight {
+  background: var(--reader-highlight);
+  padding: 0 0.00em;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 0 #fff, 0 0 0 2px rgba(255,255,255,0.18);
+  outline: none;
+  transition: background 0.18s, box-shadow 0.18s;
+}
+.search-highlight:focus, .search-highlight.active {
+  outline: 3px solid #0b6bff;
+  box-shadow: 0 2px 8px 0 rgba(11,107,255,0.10);
+}
 .search-highlight:focus,.search-highlight.active{outline:3px solid rgba(100,100,255,0.18)}
 .dropcap {
   float: left;
-  font-size: 4.75em;
-  line-height: 0.7;
-  font-weight: 500;
-  margin-right: 0.15ch;
-  padding-top: 0.00em;
+  /* Force block layout for predictable vertical alignment with the first line */
+  display: block;
+  /* Historic/ornamental serif feel */
+  font-family: 'Goudy Bookletter 1911', 'Georgia', 'Times New Roman', serif;
+  font-weight: 700;
+  /* Use CSS variables so the dropcap height always equals exactly 3 body text lines.
+     --reader-body-line-height controls paragraph line-height (in em units), and
+     --dropcap-line-height controls the dropcap's internal line-height. The font-size
+     is calculated so (font-size * dropcap-line-height) == (3 * 1em * reader-body-line-height)
+  */
+  --reader-body-line-height: 1.35; /* default body line-height (in em) */
+  --dropcap-line-height: 0.72; /* visual compactness inside the dropcap */
+  --dropcap-scale: 1.06; /* small scale-up for slightly larger ornamental cap */
+  font-size: calc(3 * var(--reader-body-line-height) / var(--dropcap-line-height) * var(--dropcap-scale) * 1em);
+  line-height: var(--dropcap-line-height);
+  /* ensure the top of the dropcap aligns with the first line of text */
+  margin-top: 0;
+  /* remove any left offset so the cap aligns exactly with the content left edge */
+  margin-left: 0;
+  /* small nudge to vertically align the ornamental cap with the text's first line */
+  --dropcap-nudge: 0.05em;
+  transform: translateY(var(--dropcap-nudge));
+  margin-right: 0.18ch;
+  padding-top: 0;
+  color: var(--reader-accent);
+  /* slight inner glow / antique look */
+  text-shadow: 0 1px 0 rgba(255,255,255,0.35), 0 2px 6px rgba(0,0,0,0.08);
+  /* subtle background ribbon to make the letter feel 'set' into the page */
+  background: linear-gradient(180deg, rgba(100,110,255,0.06), rgba(100,110,255,0.02));
+  border-radius: 4px;
+  padding: 0 0.00em;
+  /* ensure consistent vertical placement in different browsers */
 }
 
-@media (max-width:899px){.reader-width-slider{display:none}.reader-search-panel,.reader-lang-panel{left:8px;right:8px;width:auto}}
+/* Ensure dropcap has no left border (explicit override) */
+span.dropcap {
+  border-left: 0 none transparent !important;
+}
 
-/* Page width slider (small) */
+/* Responsive tweak: keep proportions for narrow screens */
+@media (max-width: 640px) {
+  .dropcap { --reader-body-line-height: 1.25; --dropcap-line-height: 0.78; --dropcap-scale: 1.04; font-size: calc(3 * var(--reader-body-line-height) / var(--dropcap-line-height) * var(--dropcap-scale) * 1em); margin-right: 0.12ch; --dropcap-nudge: 0.04em; transform: translateY(var(--dropcap-nudge)); margin-left: 0; padding-left: 0; }
+}
+
+/* Apply the body line-height to the rendered chapter paragraphs so the calculation is accurate */
+.reader-book-html p, .reader-book-html blockquote, .reader-book-html div { line-height: var(--reader-body-line-height); }
+
+@media (max-width:899px){/* .reader-width-slider{display:none} */.reader-search-panel,.reader-lang-panel{left:8px;right:8px;width:auto}}
+
+/* Page width slider (small)
 .reader-width-slider{width:220px}
+*/
 
 /* Language dropdown list */
-.reader-lang-dropdown-list{box-shadow:0 2px 16px rgba(60,60,90,0.13);border-radius:10px;border:1.5px solid #e0e0e0;background:var(--reader-modal-bg);color:var(--reader-modal-fg);padding:0.3em 0;margin:0;list-style:none;font-size:1em;font-weight:500;max-height:60vh;overflow-y:auto;z-index:100}
-.reader-lang-dropdown-list button{width:100%;background:none;color:inherit;border:none;text-align:left;padding:0.7em 1.2em;font-size:1em;font-weight:500;cursor:pointer;border-radius:8px}
+.reader-lang-dropdown-list{box-shadow:0 2px 16px rgba(60,60,90,0.13);border-radius:10px;border:1.5px solid #e0e0e0;background:var(--reader-modal-bg);color:var(--reader-modal-fg);padding:0.3em 0;margin:0;list-style:none;font-size:1.05rem;font-weight:500;max-height:60vh;overflow-y:auto;z-index:100}
+.reader-lang-dropdown-list button{width:100%;background:none;color:inherit;border:none;text-align:left;padding:0.55em 1.2em;font-size:1.05rem;font-weight:500;line-height:1.18;cursor:pointer;border-radius:8px}
 .reader-lang-dropdown-list button:not([disabled]):hover{background:rgba(100,110,255,0.06)}
 
 /* Header controls layout helpers */
-.reader-header-bar-inner{box-sizing:border-box;width:100%;max-width:100%;padding-left:1rem;padding-right:1rem}
+.reader-header-bar-inner{box-sizing:border-box;width:100%;max-width:1200px;margin:0 auto;padding-left:12px;padding-right:12px}
+
+/* Make header title clearly clickable */
+.reader-header-title{cursor:pointer}
+
+/* Desktop layout: place the book title to the left of menu items and ensure
+   the header content is centered above the main content area. */
+@media (min-width:900px) {
+  .reader-header-controls { justify-content:flex-start; }
+  .reader-title-center { order: 0; text-align:left; margin-right:12px; margin-left: 0px; }
+  .reader-burger-icon { order: 1; }
+  .reader-lang-icon { order: 2; }
+  .reader-prev-chapter { order: 3; }
+  .reader-next-chapter { order: 4; }
+  /* place search immediately after navigation arrows */
+  .reader-search-icon { order: 5; margin-left: 8px; }
+  /* keep the right-controls group (size/bookmark/darkmode) at the far right */
+  .reader-right-controls { order: 6; margin-left: auto; }
+}
 .reader-wrapper,.reader-main{position:relative;z-index:1}
 
 /* On small screens position the search icon to the right edge of the header */
@@ -127,6 +202,69 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
   .reader-header-bar-inner{padding-right:56px}
 }
 
+/* Mobile: allow header controls to wrap and move the title to its own line
+   so all icons can fit. Title appears above the controls on narrow viewports. */
+@media (max-width:640px) {
+  /* Make the header expand vertically so a stacked title can be visible
+     (the header uses a fixed 56px height by default which hid the title).
+     Keep the control row on a single line and allow horizontal scrolling
+     if it doesn't fit so icons are still reachable on small screens. */
+  .reader-header-bar { height: auto; padding: 8px 0; }
+  .reader-header-bar-inner { display:flex; flex-direction:column; gap:6px; padding-left:0.75rem; padding-right:0.75rem; }
+
+  .reader-header-controls { display:flex; flex-wrap:nowrap; align-items:center; gap:6px; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  /* Ensure the title takes a full row on narrow screens by forcing a full-width block. */
+  /* Left-align the title on mobile so it matches the control alignment */
+  .reader-title-center { order:-1; flex: 0 0 100%; width:100%; padding-left:0; padding-right:8px; font-size:0.98rem; text-align:left; display:block; }
+  .reader-title-center { margin-left: 0px; }
+  /* reduce spacing for icon group to fit more items per row */
+  .reader-header-controls > div, .reader-header-controls > button { margin:0; }
+  /* ensure the right-edge search icon remains tappable */
+  /* Remove absolute positioning of the search icon on mobile so it sits
+     in the same vertical line as the other icons (in the controls row). */
+  .reader-search-icon{ position: static; right: auto; top: auto; transform: none; margin-left: 0; }
+
+  /* Mobile-specific ordering: present icons in a logical left-to-right order
+     without changing the desktop markup. Numbers chosen to leave room for
+     other controls if needed. */
+  .reader-burger-icon { order: 1; }
+  .reader-lang-icon { order: 2; }
+  .reader-prev-chapter { order: 3; }
+  .reader-next-chapter { order: 4; }
+  /* group on the right: size controls, bookmark, darkmode */
+  .reader-right-controls { order: 5; display:flex; align-items:center; gap:8px; }
+  .reader-search-icon { order: 8; }
+  /* internal ordering inside the right-controls container */
+  .reader-right-controls .reader-size-controls { order: 1; }
+  .reader-right-controls .reader-bookmark-btn { order: 2; }
+  .reader-right-controls .reader-darkmode-toggle { order: 3; }
+}
+
+/* Ensure there's comfortable spacing between the stacked header and the
+   book content on narrow screens so the top of the chapter isn't hidden
+   under the header. This compensates for the header height being auto. */
+@media (max-width:640px) {
+  .reader-wrapper { padding-top: 96px; }
+}
+
+/* Extra-strong override for WebKit / iOS Safari where flex behavior can
+   differ; use -webkit- prefixed properties and !important to ensure the
+   title occupies its own line above controls on narrow devices. */
+@media (max-width:740px) {
+  .reader-title-center {
+    order: -1 !important;
+    -webkit-order: -1 !important;
+    flex: 0 0 100% !important;
+    -webkit-flex: 0 0 100% !important;
+    width: 100% !important;
+    display: block !important;
+    text-align: center !important;
+    padding-left: 0 !important;
+    padding-right: 8px !important;
+  }
+  .reader-header-controls { flex-wrap: wrap !important; }
+}
+
 /* Modern search modal (centered card) */
 .reader-search-modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.48);z-index:2600}
 .reader-search-card{width:min(920px,94%);max-height:80vh;display:flex;flex-direction:column;background:var(--reader-modal-bg);color:var(--reader-modal-fg);border-radius:12px;box-shadow:0 20px 60px rgba(16,24,40,0.35);overflow:hidden}
@@ -134,10 +272,42 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
 .reader-search-input{flex:1;padding:10px 12px;border-radius:8px;border:1px solid var(--reader-border);font-size:1rem;background:transparent;color:inherit;outline:none}
 .reader-search-input::placeholder{color:#9aa4b2}
 .reader-search-close{background:none;border:none;padding:8px;font-size:1.35rem;cursor:pointer;color:inherit}
-.reader-search-results{padding:12px;overflow:auto;display:grid;gap:8px;max-height:calc(80vh - 68px);background:linear-gradient(to bottom, transparent, rgba(0,0,0,0.02))}
-.reader-search-result{padding:10px 12px;border-radius:8px;transition:background 0.12s,transform 0.06s;cursor:pointer}
+.reader-search-results{padding:12px;overflow:auto;display:grid;gap:8px;max-height:calc(80vh - 68px);background:linear-gradient(to bottom, transparent, rgba(0,0,0,0.02));
+  /* left-align search result items */
+  justify-items: start;
+  text-align: left;
+}
+.reader-search-result{padding:10px 12px;border-radius:8px;transition:background 0.12s,transform 0.06s;cursor:pointer;text-align:left;justify-self:start}
+
+/* Bold the matched search term inside the result snippet */
+.reader-search-result .search-highlight, .reader-search-results .search-highlight {
+  font-weight: 700;
+}
+
+/* Chapter label shown above each search result snippet */
+.reader-search-result .reader-search-chapter{
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--reader-modal-fg);
+  opacity: 0.85;
+  margin-bottom: 6px;
+  text-align: left;
+}
 .reader-search-result:hover{background:rgba(100,110,255,0.06);transform:translateY(-1px)}
 .reader-search-noresults{padding:18px;text-align:center;color:#888}
+
+/* Opening Table of Contents (full-screen welcome card) */
+.reader-opening-toc{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(6,10,34,0.6),rgba(6,10,34,0.4));z-index:3000;padding:32px}
+.opening-toc-card{width:min(1100px,96%);max-width:1100px;background:var(--reader-modal-bg);color:var(--reader-modal-fg);border-radius:14px;padding:18px;box-shadow:0 30px 80px rgba(6,10,34,0.6);border:1px solid rgba(255,255,255,0.02)}
+.opening-toc-card .reader-modal-header{padding-bottom:6px}
+.opening-toc-card button{background:none;border:0;cursor:pointer;color:inherit}
+.opening-toc-card .reader-toc-num{min-width:36px;text-align:right;font-weight:700;color:var(--reader-accent)}
+.opening-toc-card .reader-toc-title{font-size:1.05rem}
+
+@media (max-width:720px){
+  .opening-toc-card{padding:12px;border-radius:10px}
+  .reader-opening-toc{padding:18px}
+}
 
 @media (max-width:720px){.reader-search-card{width:94%;border-radius:10px}.reader-search-bar{padding:10px}.reader-search-input{font-size:0.95rem}}
 
@@ -151,8 +321,69 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
 /* Misc small helpers */
 .reader-modal-header{display:flex;align-items:center;justify-content:space-between;gap:8px}
 
-/* Header title centered */
-.reader-title-center{flex:1;text-align:center;font-weight:600;font-size:1rem;color:var(--reader-fg);padding-right:8px}
+/* Header title: left-aligned by default (desktop and mobile). On narrow
+   screens the title already stacks above the controls; keep left alignment
+   to match the controls alignment. */
+.reader-title-center{
+  flex:0 0 auto;
+  text-align:left;
+  font-weight:600;
+  font-size:1rem;
+  color:var(--reader-fg);
+  margin-left: 0px;
+  padding-right:8px;
+  /* align with paragraph text left inset */
+  padding-left:0;
+  /* ensure there's no left border so the title edge is flush */
+  border-left: 0;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* Explicit selector requested: ensure any header-title inside a .reader div has no left margin */
+div.reader.header-title {
+  margin-left: 0px !important;
+}
+
+/* Bookmark button & resume toast */
+.reader-bookmark-btn{background:none;border:0;padding:6px;border-radius:6px;cursor:pointer;color:inherit;display:inline-flex;align-items:center}
+.reader-bookmark-btn.active{color:var(--reader-accent)}
+.reader-debug-highlight-btn{background:rgba(0,0,0,0.04);border:0;padding:6px 8px;border-radius:8px;cursor:pointer;color:inherit;font-weight:700}
+.reader-debug-highlight-btn:hover{background:rgba(0,0,0,0.06)}
+.reader-bookmark-toast{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:var(--reader-modal-bg);color:var(--reader-modal-fg);box-shadow:0 6px 22px rgba(0,0,0,0.16);padding:10px 12px;border-radius:10px;display:flex;gap:8px;align-items:center;z-index:3000}
+.reader-bookmark-toast button{background:none;border:0;padding:6px 8px;border-radius:6px;cursor:pointer}
+.reader-bookmark-toast .dismiss{opacity:0.8}
+
+/* Transient feedback */
+.reader-bookmark-feedback{position:fixed;right:18px;bottom:18px;background:var(--reader-accent);color:#fff;padding:8px 12px;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,0.18);z-index:4000;font-weight:600}
+
+/* Small feedback toast used for share/highlight messages */
+.reader-share-feedback{position:fixed;left:50%;transform:translateX(-50%);bottom:64px;background:var(--reader-modal-bg);color:var(--reader-modal-fg);padding:8px 12px;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,0.18);z-index:4001;font-weight:600}
+
+/* Debug overlay shown when enabled to capture selection state and fallback matching */
+.reader-debug-overlay{position:fixed;left:12px;bottom:18px;background:rgba(0,0,0,0.78);color:#fff;padding:10px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.36);z-index:6000;font-size:0.9rem;line-height:1.2;max-width:360px}
+.reader-debug-overlay button{background:rgba(255,255,255,0.06);border:0;color:#fff;padding:6px 8px;border-radius:6px;cursor:pointer}
+
+/* Floating share panel (appears near text selection) */
+.reader-share-panel{position:fixed;background:var(--reader-modal-bg);color:var(--reader-modal-fg);border-radius:12px;padding:8px;box-shadow:0 12px 34px rgba(12,20,40,0.28);z-index:12050;border:1px solid rgba(0,0,0,0.06);backdrop-filter: blur(6px);}
+.reader-share-panel div{max-width:340px}
+.share-action-btn{background:var(--reader-bg);border:0;padding:8px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 18px rgba(10,20,40,0.08);transition:transform 0.08s ease,box-shadow 0.12s ease}
+.share-action-btn svg{width:18px;height:18px}
+.share-action-btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(10,20,40,0.12)}
+.share-action-btn[title]{opacity:0.98}
+
+/* Highlight toggle (small button that appears near a text selection) */
+.reader-highlight-toggle{position:fixed;z-index:12010}
+.reader-highlight-toggle .highlight-toggle-btn{background:var(--reader-accent);color:#fff;border:0;padding:8px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;box-shadow:0 10px 24px rgba(20,30,60,0.14);border:1px solid rgba(0,0,0,0.06);}
+.reader-highlight-toggle .highlight-toggle-btn svg{width:18px;height:18px}
+.reader-highlight-toggle .highlight-toggle-btn:hover{transform:translateY(-2px)}
+.reader-highlight-toggle, .reader-highlight-toggle .highlight-toggle-btn { pointer-events: auto; }
+.reader-highlight-toggle .highlight-toggle-btn { touch-action: manipulation; }
+.user-highlight{background:rgba(255,200,102,0.28);padding:0 0.06em;border-radius:4px}
 
 /* Ensure nothing left open or malformed in this file */
+
+/* Force-hide the page width slider (keeps markup in place for now) */
+.reader-width-slider{display:none !important}
 

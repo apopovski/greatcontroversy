@@ -24,6 +24,14 @@ const languageFolders = [
   "alSra` al`Zym - Ellen G. White"
 ];
 
+function getOrderedLanguageFolders(languageNames: Record<string, string>) {
+  return languageFolders.slice().sort((a, b) => {
+    const A = (languageNames[a] || a).toString();
+    const B = (languageNames[b] || b).toString();
+    return A.localeCompare(B, undefined, { sensitivity: 'base' });
+  });
+}
+
 function getDefaultLanguageFolder() {
   const browserLang = navigator.language || (navigator.languages && navigator.languages[0]) || "en";
   const langMap: Record<string, string> = {
@@ -51,7 +59,26 @@ function getDefaultLanguageFolder() {
   };
   const code = browserLang.split("-")[0];
   const folder = langMap[code as keyof typeof langMap] || languageFolders[0];
-  return languageFolders.includes(folder) ? folder : languageFolders[0];
+  const ordered = getOrderedLanguageFolders({
+    "The Great Controversy - Ellen G. White 2": "English",
+    "El Conflicto de los Siglos - Ellen G. White": "Español",
+    "MOD EN BEDRE FREMTID - Ellen G. White": "Dansk",
+    "Der grosse Kampf - Ellen G. White": "Deutsch",
+    "Il gran conflitto - Ellen G. White": "Italiano",
+    "O Grande Conflito - Ellen G. White": "Português",
+    "Tragedia veacurilor - Ellen G. White": "Română",
+    "Vielikaia bor'ba - Ellen G. White": "Русский",
+    "Wielki boj - Ellen G. White": "Polski",
+    "Velky spor vekov - Ellen G. White": "Slovenčina",
+    "Velke drama veku - Ellen G. White": "Čeština",
+    "Suur Voitlus - Ellen G. White": "Eesti",
+    "Vielika borot'ba - Ellen G. White": "Українська",
+    "VELIKA BORBA IZMEDU KRISTA I SOTONE - Ellen G. White": "Hrvatski",
+    "O Le Finauga Tele - Ellen G. White": "Samoan",
+    "alSra` al`Zym - Ellen G. White": "العربية",
+    "VIeLIKATA BORBA MIeZhDU KhRISTA i SATANA - Ellen G. White": "Български",
+  });
+  return ordered.includes(folder) ? folder : ordered[0];
 }
 
 type TocEntry = { title: string; href: string; };
@@ -75,7 +102,7 @@ const bookTitles: Record<string, string> = {
   "VELIKA BORBA IZMEDU KRISTA I SOTONE - Ellen G. White": "VELIKA BORBA IZMEĐU KRISTA I SOTONE",
   "O Le Finauga Tele - Ellen G. White": "O Le Finauga Tele",
   "alSra` al`Zym - Ellen G. White": "السراع العظيم",
-  "VIeLIKATA BORBA MIeZhDU KhRISTA i SATANA - Ellen G. White": "ВЕЛИКАТА БОРБА МЕЖДУ ХРИСТА и САТАНА",
+  "VIeLIKATA BORBA MIeZhDU KhRISTA i SATANA - Ellen G. White": "Великата Борба Между Христа И Сатана",
 };
 
 export function LanguageBookViewer() {
@@ -215,15 +242,60 @@ export function LanguageBookViewer() {
     return () => content.removeEventListener('click', handleClick as EventListener);
   }, [rawHtml]);
 
+  // Debugging hooks: log selection events and pointerup for diagnostics
+  useEffect(() => {
+    const content = document.querySelector('.modern-reader-html');
+    if (!content) return;
+
+    const onSelectionChange = () => {
+      try {
+        const sel = window.getSelection?.();
+        const txt = sel ? (sel.toString() || '').trim() : '';
+        if (!txt) return;
+        // only log selections that live inside the reader content
+        let inContent = false;
+        try {
+          if (sel && sel.rangeCount) {
+            const r = sel.getRangeAt(0);
+            const node = r.commonAncestorContainer;
+            const el = (node && (node as any).nodeType === 3) ? (node as any).parentElement : (node as HTMLElement | null);
+            if (el && content.contains(el)) inContent = true;
+          }
+        } catch {}
+        if (inContent) console.debug('LBV selectionchange', { text: txt.slice(0, 200), len: txt.length });
+      } catch (e) {
+        // ignore
+      }
+    };
+
+    const onPointerUp = () => {
+      try {
+        const sel = window.getSelection?.();
+        const txt = sel ? (sel.toString() || '').trim() : '';
+        console.debug('LBV pointerup', { textLen: (txt || '').length });
+      } catch {}
+    };
+
+    document.addEventListener('selectionchange', onSelectionChange, false);
+    document.addEventListener('pointerup', onPointerUp, false);
+    document.addEventListener('touchend', onPointerUp, false);
+
+    return () => {
+      document.removeEventListener('selectionchange', onSelectionChange, false);
+      document.removeEventListener('pointerup', onPointerUp, false);
+      document.removeEventListener('touchend', onPointerUp, false);
+    };
+  }, [rawHtml]);
+
   return (
     <div className="modern-reader-container">
       <div className="modern-reader-progress-bar" style={{ width: `${progress * 100}%` }} />
       <div className="modern-reader-book-title" style={{textAlign: 'center', fontWeight: 700, fontSize: '2rem', margin: '1.2rem 0 0.5rem 0'}}>
-        {bookTitles[selectedLang] || ''}
+        <a href="/" aria-label="Home" style={{ color: 'inherit', textDecoration: 'none' }}>{bookTitles[selectedLang] || ''}</a>
       </div>
       <header className="modern-reader-header">
         <select className="modern-reader-lang" value={selectedLang} onChange={e => setSelectedLang(e.target.value)}>
-          {languageFolders.map(lang => (
+          {getOrderedLanguageFolders(languageNames).map(lang => (
             <option key={lang} value={lang}>{languageNames[lang] || lang}</option>
           ))}
         </select>
