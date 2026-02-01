@@ -226,27 +226,49 @@ function applyDropcap(html: string, langKey: string, chapterIndex: number, toc: 
 function transformChapterHeading(html: string) {
   try {
     const doc = new DOMParser().parseFromString(html || '', 'text/html');
-    const heading = doc.body.querySelector('h1,h2,h3,h4,h5,h6');
-    if (!heading) return html;
-    const raw = (heading.textContent || '').trim();
-    // Match patterns like "Chapter 1 — The Title" or "CHAPTER I - Title"
-    const m = raw.match(/^\s*(chapter|ch)\.?\s*([0-9]+|[IVXLCDM]+)\s*[—–\-:\u2014]\s*(.+)$/i);
-    if (!m) return html;
-    const num = m[2];
-    const title = m[3];
-    const level = heading.tagName.toLowerCase();
-    const wrapper = doc.createElement('div');
-    wrapper.className = 'chapter-heading';
-    const numEl = doc.createElement('div');
-    numEl.className = 'chapter-number';
-    numEl.textContent = `Chapter ${num}`;
-    const titleEl = doc.createElement(level);
-    titleEl.className = 'chapter-title';
-    titleEl.textContent = title;
-    wrapper.appendChild(numEl);
-    wrapper.appendChild(titleEl);
-    heading.parentNode?.replaceChild(wrapper, heading);
-    return doc.body.innerHTML;
+    // If we've previously wrapped headings into a .chapter-heading, convert
+    // them back into a single heading like "Chapter 4—The Waldenses" so the
+    // original inline style is restored.
+    const wrappers = Array.from(doc.body.querySelectorAll('.chapter-heading'));
+    if (wrappers.length) {
+      wrappers.forEach((wrapper) => {
+        const numEl = wrapper.querySelector('.chapter-number');
+        const titleEl = wrapper.querySelector('.chapter-title');
+        let level = 'h2';
+        if (titleEl && (titleEl.tagName || '').match(/^H[1-6]$/i)) level = titleEl.tagName.toLowerCase();
+        const heading = doc.createElement(level);
+        heading.className = 'chapterhead';
+        const numText = (numEl && (numEl.textContent || '').trim()) || '';
+        const titleText = (titleEl && (titleEl.textContent || '').trim()) || '';
+        if (numText && titleText) {
+          // Normalize label to title-case "Chapter N" then a dash and the title.
+          // Wrap the "Chapter N" portion in a span so we can style it separately
+          // (unbold the label while keeping the title bold).
+          const normalizedNum = numText.replace(/^CHAPTER\s*/i, 'Chapter ');
+          const numSpan = doc.createElement('span');
+          numSpan.className = 'chapter-num-inline';
+          numSpan.textContent = normalizedNum;
+          heading.appendChild(numSpan);
+          const sep = doc.createElement('span');
+          sep.className = 'chapter-sep-inline';
+          sep.textContent = ' — ';
+          heading.appendChild(sep);
+          const titleSpan = doc.createElement('span');
+          titleSpan.className = 'chapter-title-inline';
+          titleSpan.textContent = titleText;
+          heading.appendChild(titleSpan);
+        } else if (titleText) {
+          heading.textContent = titleText;
+        } else {
+          heading.textContent = (wrapper.textContent || '').trim();
+        }
+        wrapper.parentNode?.replaceChild(heading, wrapper);
+      });
+      return doc.body.innerHTML;
+    }
+
+    // No wrapper present — nothing to transform.
+    return html;
   } catch {
     return html;
   }
@@ -343,11 +365,27 @@ export default function BookReader() {
         let tocRoot: Element | null = doc.querySelector('nav[type="toc"]') || doc.querySelector('nav.toc') || doc.querySelector('.toc') || doc.querySelector('#toc') || doc.querySelector('ol');
         const entries: TocEntry[] = [];
         const isInfoPage = (t: string) => /^\s*information\s+about.*book/i.test(t.trim());
+        const shouldSkipToc = (t: string) => {
+          const s = (t || '').trim();
+          if (!s) return true;
+          if (isInfoPage(s)) return true;
+          if (/^\s*(?:preface|foreword)\b/i.test(s)) return true;
+          // Language-specific exclusions (Spanish titles)
+          const langName = (LANGUAGE_NAMES[lang] || '').toLowerCase();
+          if (langName.includes('span')) {
+            // "Información sobre este libro" / "Información sobre el libro"
+            if (/^\s*(?:informaci[oó]n\s+sobre(?:\s+este|\s+el)?\s+libro)\b/i.test(s)) return true;
+            // "Prefacio" or "Prólogo"
+            if (/^\s*(?:prefacio|pr[oó]logo)\b/i.test(s)) return true;
+          }
+          // Do NOT skip Introduction — show it in contents
+          return false;
+        };
         if (tocRoot) {
           tocRoot.querySelectorAll('a').forEach((a) => {
             const href = a.getAttribute('href') || '';
             const title = (a.textContent || '').trim();
-            if (href && title && !isInfoPage(title)) entries.push({ title, href });
+            if (href && title && !shouldSkipToc(title)) entries.push({ title, href });
           });
         }
         // Fallback: collect anchors that reference in-page ids and point to existing elements
@@ -362,7 +400,7 @@ export default function BookReader() {
             if (!doc.getElementById(id)) return;
             const title = (a.textContent || '').trim();
             if (!title) return;
-            if (isInfoPage(title)) return;
+            if (shouldSkipToc(title)) return;
             if (seen.has(href)) return;
             seen.add(href);
             entries.push({ title, href });
@@ -414,30 +452,45 @@ export default function BookReader() {
   }, [lang]);
 
   function runSearch() {
-    const q = (searchQuery || '').trim();
-    if (!q) {
+    // Support exact-phrase searches when the user wraps the query in
+    // quotes (single or double). E.g. "the Lord" will only match that
+    // exact phrase (word-boundary delimited), while unquoted queries
+    // remain fuzzy/case-insensitive substring matches.
+    const raw = (searchQuery || '').trim();
+    let exact = false;
+    let query = raw;
+    // detect quoted phrase like "..." or '...'
+    if ((raw.startsWith('"') && raw.endsWith('"')) || (raw.startsWith("'") && raw.endsWith("'"))) {
+      query = raw.slice(1, -1).trim();
+      exact = true;
+    }
+    if (!query) {
       setSearchResults([]);
       setHighlighted(null);
       return;
     }
-    const esc = escapeRegExp(q);
+
+    const esc = escapeRegExp(query);
     const results: { idx: number; occ: number }[] = [];
     chapters.forEach((html, idx) => {
       const text = html.replace(/<[^>]+>/g, ' ');
       let m: RegExpExecArray | null;
       let occ = 0;
-      const runner = new RegExp(esc, 'gi');
+      const pattern = exact ? `\\b${esc}\\b` : esc;
+      const runner = new RegExp(pattern, 'gi');
       while ((m = runner.exec(text)) !== null) {
         results.push({ idx, occ });
         occ++;
         if (runner.lastIndex === m.index) runner.lastIndex++;
       }
     });
+
     setSearchResults(results);
     if (results.length) {
       const first = results[0];
       setChapterIdx(first.idx);
-      setHighlighted(q);
+      // Highlight using the (possibly unquoted) search term
+      setHighlighted(query);
       setSearchIdx(0);
       setTimeout(() => scrollToHighlight(first.occ), 200);
     } else {
@@ -466,10 +519,10 @@ export default function BookReader() {
     // Fallback: if marks are not present (sanitization or markup changed),
     // locate the nth occurrence of the highlighted query in the text nodes
     // and scroll the containing node into view.
-    const q = (highlighted || '').trim();
-    if (!q) return;
+    const hlQuery = (highlighted || '').trim();
+    if (!hlQuery) return;
     try {
-      const re = new RegExp(escapeRegExp(q), 'gi');
+      const re = new RegExp(escapeRegExp(hlQuery), 'gi');
       const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null as any);
       let node: Node | null = walker.nextNode();
       let count = 0;
@@ -776,7 +829,6 @@ export default function BookReader() {
             <div className="reader-modal-header">
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                 <strong style={{ fontSize: '1.1rem' }}>Contents</strong>
-                <span style={{ color: 'var(--reader-modal-fg)', opacity: 0.8 }}> — select a chapter to begin</span>
               </div>
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                 <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.9rem' }}>
@@ -792,7 +844,6 @@ export default function BookReader() {
               {toc.map((t, i) => (
                 <button key={t.href} className={i === chapterIdx ? 'active' : ''} onClick={() => { setChapterIdx(i); setShowOpeningToc(false); }} style={{ textAlign: 'left', padding: '10px 12px', borderRadius: 10, border: 'none', background: 'transparent', cursor: 'pointer' }}>
                   <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                    <div className="reader-toc-num">{i + 1}</div>
                     <div className="reader-toc-title" style={{ fontWeight: i === chapterIdx ? 700 : 500 }}>{t.title}</div>
                   </div>
                 </button>
@@ -844,10 +895,13 @@ export default function BookReader() {
               {searchResults.map((r, i) => {
                 const html = chapters[r.idx] || '';
                 const text = html.replace(/<[^>]+>/g, ' ');
-                const q = (searchQuery || '').trim();
+                let displayQ = (searchQuery || '').trim();
+                if ((displayQ.startsWith('"') && displayQ.endsWith('"')) || (displayQ.startsWith("'") && displayQ.endsWith("'"))) {
+                  displayQ = displayQ.slice(1, -1).trim();
+                }
                 const idx = (() => {
                   let found = 0;
-                  const re = new RegExp(escapeRegExp(q), 'gi');
+                  const re = new RegExp(escapeRegExp(displayQ), 'gi');
                   let m: RegExpExecArray | null;
                   while ((m = re.exec(text)) !== null) {
                     if (found === r.occ) return m.index;
@@ -868,7 +922,7 @@ export default function BookReader() {
                         setChapterIdx(r.idx);
                         setSearchIdx(i);
                         // ensure highlights are enabled for the target chapter
-                        setHighlighted((searchQuery || '').trim() || null);
+                        setHighlighted(displayQ || null);
                         // defer actual scrolling until the rendered HTML contains the highlights
                         setPendingScroll({ idx: r.idx, occ: r.occ });
                       }}
@@ -877,7 +931,7 @@ export default function BookReader() {
                     <div className="reader-search-chapter">
                       {toc && toc[r.idx] && toc[r.idx].title ? toc[r.idx].title : `Chapter ${r.idx + 1}`}
                     </div>
-                    <div style={{ fontSize: '0.95rem', color: 'inherit' }} dangerouslySetInnerHTML={{ __html: snippet.replace(new RegExp(escapeRegExp(searchQuery), 'gi'), (m) => `<mark class=\"search-highlight\">${m}</mark>`) }} />
+                    <div style={{ fontSize: '0.95rem', color: 'inherit' }} dangerouslySetInnerHTML={{ __html: snippet.replace(new RegExp(escapeRegExp(displayQ), 'gi'), (m) => `<mark class=\"search-highlight\">${m}</mark>`) }} />
                   </button>
                 );
               })}

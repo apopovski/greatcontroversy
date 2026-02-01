@@ -80,10 +80,16 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
 .reader-toc-list{list-style:none;margin:8px 0 0;padding:0}
 .reader-toc-list li{margin:0}
 /* Subtle divider under each chapter for improved visual separation */
-.reader-toc-list button{width:100%;text-align:left;padding:10px 8px;border:none;background:none;border-radius:6px;cursor:pointer;font-size:1.05rem;line-height:1.18;display:grid;grid-template-columns:max-content 1fr;column-gap:12px;align-items:start;border-bottom:1px solid var(--reader-border)}
+.reader-toc-list button{width:100%;text-align:left;padding:10px 8px;border:none;background:none;border-radius:6px;cursor:pointer;font-size:1.05rem;line-height:1.18;display:grid;grid-template-columns:1fr;column-gap:12px;align-items:start;border-bottom:1px solid var(--reader-border)}
 .reader-toc-list li:last-child .reader-toc-num + .reader-toc-title, .reader-toc-list li:last-child button{border-bottom:0}
 .reader-toc-list button .reader-toc-num{opacity:0.85;white-space:nowrap;font-weight:600;color:var(--reader-modal-fg)}
 .reader-toc-list button .reader-toc-title{display:block}
+
+/* Prevent horizontal scrolling in the anchored chapters/contents panel and
+  ensure long titles wrap cleanly. The opening TOC already has similar
+  rules; apply them here too for the burger/chapters panel. */
+.reader-chapters-panel, .reader-chapters-panel .reader-toc-list, .reader-toc-list { overflow-x: hidden; }
+.reader-toc-list button{white-space:normal;overflow-wrap:anywhere;word-break:break-word}
 .reader-toc-list button .full-title{grid-column:1/-1}
 .reader-toc-list button.active{background:rgba(100,110,255,0.08);font-weight:700}
 
@@ -304,6 +310,14 @@ span.dropcap {
 .opening-toc-card .reader-toc-num{min-width:36px;text-align:right;font-weight:700;color:var(--reader-accent)}
 .opening-toc-card .reader-toc-title{font-size:1.05rem}
 
+/* Prevent horizontal scrolling inside the contents modal and allow long
+  chapter titles to wrap to multiple lines. Ensure the number column stays
+  fixed while the title takes remaining space and can break. */
+.opening-toc-card{overflow-x:hidden}
+.opening-toc-card button{white-space:normal;overflow-wrap:anywhere;word-break:break-word}
+.opening-toc-card .reader-toc-num{flex:0 0 36px}
+.opening-toc-card .reader-toc-title{flex:1 1 auto;white-space:normal;overflow-wrap:anywhere;word-break:break-word}
+
 @media (max-width:720px){
   .opening-toc-card{padding:12px;border-radius:10px}
   .reader-opening-toc{padding:18px}
@@ -317,24 +331,50 @@ span.dropcap {
 /* Chapter heading: small number above the visible title */
 .chapter-heading{
   display:block;
-  /* pulled up so the number sits closer to the title */
-  margin:1.0em 0 0.15em 0;
+  /* remove top gap so chapter title sits flush with preceding content */
+  margin:0 0 0.01em 0;
   text-align:left;
 }
 .chapter-heading .chapter-number{
-  /* slightly smaller than body text, uppercase and tighter to the title */
-  font-size:0.78rem;
+  /* smaller than body text, uppercase and pulled tight to the title */
+  /* reduced font-size + removed bottom gap so label sits visually closer */
+  font-size:0.44rem; /* smaller */
   line-height:1;
   opacity:0.95;
-  font-weight:700;
+  font-weight:600;
   color:var(--reader-modal-fg);
-  margin-bottom:0.06rem;
+  margin-bottom:-0.12rem; /* pull label down toward the title */
   text-transform:uppercase;
-  letter-spacing:0.06em;
+  letter-spacing:0.02em;
   display:block;
 }
-.chapter-heading .chapter-title{font-size:1.45rem;margin:0;font-weight:700}
-.chapter-heading .chapter-title + p{margin-top:0.6em}
+.chapter-heading .chapter-title{font-size:calc(1.45rem * 1.5);margin:0 !important; margin-top:0 !important; font-weight:700}
+/* Forcefully remove any top margin that might be applied by global heading rules
+  so the small chapter-number sits immediately above the title. Use a
+  reader-scoped selector to avoid affecting app-wide headings. */
+.reader-book-html .chapter-heading .chapter-title{margin:0 !important;padding-top:0 !important}
+.chapter-heading .chapter-title + p{margin-top:0.35em}
+
+/* If the original chapter title was left in the DOM as a top-level H1/H2
+  (ebook content sometimes separates number and title into two headings),
+  ensure the wrapper itself doesn't introduce extra spacing. */
+.reader-book-html .chapter-heading{margin-top:0 !important;margin-bottom:0}
+
+/* Extra aggressive override to clear any residual margins coming from the
+   ebook's own CSS so the CHAPTER label hugs the title tightly. */
+.reader-book-html .chapter-heading .chapter-title,
+.reader-book-html .chapter-heading .chapter-title * {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Style for restored inline chapter headings created by transformChapterHeading.
+  Keep the overall heading bold, but render the leading "Chapter N" label
+  with normal weight so it doesn't appear bold. */
+.reader-book-html .chapterhead { font-weight: 700; margin: 0; }
+.reader-book-html .chapterhead .chapter-num-inline { font-weight: 400; opacity: 0.95; margin-right: 0.06em; }
+.reader-book-html .chapterhead .chapter-sep-inline { font-weight: 400; opacity: 0.95; }
+.reader-book-html .chapterhead .chapter-title-inline { font-weight: 700; }
 
 /* Footer */
 .reader-footer{margin-top:1.25rem;padding-top:12px;border-top:1px solid var(--reader-border);width:100%}
