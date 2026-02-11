@@ -1,9 +1,84 @@
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './BookReader.css';
-import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode } from 'react-icons/md';
+import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode, MdContentCopy, MdShare, MdClose, MdMoreVert } from 'react-icons/md';
+import { FaFacebookF, FaXTwitter, FaWhatsapp } from 'react-icons/fa6';
+import { IoMdMail } from 'react-icons/io';
+import { LANGUAGE_NAMES } from './utils/language';
 
 type TocEntry = { title: string; href: string };
+
+type BookContentProps = {
+  loading: boolean;
+  isDesktop: boolean;
+  pageWidth: number;
+  textSize: number;
+  displayedHtml: string;
+  contentRef: React.RefObject<HTMLDivElement | null>;
+  copyrightText: string;
+  lang: string;
+  chapterIdx: number;
+};
+
+const BookContent = React.memo(function BookContent({
+  loading,
+  isDesktop,
+  pageWidth,
+  textSize,
+  displayedHtml,
+  contentRef,
+  copyrightText,
+  lang,
+  chapterIdx,
+  chapterTitle,
+  audioMinimized,
+  setAudioMinimized,
+  onNextChapter,
+  onPrevChapter,
+}: BookContentProps & {
+  chapterTitle: string;
+  audioMinimized: boolean;
+  setAudioMinimized: (v: boolean) => void;
+  onNextChapter: () => void;
+  onPrevChapter: () => void;
+}) {
+  if (loading) {
+    return (
+      <main className="reader-main">
+        <div>Loading…</div>
+      </main>
+    );
+  }
+
+  const wrapperStyle: React.CSSProperties = {
+    width: isDesktop ? `${pageWidth}px` : '100%',
+    fontSize: `${textSize}px`,
+    position: 'relative',
+  };
+
+  return (
+    <main className="reader-main">
+      <div className="reader-wrapper" style={wrapperStyle}>
+        <div ref={contentRef} className="reader-book-html" dangerouslySetInnerHTML={{ __html: displayedHtml }} />
+        <footer className="reader-footer">
+          <div className="reader-footer-inner">
+            {copyrightText}
+          </div>
+        </footer>
+      </div>
+    </main>
+  );
+}, (prev, next) => (
+  prev.loading === next.loading &&
+  prev.isDesktop === next.isDesktop &&
+  prev.pageWidth === next.pageWidth &&
+  prev.textSize === next.textSize &&
+  prev.displayedHtml === next.displayedHtml &&
+  prev.contentRef === next.contentRef &&
+  prev.copyrightText === next.copyrightText &&
+  prev.chapterTitle === next.chapterTitle &&
+  prev.audioMinimized === next.audioMinimized
+));
 
 const LANGUAGE_FOLDERS = [
   'The Great Controversy - Ellen G. White 2',
@@ -26,49 +101,70 @@ const LANGUAGE_FOLDERS = [
   "alSra` al`Zym - Ellen G. White",
 ];
 
-const LANGUAGE_NAMES: Record<string, string> = {
-  'The Great Controversy - Ellen G. White 2': 'English',
-  'El Conflicto de los Siglos - Ellen G. White': 'Spanish',
-  'Der grosse Kampf - Ellen G. White': 'German',
-  'Il gran conflitto - Ellen G. White': 'Italian',
-  'MOD EN BEDRE FREMTID - Ellen G. White': 'Danish',
-  'Mot historiens klimaks - Ellen G. White': 'Norwegian',
-  'O Grande Conflito - Ellen G. White': 'Portuguese',
-  'O Le Finauga Tele - Ellen G. White': 'Samoan',
-  'Suur Voitlus - Ellen G. White': 'Estonian',
-  'Tragedia veacurilor - Ellen G. White': 'Romanian',
-  'VELIKA BORBA IZMEDU KRISTA I SOTONE - Ellen G. White': 'Serbian',
-  "VIeLIKATA BORBA MIeZhDU KhRISTA i SATANA - Ellen G. White": 'Bulgarian',
-  'Velke drama veku - Ellen G. White': 'Slovak',
-  'Velky spor vekov - Ellen G. White': 'Czech',
-  "Vielika borot'ba - Ellen G. White": 'Ukrainian',
-  "Vielikaia bor'ba - Ellen G. White": 'Russian',
-  'Wielki boj - Ellen G. White': 'Polish',
-  "alSra` al`Zym - Ellen G. White": 'Arabic',
-};
-
 const LANGUAGE_ABBREV: Record<string, string> = {
-  'The Great Controversy - Ellen G. White 2': 'EN',
-  'El Conflicto de los Siglos - Ellen G. White': 'ES',
-  'Der grosse Kampf - Ellen G. White': 'DE',
-  'Il gran conflitto - Ellen G. White': 'IT',
-  'MOD EN BEDRE FREMTID - Ellen G. White': 'DA',
-  'Mot historiens klimaks - Ellen G. White': 'NO',
-  'O Grande Conflito - Ellen G. White': 'PT',
-  'O Le Finauga Tele - Ellen G. White': 'SM',
-  'Suur Voitlus - Ellen G. White': 'ET',
-  'Tragedia veacurilor - Ellen G. White': 'RO',
-  'VELIKA BORBA IZMEDU KRISTA I SOTONE - Ellen G. White': 'SR',
-  "VIeLIKATA BORBA MIeZhDU KhRISTA i SATANA - Ellen G. White": 'BG',
-  'Velke drama veku - Ellen G. White': 'SK',
-  'Velky spor vekov - Ellen G. White': 'CS',
-  "Vielika borot'ba - Ellen G. White": 'UK',
-  "Vielikaia bor'ba - Ellen G. White": 'RU',
-  'Wielki boj - Ellen G. White': 'PL',
-  "alSra` al`Zym - Ellen G. White": 'AR',
+  'The Great Controversy - Ellen G. White 2': 'en',
+  'El Conflicto de los Siglos - Ellen G. White': 'es',
+  'Der grosse Kampf - Ellen G. White': 'de',
+  'Il gran conflitto - Ellen G. White': 'it',
+  'MOD EN BEDRE FREMTID - Ellen G. White': 'da',
+  'Mot historiens klimaks - Ellen G. White': 'no',
+  'O Grande Conflito - Ellen G. White': 'pt',
+  'O Le Finauga Tele - Ellen G. White': 'sm',
+  'Suur Voitlus - Ellen G. White': 'et',
+  'Tragedia veacurilor - Ellen G. White': 'ro',
+  'VELIKA BORBA IZMEDU KRISTA I SOTONE - Ellen G. White': 'hr',
+  "VIeLIKATA BORBA MIeZhDU KhRISTA i SATANA - Ellen G. White": 'bg',
+  'Velke drama veku - Ellen G. White': 'sk',
+  'Velky spor vekov - Ellen G. White': 'cs',
+  "Vielika borot'ba - Ellen G. White": 'uk',
+  "Vielikaia bor'ba - Ellen G. White": 'ru',
+  'Wielki boj - Ellen G. White': 'pl',
+  "alSra` al`Zym - Ellen G. White": 'ar',
 };
 
 const getBookTitleFromFolder = (folder: string) => (folder || '').split(' - Ellen')[0].trim();
+
+const LANGUAGE_URL_NAMES: Record<string, string> = {
+  'The Great Controversy - Ellen G. White 2': 'English',
+  'El Conflicto de los Siglos - Ellen G. White': 'Español',
+  'Der grosse Kampf - Ellen G. White': 'Deutsch',
+  'Il gran conflitto - Ellen G. White': 'Italiano',
+  'MOD EN BEDRE FREMTID - Ellen G. White': 'Dansk',
+  'Mot historiens klimaks - Ellen G. White': 'Norsk',
+  'O Grande Conflito - Ellen G. White': 'Português',
+  'O Le Finauga Tele - Ellen G. White': 'Gagana Samoa',
+  'Suur Voitlus - Ellen G. White': 'Eesti',
+  'Tragedia veacurilor - Ellen G. White': 'Română',
+  'VELIKA BORBA IZMEDU KRISTA I SOTONE - Ellen G. White': 'Hrvatski',
+  "VIeLIKATA BORBA MIeZhDU KhRISTA i SATANA - Ellen G. White": 'Български',
+  'Velke drama veku - Ellen G. White': 'Slovenčina',
+  'Velky spor vekov - Ellen G. White': 'Čeština',
+  "Vielika borot'ba - Ellen G. White": 'Українська',
+  "Vielikaia bor'ba - Ellen G. White": 'Русский',
+  'Wielki boj - Ellen G. White': 'Polski',
+  "alSra` al`Zym - Ellen G. White": 'العربية',
+};
+
+const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
+  'The Great Controversy - Ellen G. White 2': 'Chapter',
+  'El Conflicto de los Siglos - Ellen G. White': 'Capítulo',
+  'Der grosse Kampf - Ellen G. White': 'Kapitel',
+  'Il gran conflitto - Ellen G. White': 'Capitolo',
+  'MOD EN BEDRE FREMTID - Ellen G. White': 'Kapitel',
+  'Mot historiens klimaks - Ellen G. White': 'Kapittel',
+  'O Grande Conflito - Ellen G. White': 'Capítulo',
+  'O Le Finauga Tele - Ellen G. White': 'Mataupu',
+  'Suur Voitlus - Ellen G. White': 'Peatükk',
+  'Tragedia veacurilor - Ellen G. White': 'Capitol',
+  'VELIKA BORBA IZMEDU KRISTA I SOTONE - Ellen G. White': 'Poglavlje',
+  "VIeLIKATA BORBA MIeZhDU KhRISTA i SATANA - Ellen G. White": 'Glava',
+  'Velke drama veku - Ellen G. White': 'Kapitola',
+  'Velky spor vekov - Ellen G. White': 'Kapitola',
+  "Vielika borot'ba - Ellen G. White": 'Rozdil',
+  "Vielikaia bor'ba - Ellen G. White": 'Glava',
+  'Wielki boj - Ellen G. White': 'Rozdział',
+  "alSra` al`Zym - Ellen G. White": 'الفصل',
+};
 
 const COPYRIGHTS: Record<string, string> = {
   // Use the localized book title (derived from the language folder) as the copyright holder.
@@ -78,6 +174,51 @@ const COPYRIGHTS: Record<string, string> = {
 function escapeRegExp(s: string) {
   return s.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&');
 }
+
+function slugify(input: string) {
+  return (input || '')
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^\p{L}\p{N}]+/gu, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 80);
+}
+
+function slugifyAscii(input: string) {
+  return (input || '')
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 80);
+}
+
+function getChapterNumber(title: string) {
+  const t = (title || '').trim();
+  const m = t.match(/\bchapter\s+(\d+)\b/i);
+  if (m && m[1]) return Number(m[1]);
+  return null;
+}
+
+function stripChapterPrefix(title: string) {
+  return (title || '')
+    .replace(/^\s*chapter\s+\d+\s*[-—–:]*\s*/i, '')
+    .trim();
+}
+
+const LANG_SLUG_TO_FOLDER: Record<string, string> = Object.fromEntries(
+  LANGUAGE_FOLDERS.flatMap((folder) => {
+    const localized = LANGUAGE_URL_NAMES[folder] || LANGUAGE_NAMES[folder] || getBookTitleFromFolder(folder) || folder;
+    const nameSlug = slugifyAscii(localized);
+    const abbrSlug = (LANGUAGE_ABBREV[folder] || '').toLowerCase();
+    return [
+      nameSlug ? [nameSlug, folder] : null,
+      abbrSlug ? [abbrSlug, folder] : null,
+    ].filter(Boolean) as Array<[string, string]>;
+  })
+);
 
 function getHighlightedHtml(html: string, q: string | null) {
   if (!q) return html || '';
@@ -119,6 +260,21 @@ function getHighlightedHtml(html: string, q: string | null) {
       if (frag.childNodes.length) t.parentNode?.replaceChild(frag, t);
       n = walker.nextNode();
     }
+    return doc.body.innerHTML;
+  } catch {
+    return html || '';
+  }
+}
+
+function addParagraphIds(html: string, chapterNumber: number) {
+  try {
+    const doc = new DOMParser().parseFromString(html || '', 'text/html');
+    const paragraphs = doc.querySelectorAll('p, blockquote');
+    paragraphs.forEach((el, idx) => {
+      if (!el.id) {
+        el.id = `gc-p-${chapterNumber}-${idx + 1}`;
+      }
+    });
     return doc.body.innerHTML;
   } catch {
     return html || '';
@@ -266,7 +422,6 @@ function transformChapterHeading(html: string) {
       });
       return doc.body.innerHTML;
     }
-
     // No wrapper present — nothing to transform.
     return html;
   } catch {
@@ -275,9 +430,27 @@ function transformChapterHeading(html: string) {
 }
 
 export default function BookReader() {
+  // --- SEARCH & SHARE POPUP STATE ---
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<Array<{ idx: number; occ: number }>>([]);
+  const [searchIdx, setSearchIdx] = useState(0);
+  const [highlighted, setHighlighted] = useState<string | null>(null);
+  const [pendingScroll, setPendingScroll] = useState<{ idx: number; occ: number } | null>(null);
+  const [showSharePopup, setShowSharePopup] = useState(false);
+  const [selectedText, setSelectedText] = useState('');
+  const [selectedAnchorId, setSelectedAnchorId] = useState<string | null>(null);
+  const [sharePopupPos, setSharePopupPos] = useState({ top: 0, left: 0 });
+
+  // --- AUDIO STATE ---
+  const [audioMinimized, setAudioMinimized] = useState(false);
+
+  // --- MAIN APP STATE ---
   const [lang, setLang] = useState(LANGUAGE_FOLDERS[0]);
   const [toc, setToc] = useState<TocEntry[]>([]);
-  const [chapters, setChapters] = useState<string[]>([]);
+  const [bookDoc, setBookDoc] = useState<Document | null>(null);
+  const [chapterIds, setChapterIds] = useState<string[]>([]);
+  const chapterCache = useRef<Map<number, string>>(new Map());
+  const plainTextCache = useRef<Map<number, string>>(new Map());
   const [chapterIdx, setChapterIdx] = useState(0);
   const [loading, setLoading] = useState(true);
   const [pageWidth, setPageWidth] = useState(720);
@@ -289,18 +462,24 @@ export default function BookReader() {
   const [showChaptersMenu, setShowChaptersMenu] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [showShareMenu, setShowShareMenu] = useState(false);
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [showCopyToast, setShowCopyToast] = useState(false);
+  const [copyToastPos, setCopyToastPos] = useState({ top: 0, left: 0 });
   const [showOpeningToc, setShowOpeningToc] = useState(() => {
-    try {
-      return localStorage.getItem('reader-opening-toc') !== '0';
-    } catch {
-      return true;
-    }
+    // If navigating via a URL path or if there's a hash fragment (paragraph anchor), don't show the TOC overlay
+    const hasUrlPath = /^\/([^/]+)\/[^/]+-\d+\//.test(window.location.pathname);
+    const hasHashFragment = window.location.hash && window.location.hash.startsWith('#gc-p-');
+    if (hasUrlPath || hasHashFragment) return false;
+    return true;
   });
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<{ idx: number; occ: number }[]>([]);
-  const [searchIdx, setSearchIdx] = useState(0);
-  const [highlighted, setHighlighted] = useState<string | null>(null);
-  const [pendingScroll, setPendingScroll] = useState<{ idx: number; occ: number } | null>(null);
+  const sharePopupRef = useRef<HTMLDivElement | null>(null);
+  const selectionRangeRef = useRef<Range | null>(null);
+  const isSelectingRef = useRef(false);
+  const pendingChapterIdxRef = useRef<number | null>(null);
+  const pendingChapterNumberRef = useRef<number | null>(null);
+  const copyToastTimerRef = useRef<number | null>(null);
+  const lastSelectionRectRef = useRef<DOMRect | null>(null);
 
   // theme state: keep in React state so UI updates immediately when toggled
   const [isDark, setIsDark] = useState(() => localStorage.getItem('reader-dark') === '1');
@@ -309,10 +488,107 @@ export default function BookReader() {
   const langBtnRef = useRef<HTMLButtonElement | null>(null);
   const burgerBtnRef = useRef<HTMLButtonElement | null>(null);
   const searchBtnRef = useRef<HTMLButtonElement | null>(null);
+  const shareBtnRef = useRef<HTMLButtonElement | null>(null);
+  const shareMenuRef = useRef<HTMLDivElement | null>(null);
+  const chaptersMenuRef = useRef<HTMLDivElement | null>(null);
+  const langMenuRef = useRef<HTMLDivElement | null>(null);
+  const moreBtnRef = useRef<HTMLButtonElement | null>(null);
+  const moreMenuRef = useRef<HTMLDivElement | null>(null);
+
+  // Handlers for next/prev chapter (for audio auto-next)
+  const handleNextChapter = () => {
+    if (chapterIdx < toc.length - 1) setChapterIdx(chapterIdx + 1);
+  };
+  const handlePrevChapter = () => {
+    if (chapterIdx > 0) setChapterIdx(chapterIdx - 1);
+  };
+  // Get current chapter title
+  const chapterTitle = toc[chapterIdx]?.title || '';
+
+  // --- Minimized audio bar and auto-next logic ---
+  // Auto-minimize audio bar on scroll (mobile)
+  useEffect(() => {
+    let lastY = window.scrollY;
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const y = window.scrollY;
+          if (y > 120) setAudioMinimized(true);
+          else setAudioMinimized(false);
+          lastY = y;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // --- Minimized audio bar and auto-next logic ---
+
+  const clearTempHighlights = () => {
+    const contentEl = contentRef.current;
+    if (!contentEl) return;
+    contentEl.querySelectorAll('span.user-highlight-temp').forEach((el) => {
+      const parent = el.parentNode;
+      while (el.firstChild) parent?.insertBefore(el.firstChild, el);
+      parent?.removeChild(el);
+    });
+  };
+
+  const applyPersistentHighlight = (range: Range) => {
+    clearTempHighlights();
+    const common = range.commonAncestorContainer;
+    const root = common.nodeType === Node.ELEMENT_NODE ? (common as Element) : (common.parentElement || null);
+    if (!root) return;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: (node: Node) => {
+        const text = node.nodeValue || '';
+        if (!text.trim()) return NodeFilter.FILTER_REJECT;
+        try {
+          return range.intersectsNode(node) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        } catch {
+          return NodeFilter.FILTER_REJECT;
+        }
+      },
+    } as any);
+
+    const nodes: Text[] = [];
+    let n = walker.nextNode();
+    while (n) {
+      nodes.push(n as Text);
+      n = walker.nextNode();
+    }
+    nodes.forEach((textNode) => {
+      const fullText = textNode.nodeValue || '';
+      if (!fullText) return;
+      let startOffset = 0;
+      let endOffset = fullText.length;
+      if (textNode === range.startContainer) startOffset = range.startOffset;
+      if (textNode === range.endContainer) endOffset = range.endOffset;
+      if (startOffset === endOffset) return;
+
+      let nodeToWrap = textNode;
+      if (endOffset < nodeToWrap.length) {
+        nodeToWrap.splitText(endOffset);
+      }
+      if (startOffset > 0) {
+        nodeToWrap = nodeToWrap.splitText(startOffset);
+      }
+      const span = document.createElement('span');
+      span.className = 'user-highlight user-highlight-temp';
+      span.textContent = nodeToWrap.nodeValue || '';
+      nodeToWrap.parentNode?.replaceChild(span, nodeToWrap);
+    });
+  };
 
   const [langPanelStyle, setLangPanelStyle] = useState<React.CSSProperties | null>(null);
   const [chaptersPanelStyle, setChaptersPanelStyle] = useState<React.CSSProperties | null>(null);
   const [searchPanelStyle, setSearchPanelStyle] = useState<React.CSSProperties | null>(null);
+  const [sharePanelStyle, setSharePanelStyle] = useState<React.CSSProperties | null>(null);
+  const [morePanelStyle, setMorePanelStyle] = useState<React.CSSProperties | null>(null);
 
   useEffect(() => {
     const mq = window.matchMedia('(min-width:900px)');
@@ -320,6 +596,126 @@ export default function BookReader() {
     fn();
     mq.addEventListener?.('change', fn);
     return () => mq.removeEventListener?.('change', fn);
+  }, []);
+
+  useEffect(() => {
+    if (!showShareMenu) return;
+    const onDown = (ev: MouseEvent | TouchEvent) => {
+      const target = ev.target as Node | null;
+      if (target && shareMenuRef.current?.contains(target)) return;
+      if (target && shareBtnRef.current?.contains(target)) return;
+      setShowShareMenu(false);
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('touchstart', onDown);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('touchstart', onDown);
+    };
+  }, [showShareMenu]);
+
+  useEffect(() => {
+    if (!showChaptersMenu) return;
+    const onDown = (ev: MouseEvent | TouchEvent) => {
+      const target = ev.target as Node | null;
+      if (target && chaptersMenuRef.current?.contains(target)) return;
+      if (target && burgerBtnRef.current?.contains(target)) return;
+      setShowChaptersMenu(false);
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('touchstart', onDown);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('touchstart', onDown);
+    };
+  }, [showChaptersMenu]);
+
+  useEffect(() => {
+    if (!showLangMenu) return;
+    const onDown = (ev: MouseEvent | TouchEvent) => {
+      const target = ev.target as Node | null;
+      if (target && langMenuRef.current?.contains(target)) return;
+      if (target && langBtnRef.current?.contains(target)) return;
+      setShowLangMenu(false);
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('touchstart', onDown);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('touchstart', onDown);
+    };
+  }, [showLangMenu]);
+
+  useEffect(() => {
+    if (!showMoreMenu) return;
+    const onDown = (ev: MouseEvent | TouchEvent) => {
+      const target = ev.target as Node | null;
+      if (target && moreMenuRef.current?.contains(target)) return;
+      if (target && moreBtnRef.current?.contains(target)) return;
+      setShowMoreMenu(false);
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('touchstart', onDown);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('touchstart', onDown);
+    };
+  }, [showMoreMenu]);
+
+  // Parse path-based routes like /lang/en/chapter/23 on initial load
+  useEffect(() => {
+    const parsePath = (path: string) => {
+      // Language-only format: /{lang} - show TOC menu
+      let m = path.match(/^\/([^/]+)\/?$/i);
+      if (m) {
+        const abbr = decodeURIComponent(m[1] || '').toLowerCase();
+        const folder = LANG_SLUG_TO_FOLDER[abbr];
+        if (folder) return { folder, idx: null, num: null, showToc: true };
+      }
+      // New format: /{lang}/{label}-{num}/{slug}
+      m = path.match(/^\/([^/]+)\/[^/]+-(\d+)\/([^/]+)?(?:\/)?$/i);
+      if (m) {
+        const abbr = decodeURIComponent(m[1] || '').toLowerCase();
+        const num = Math.max(1, parseInt(m[2], 10));
+        const idx = Math.max(0, num - 1);
+        const folder = LANG_SLUG_TO_FOLDER[abbr];
+        if (!folder) return null;
+        return { folder, idx, num, showToc: false };
+      }
+      // Backward compatible: /{lang}/chapter/{num}-{slug}
+      m = path.match(/^\/([^/]+)\/chapter\/(\d+)(?:-([^/]+))?(?:\/)?$/i);
+      if (!m) return null;
+      const abbr = decodeURIComponent(m[1] || '').toLowerCase();
+      const num = Math.max(1, parseInt(m[2], 10));
+      const idx = Math.max(0, num - 1);
+      const folder = LANG_SLUG_TO_FOLDER[abbr];
+      if (!folder) return null;
+      return { folder, idx, num, showToc: false };
+    };
+
+    const parsed = parsePath(window.location.pathname);
+    if (parsed) {
+      if (parsed.idx !== null) {
+        pendingChapterIdxRef.current = parsed.idx;
+        pendingChapterNumberRef.current = parsed.num ?? null;
+      }
+      setLang(parsed.folder);
+      setShowOpeningToc(parsed.showToc ?? false);
+    }
+
+    const onPop = () => {
+      const p = parsePath(window.location.pathname);
+      if (p) {
+        if (p.idx !== null) {
+          pendingChapterIdxRef.current = p.idx;
+          pendingChapterNumberRef.current = p.num ?? null;
+        }
+        setLang(p.folder);
+        setShowOpeningToc(p.showToc ?? false);
+      }
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
   }, []);
 
   // Persist theme preference and apply to document element
@@ -332,6 +728,297 @@ export default function BookReader() {
     }
   }, [isDark]);
 
+  // Handle RTL for Arabic and other RTL languages
+  useEffect(() => {
+    const isArabic = lang && lang.toLowerCase().includes('alsra');
+    const isRTL = isArabic;
+    document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
+    if (isRTL) {
+      document.documentElement.setAttribute('lang', 'ar');
+    }
+  }, [lang]);
+
+  // Remove auto-highlight and share popup on selection end: restore standard selection behavior.
+  // The share/copy popup will only be shown when the user explicitly triggers it (e.g., via a button in the UI).
+
+  // Track selection gesture state to avoid fighting user selection changes
+  useEffect(() => {
+    const onDown = (ev: PointerEvent) => {
+      const target = ev.target as Node | null;
+      if (target && contentRef.current?.contains(target)) {
+        isSelectingRef.current = true;
+      }
+    };
+    const onUp = () => {
+      isSelectingRef.current = false;
+    };
+    document.addEventListener('pointerdown', onDown);
+    document.addEventListener('pointerup', onUp);
+    return () => {
+      document.removeEventListener('pointerdown', onDown);
+      document.removeEventListener('pointerup', onUp);
+    };
+  }, []);
+
+  // Copy selected text to clipboard (include title + link)
+  const handleCopy = async () => {
+    try {
+      const bookTitle = getBookTitleFromFolder(lang);
+      const baseUrl = `${window.location.origin}${window.location.pathname}`;
+      const url = selectedAnchorId ? `${baseUrl}#${selectedAnchorId}` : window.location.href;
+      const payloadText = `${selectedText}${selectedText ? '\n\n' : ''}${bookTitle}\n${url}`;
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(payloadText);
+      } else {
+        // Fallback for older browsers / non-https contexts
+        const ta = document.createElement('textarea');
+        ta.value = payloadText;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      setShowSharePopup(false);
+      // restore iOS touch callout when popup closed
+      try {
+        if (contentRef.current && (contentRef.current as any).style) {
+          (contentRef.current as any).style.webkitTouchCallout = '';
+        }
+      } catch {}
+      window.getSelection()?.removeAllRanges();
+      if (lastSelectionRectRef.current) {
+        const r = lastSelectionRectRef.current;
+        setCopyToastPos({
+          top: r.top + window.scrollY - 40,
+          left: r.left + window.scrollX + Math.max(r.width / 2, 0),
+        });
+      } else {
+        setCopyToastPos({
+          top: Math.max(16, window.scrollY + 16),
+          left: Math.max(16, window.innerWidth / 2),
+        });
+      }
+      setShowCopyToast(true);
+      if (copyToastTimerRef.current) window.clearTimeout(copyToastTimerRef.current);
+      copyToastTimerRef.current = window.setTimeout(() => setShowCopyToast(false), 1600);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
+  // Ensure the original selection stays visible while interacting with the popup
+  const restoreSelection = () => {
+    const sel = window.getSelection();
+    if (!sel || !selectionRangeRef.current) return;
+    try {
+      sel.removeAllRanges();
+      sel.addRange(selectionRangeRef.current.cloneRange());
+    } catch {
+      // ignore
+    }
+  };
+
+  // Keep the highlight visible when the popup appears/re-renders
+  useEffect(() => {
+    if (showSharePopup && selectedText && selectionRangeRef.current) {
+      restoreSelection();
+    }
+  }, [showSharePopup, selectedText]);
+
+  // Show a lightweight share popup when the user selects text, but do NOT
+  // alter the browser selection or apply persistent highlights. This preserves
+  // the standard selection visuals while providing a white share modal.
+  useEffect(() => {
+    const onPointerUp = (ev?: Event) => {
+      try {
+        const sel = window.getSelection();
+        const txt = sel ? (sel.toString() || '').trim() : '';
+        const anchor = sel?.anchorNode || null;
+        if (!txt || !anchor || !contentRef.current?.contains(anchor)) return;
+        const range = sel!.rangeCount ? sel!.getRangeAt(0) : null;
+        if (!range) return;
+
+        // Determine an anchor id for linking back to the paragraph
+        const containerEl = (range.startContainer as Element)?.nodeType === Node.ELEMENT_NODE
+          ? (range.startContainer as Element)
+          : (range.startContainer.parentElement || null);
+        const blockEl = containerEl?.closest?.('p, blockquote') || containerEl?.closest?.('[id]') || null;
+        let anchorId: string | null = null;
+        if (blockEl && (blockEl as Element).id) anchorId = (blockEl as Element).id;
+        if (!anchorId && contentRef.current) {
+          const blocks = Array.from(contentRef.current.querySelectorAll('p, blockquote')) as HTMLElement[];
+          const idx = blockEl ? blocks.indexOf(blockEl as HTMLElement) : -1;
+          const fallbackIdx = idx >= 0 ? idx + 1 : Math.max(1, blocks.length);
+          anchorId = `gc-p-${chapterIdx + 1}-${fallbackIdx}`;
+          if (blockEl && !(blockEl as Element).id) (blockEl as Element).id = anchorId;
+        }
+
+        const rect = range.getBoundingClientRect();
+        lastSelectionRectRef.current = rect;
+        selectionRangeRef.current = range.cloneRange();
+        setSelectedText(txt);
+        setSelectedAnchorId(anchorId);
+        // Adjust popup vertical offset to avoid iOS native selection menu overlapping
+        const isIOS = typeof navigator !== 'undefined' && /iP(ad|hone|od)/i.test(navigator.userAgent || '');
+        // Increase offset slightly so our popup sits above the iOS native menu.
+        const nativeOffset = isIOS ? 110 : 56; // iOS native menu can occupy more space
+        setSharePopupPos({
+          top: rect.top + window.scrollY - nativeOffset,
+          left: rect.left + window.scrollX + Math.max(rect.width / 2, 0),
+        });
+        setShowSharePopup(true);
+        // Temporarily disable iOS native touch callout so the app popup is used
+        try {
+          if (isIOS && contentRef.current && (contentRef.current as any).style) {
+            (contentRef.current as any).style.webkitTouchCallout = 'none';
+          }
+        } catch {}
+        // Do NOT call applyPersistentHighlight — preserve native selection visuals
+      } catch {
+        // ignore
+      }
+    };
+
+    document.addEventListener('pointerup', onPointerUp);
+    document.addEventListener('touchend', onPointerUp);
+    return () => {
+      document.removeEventListener('pointerup', onPointerUp);
+      document.removeEventListener('touchend', onPointerUp);
+    };
+  }, [chapterIdx]);
+
+  // Note: selectionchange handling removed to prevent flashing on mobile/desktop.
+
+  // Close share popup when clicking outside content and the popup
+  useEffect(() => {
+    if (!showSharePopup) return;
+    const onDown = (ev: MouseEvent | TouchEvent) => {
+      const target = ev.target as Node | null;
+      if (target && sharePopupRef.current?.contains(target)) return;
+      if (target && contentRef.current?.contains(target)) return;
+      setShowSharePopup(false);
+      setSelectedAnchorId(null);
+      // restore iOS touch callout when popup closed
+      try {
+        if (contentRef.current && (contentRef.current as any).style) {
+          (contentRef.current as any).style.webkitTouchCallout = '';
+        }
+      } catch {}
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('touchstart', onDown);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('touchstart', onDown);
+    };
+  }, [showSharePopup]);
+
+  // Share on social media
+  const handleShare = (platform: string) => {
+    const bookTitle = getBookTitleFromFolder(lang);
+    const text = `"${selectedText}" — ${bookTitle}`;
+    const baseUrl = `${window.location.origin}${window.location.pathname}`;
+    const url = selectedAnchorId ? `${baseUrl}#${selectedAnchorId}` : window.location.href;
+    
+    let shareUrl = '';
+    
+    switch (platform) {
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`;
+        break;
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+        break;
+      case 'whatsapp':
+        shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
+        break;
+      case 'email':
+        shareUrl = `mailto:?subject=${encodeURIComponent(bookTitle)}&body=${encodeURIComponent(text + '\n\n' + url)}`;
+        break;
+      case 'native':
+        if (navigator.share) {
+          // Some share targets (like Messages on iOS) ignore `text` when `url` is present.
+          // Put everything into `text` and omit `url` so the quote always appears.
+          const payloadText = `${selectedText}${selectedText ? '\n\n' : ''}${bookTitle}\n${url}`;
+          navigator.share({ title: bookTitle, text: payloadText })
+            .catch(err => console.log('Share cancelled:', err));
+          setShowSharePopup(false);
+          // restore iOS touch callout when popup closed
+          try {
+            if (contentRef.current && (contentRef.current as any).style) {
+              (contentRef.current as any).style.webkitTouchCallout = '';
+            }
+          } catch {}
+          window.getSelection()?.removeAllRanges();
+          return;
+        }
+        break;
+    }
+    
+    if (shareUrl) {
+      window.open(shareUrl, '_blank', 'width=720,height=520');
+      setShowSharePopup(false);
+      // restore iOS touch callout when popup closed
+      try {
+        if (contentRef.current && (contentRef.current as any).style) {
+          (contentRef.current as any).style.webkitTouchCallout = '';
+        }
+      } catch {}
+      window.getSelection()?.removeAllRanges();
+    }
+  };
+
+  // Clear persistent highlights when chapter or language changes
+  useEffect(() => {
+    clearTempHighlights();
+    selectionRangeRef.current = null;
+    setSelectedAnchorId(null);
+  }, [chapterIdx, lang]);
+
+  useEffect(() => {
+    return () => {
+      if (copyToastTimerRef.current) window.clearTimeout(copyToastTimerRef.current);
+    };
+  }, []);
+
+  const handleShareApp = (platform: string) => {
+    const bookTitle = getBookTitleFromFolder(lang) || (lang || '').split(' - Ellen')[0].trim() || 'The Great Controversy';
+    const url = `${window.location.origin}${window.location.pathname}`;
+    const text = `${bookTitle} — ${url}`;
+
+    let shareUrl = '';
+
+    switch (platform) {
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+        break;
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+        break;
+      case 'whatsapp':
+        shareUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+        break;
+      case 'email':
+        shareUrl = `mailto:?subject=${encodeURIComponent(bookTitle)}&body=${encodeURIComponent(text)}`;
+        break;
+      case 'native':
+        if (navigator.share) {
+          navigator.share({ title: bookTitle, text: bookTitle, url })
+            .catch(() => null);
+          return;
+        }
+        break;
+    }
+
+    if (shareUrl) {
+      window.open(shareUrl, '_blank', 'width=720,height=520');
+    }
+  };
+
+
   useEffect(() => {
     // When language changes, clear previous content immediately and try to
     // load the selected language folder's index.html. We try a couple of
@@ -339,7 +1026,10 @@ export default function BookReader() {
     // contain characters that can be tricky when served from the dev server.
     setLoading(true);
     setToc([]);
-    setChapters([]);
+    setChapterIds([]);
+    setBookDoc(null);
+    chapterCache.current.clear();
+    plainTextCache.current.clear();
     setChapterIdx(0);
 
     const tryFetch = async (paths: string[]) => {
@@ -348,6 +1038,13 @@ export default function BookReader() {
           const r = await fetch(p);
           if (!r.ok) continue;
           const html = await r.text();
+
+          // Some hosts (Netlify with Pretty URLs / path normalization) may
+          // respond to "/.../index.html" with a small "Document moved" page.
+          // If we parse that as a book, the TOC will be empty.
+          const moved = /<title>\s*document moved\s*<\/title>/i.test(html) || /document moved permanently/i.test(html);
+          if (moved) continue;
+
           return html;
         } catch (e) {
           // continue to next candidate
@@ -356,9 +1053,18 @@ export default function BookReader() {
       throw new Error('Not found');
     };
 
-    const encoded = `./book-content/html/${encodeURIComponent(lang)}/index.html`;
-    const raw = `./book-content/html/${lang}/index.html`;
-    tryFetch([encoded, raw])
+    const encodedBase = `/book-content/html/${encodeURIComponent(lang)}`;
+    const rawBase = `/book-content/html/${lang}`;
+    const candidates = [
+      // Most common
+      `${encodedBase}/index.html`,
+      `${encodedBase}/`,
+      // Fallback for tricky characters / dev-server quirks
+      `${rawBase}/index.html`,
+      `${rawBase}/`,
+    ];
+
+    tryFetch(candidates)
       .then((html) => {
         const doc = new DOMParser().parseFromString(html, 'text/html');
         // Try several strategies to locate a table-of-contents
@@ -389,7 +1095,7 @@ export default function BookReader() {
           });
         }
         // Fallback: collect anchors that reference in-page ids and point to existing elements
-        if (!entries.length) {
+        if (!entries.length || entries.length < 3) {
           const seen = new Set<string>();
           const all = Array.from(doc.querySelectorAll('a[href]'));
           all.forEach((a) => {
@@ -406,33 +1112,206 @@ export default function BookReader() {
             entries.push({ title, href });
           });
         }
-        setToc(entries);
-        // Choose a sensible default chapter to show first.
-        // Prefer a chapter titled "Introduction" (or common fallbacks like Preface/Foreword).
-        let defaultIdx = 0;
-        const introIdx = entries.findIndex((e) => /\bintroduction\b/i.test(e.title));
-        const prefaceIdx = entries.findIndex((e) => /\b(preface|foreword)\b/i.test(e.title));
-        const infoIdx = entries.findIndex((e) => /^information\s+about/i.test(e.title));
-        if (introIdx >= 0) defaultIdx = introIdx;
-        else if (prefaceIdx >= 0) defaultIdx = prefaceIdx;
-        else if (infoIdx >= 0 && infoIdx + 1 < entries.length) defaultIdx = infoIdx + 1;
-        setChapterIdx(defaultIdx);
-        const chapterHtmls = entries.map((e) => {
-          const id = e.href.replace(/^#/, '');
-          const el = doc.getElementById(id);
-          if (!el) return '';
-          let node: Element | null = el;
-          let acc = '';
-          while (node) {
-            acc += node.outerHTML;
-            const next = node.nextElementSibling;
-            if (next && entries.some((en) => en.href.replace(/^#/, '') === next.id)) break;
-            node = node.nextElementSibling;
+        // Additional fallback: extract chapters from h2 headings if TOC is still sparse
+        if (entries.length < 3) {
+          const headings = Array.from(doc.querySelectorAll('h2.chapterhead, h2[class*="chapter"]'));
+          const fallbackEntries: TocEntry[] = [];
+          headings.forEach((h) => {
+            const title = (h.textContent || '').trim();
+            if (!title || shouldSkipToc(title)) return;
+            // Find the parent element with an id
+            let el: Element | null = h;
+            while (el && !el.id) {
+              el = el.parentElement;
+            }
+            if (el && el.id) {
+              fallbackEntries.push({ title, href: `#${el.id}` });
+            }
+          });
+          if (fallbackEntries.length > entries.length) {
+            entries.length = 0;
+            entries.push(...fallbackEntries);
           }
-          return acc;
-        });
-        setChapters(chapterHtmls);
+        }
+        
+        // Filter TOC to start from Introduction onwards - hide everything before it
+        const introductionIdx = entries.findIndex((e) => /\bintroduction\b/i.test(e.title));
+        let filteredEntries = introductionIdx >= 0 ? entries.slice(introductionIdx) : entries;
+        
+        // Remove unwanted pages for German language
+        if (lang === 'Der grosse Kampf - Ellen G. White') {
+          filteredEntries = filteredEntries.filter((e) => {
+            const title = e.title || '';
+            const chNum = getChapterNumber(title);
+            
+            // Remove "Informationen zu diesem Buch" and "Vorwort"
+            if (/informationen|vorwort/i.test(title)) return false;
+            
+            // Remove specific pages
+            if (/untreue\s+und\s+abfall/i.test(title)) return false;
+            
+            // Remove chapters 2, 3, and 4
+            if (chNum === 2 || chNum === 3 || chNum === 4) return false;
+            
+            return true;
+          });
+        }
+        
+        // Remove unwanted pages for Italian language
+        if (lang === 'Il gran conflitto - Ellen G. White') {
+          filteredEntries = filteredEntries.filter((e) => {
+            const title = e.title || '';
+            
+            // Remove "Informazioni su questo libro" and "Prefazione"
+            if (/informazioni|prefazione/i.test(title)) return false;
+            
+            return true;
+          });
+        }
+        
+        // Remove unwanted pages for Portuguese language
+        if (lang === 'O Grande Conflito - Ellen G. White') {
+          filteredEntries = filteredEntries.filter((e) => {
+            const title = e.title || '';
+            
+            // Remove "Informações sobre este livro"
+            if (/informações/i.test(title)) return false;
+            
+            return true;
+          });
+        }
+        
+        // Remove unwanted pages for Samoan language
+        if (lang === 'O Le Finauga Tele - Ellen G. White') {
+          filteredEntries = filteredEntries.filter((e) => {
+            const title = e.title || '';
+            
+            // Remove "UPU TOMUA"
+            if (/upu\s+tomua/i.test(title)) return false;
+            
+            return true;
+          });
+        }
+        
+        // Remove unwanted pages for Croatian language
+        if (lang === 'VELIKA BORBA IZMEDU KRISTA I SOTONE - Ellen G. White') {
+          filteredEntries = filteredEntries.filter((e) => {
+            const title = e.title || '';
+            
+            // Remove "Predgovor"
+            if (/predgovor/i.test(title)) return false;
+            
+            return true;
+          });
+        }
+        
+        // Remove unwanted pages for Bulgarian language
+        if (lang === "VIeLIKATA BORBA MIeZhDU KhRISTA i SATANA - Ellen G. White") {
+          filteredEntries = filteredEntries.filter((e) => {
+            const title = e.title || '';
+            
+            // Remove "Предговоръ"
+            if (/предговор/i.test(title)) return false;
+            
+            return true;
+          });
+        }
+        
+        // Remove unwanted pages for Romanian language
+        if (lang === 'Tragedia veacurilor - Ellen G. White') {
+          filteredEntries = filteredEntries.filter((e) => {
+            const title = e.title || '';
+            
+            // Remove "Informații despre această carte"
+            if (/informații.*despre/i.test(title)) return false;
+            
+            return true;
+          });
+        }
+        
+        // Remove unwanted pages for Czech language
+        if (lang === 'Velky spor vekov - Ellen G. White') {
+          filteredEntries = filteredEntries.filter((e) => {
+            const title = e.title || '';
+            
+            // Remove "Předmluva"
+            if (/předmluva/i.test(title)) return false;
+            
+            return true;
+          });
+        }
+        
+        // Remove unwanted pages for Russian language
+        if (lang === "Vielikaia bor'ba - Ellen G. White") {
+          filteredEntries = filteredEntries.filter((e) => {
+            const title = e.title || '';
+            
+            // Remove "Информация об этой книге" and "Предисловие"
+            if (/информация.*об|предисловие/i.test(title)) return false;
+            
+            return true;
+          });
+        }
+        
+        // Remove unwanted pages for Polish language
+        if (lang === 'Wielki boj - Ellen G. White') {
+          filteredEntries = filteredEntries.filter((e) => {
+            const title = e.title || '';
+            
+            // Remove "Wprowadzenie do wydania XV"
+            if (/wprowadzenie.*do.*wydania/i.test(title)) return false;
+            
+            return true;
+          });
+        }
+        
+        // Remove unwanted pages for Arabic language
+        if (lang === "alSra` al`Zym - Ellen G. White") {
+          filteredEntries = filteredEntries.filter((e) => {
+            const title = e.title || '';
+            
+            // Remove "المقدمة"
+            if (/المقدمة/.test(title)) return false;
+            
+            return true;
+          });
+        }
+        
+        setToc(filteredEntries);
+        
+        // Choose a sensible default chapter to show first.
+        // Always start at the first visible chapter (Introduction or first available)
+        let defaultIdx = 0;
+        const desiredNumber = pendingChapterNumberRef.current;
+        const desiredIdx = pendingChapterIdxRef.current;
+        if (typeof desiredNumber === 'number') {
+          const matchIdx = filteredEntries.findIndex((e) => getChapterNumber(e.title) === desiredNumber);
+          if (matchIdx >= 0) setChapterIdx(matchIdx);
+          else if (typeof desiredIdx === 'number' && desiredIdx >= 0 && desiredIdx < filteredEntries.length) setChapterIdx(desiredIdx);
+          else setChapterIdx(defaultIdx);
+        } else if (typeof desiredIdx === 'number' && desiredIdx >= 0 && desiredIdx < filteredEntries.length) {
+          setChapterIdx(desiredIdx);
+        } else {
+          setChapterIdx(defaultIdx);
+        }
+        pendingChapterIdxRef.current = null;
+        pendingChapterNumberRef.current = null;
+        // Store chapter IDs and parsed doc for lazy extraction
+        const ids = filteredEntries.map((e) => e.href.replace(/^#/, ''));
+        setChapterIds(ids);
+        setBookDoc(doc);
+        chapterCache.current.clear();
+        plainTextCache.current.clear();
         setLoading(false);
+        // Prefetch remaining chapters in idle time
+        if ('requestIdleCallback' in window) {
+          (window as any).requestIdleCallback(() => {
+            ids.forEach((id, i) => {
+              if (i === defaultIdx) return; // already rendered
+              extractChapterHtml(doc, id, entries);
+            });
+          }, { timeout: 2000 });
+        }
         // Show the opening TOC when chapters are available (first load)
         try {
           const show = localStorage.getItem('reader-opening-toc');
@@ -446,10 +1325,62 @@ export default function BookReader() {
         // clearly indicates content isn't available rather than silently
         // showing the previous language's content.
         setToc([]);
-        setChapters([]);
+        setChapterIds([]);
+        setBookDoc(null);
+        chapterCache.current.clear();
+        plainTextCache.current.clear();
         setLoading(false);
       });
   }, [lang]);
+
+  // Keep path in sync with current language/chapter
+  useEffect(() => {
+    if (!chapterIds.length) return;
+    // Use short language code (ISO 639-1) for URLs
+    const abbr = (LANGUAGE_ABBREV[lang] || '').toLowerCase();
+    const chapterTitle = toc[chapterIdx]?.title || '';
+    const chapterNumber = getChapterNumber(chapterTitle) ?? (chapterIdx + 1);
+    const strippedTitle = stripChapterPrefix(chapterTitle);
+    const slug = slugifyAscii(strippedTitle || chapterTitle) || `chapter-${chapterNumber}`;
+    const label = slugifyAscii(LANGUAGE_CHAPTER_LABELS[lang] || 'Chapter') || 'chapter';
+    const path = `/${abbr}/${label}-${chapterNumber}/${slug}`;
+    if (window.location.pathname !== path) {
+      window.history.replaceState({}, '', path);
+    }
+  }, [lang, chapterIdx, chapterIds.length, toc]);
+
+  // Lazily extract and cache chapter HTML from the stored document
+  function extractChapterHtml(doc: Document, id: string, entries: TocEntry[]): string {
+    const el = doc.getElementById(id);
+    if (!el) return '';
+    let node: Element | null = el;
+    let acc = '';
+    while (node) {
+      acc += node.outerHTML;
+      const next = node.nextElementSibling;
+      if (next && entries.some((en) => en.href.replace(/^#/, '') === next.id)) break;
+      node = node.nextElementSibling;
+    }
+    return acc;
+  }
+
+  // Get chapter HTML, using cache or extracting on-demand
+  function getChapterHtml(idx: number): string {
+    if (chapterCache.current.has(idx)) return chapterCache.current.get(idx)!;
+    if (!bookDoc || !chapterIds[idx]) return '';
+    const html = extractChapterHtml(bookDoc, chapterIds[idx], toc);
+    chapterCache.current.set(idx, html);
+    return html;
+  }
+
+  // Get plain-text version of chapter for search (cached)
+  function getChapterText(idx: number): string {
+    if (plainTextCache.current.has(idx)) return plainTextCache.current.get(idx)!;
+    const html = getChapterHtml(idx);
+    const text = html.replace(/<[^>]+>/g, ' ');
+    plainTextCache.current.set(idx, text);
+    return text;
+  }
 
   function runSearch() {
     // Support exact-phrase searches when the user wraps the query in
@@ -472,8 +1403,8 @@ export default function BookReader() {
 
     const esc = escapeRegExp(query);
     const results: { idx: number; occ: number }[] = [];
-    chapters.forEach((html, idx) => {
-      const text = html.replace(/<[^>]+>/g, ' ');
+    for (let idx = 0; idx < chapterIds.length; idx++) {
+      const text = getChapterText(idx);
       let m: RegExpExecArray | null;
       let occ = 0;
       const pattern = exact ? `\\b${esc}\\b` : esc;
@@ -483,7 +1414,7 @@ export default function BookReader() {
         occ++;
         if (runner.lastIndex === m.index) runner.lastIndex++;
       }
-    });
+    }
 
     setSearchResults(results);
     if (results.length) {
@@ -564,6 +1495,8 @@ export default function BookReader() {
     }
   }, [searchIdx, searchResults]);
 
+
+
   // When a click requests navigation to an occurrence we may need to wait
   // until the rendered HTML has been updated and highlights exist. Poll a
   // short while and then perform the scroll; this avoids race conditions
@@ -601,18 +1534,70 @@ export default function BookReader() {
     };
   }, [pendingScroll, chapterIdx, highlighted]);
 
-  const currentHtml = chapters[chapterIdx] || '';
-  const highlightedHtml = getHighlightedHtml(currentHtml, highlighted);
-  const headingTransformedHtml = transformChapterHeading(highlightedHtml);
-  const displayedHtml = applyDropcap(headingTransformedHtml, lang, chapterIdx, toc);
+  const currentHtml = getChapterHtml(chapterIdx);
+  // Avoid re-running expensive DOMParser work on every render when nothing
+  // relevant changed. Pipeline the transforms so each step only re-computes
+  // when its dependencies change.
+  const highlightedHtml = useMemo(
+    () => getHighlightedHtml(currentHtml, highlighted),
+    [currentHtml, highlighted]
+  );
+  const headingTransformedHtml = useMemo(
+    () => transformChapterHeading(highlightedHtml),
+    [highlightedHtml]
+  );
+  const htmlWithParagraphIds = useMemo(
+    () => addParagraphIds(headingTransformedHtml, chapterIdx + 1),
+    [headingTransformedHtml, chapterIdx]
+  );
+  const displayedHtml = useMemo(
+    () => applyDropcap(htmlWithParagraphIds, lang, chapterIdx, toc),
+    [htmlWithParagraphIds, lang, chapterIdx, toc]
+  );
+
+  // If URL has a paragraph hash, try to scroll it into view
+  useEffect(() => {
+    const hash = (window.location.hash || '').replace(/^#/, '');
+    if (!hash) return;
+    
+    let attempts = 0;
+    const maxAttempts = 10;
+    
+    const tryScroll = () => {
+      const el = document.getElementById(hash);
+      if (el) {
+        // Element found, scroll to it
+        setTimeout(() => {
+          try {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          } catch {
+            // Fallback: calculate position and scroll
+            const rect = el.getBoundingClientRect();
+            const scrollTop = window.scrollY + rect.top - (window.innerHeight / 2) + (rect.height / 2);
+            window.scrollTo({ top: scrollTop, behavior: 'smooth' });
+          }
+        }, 100);
+      } else if (attempts < maxAttempts) {
+        // Element not found yet, retry
+        attempts++;
+        setTimeout(tryScroll, 100);
+      }
+    };
+    
+    // Start trying after initial render
+    requestAnimationFrame(() => {
+      setTimeout(tryScroll, 200);
+    });
+  }, [chapterIdx, displayedHtml]);
 
   // Derive a readable book title from the language folder name.
   // Many folders are named like "<Localized Title> - Ellen G. White" so split off
   // the author suffix to get the localized title for the header.
   const displayTitle = (lang || '').split(' - Ellen')[0].trim();
+  const isRtl = (lang || '').toLowerCase().includes('alsra');
 
   return (
-    <div className="reader-root">
+    <div className={`reader-root${showOpeningToc ? ' opening-toc-active' : ''}`}>
       {/* Language title removed — header icons now indicate language */}
       <header className="reader-header-bar">
         <div className="reader-header-bar-inner" style={{ width: isDesktop ? `${pageWidth}px` : '100%' }}>
@@ -620,7 +1605,7 @@ export default function BookReader() {
             {/* Localized book title on the left */}
             <div
               className="reader-header-title"
-              style={{ marginLeft: 0, fontWeight: 600 }}
+              style={{ fontWeight: 600 }}
               role="button"
               tabIndex={0}
               onClick={() => setShowOpeningToc(true)}
@@ -671,35 +1656,36 @@ export default function BookReader() {
               <MdMenu size={28} />
             </button>
 
-            {/* Previous chapter button */}
-            <button
-              className="reader-prev-chapter"
-              aria-label="Previous chapter"
-              disabled={chapterIdx <= 0}
-              onClick={() => {
-                if (chapterIdx > 0) setChapterIdx(chapterIdx - 1);
-              }}
-              style={{ marginLeft: 8 }}
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-            </button>
-
-            {/* Next chapter button */}
-            <button
-              className="reader-next-chapter"
-              aria-label="Next chapter"
-              disabled={chapterIdx >= chapters.length - 1}
-              onClick={() => {
-                if (chapterIdx < chapters.length - 1) setChapterIdx(chapterIdx + 1);
-              }}
-              style={{ marginLeft: 4 }}
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
-            </button>
-
             {/* Spacer to push utilities to the right */}
-            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
-              {/* Search icon */}
+            <div className="reader-right-controls" style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+              {/* Previous chapter button */}
+              <button
+                className="reader-prev-chapter"
+                aria-label="Previous chapter"
+                disabled={chapterIdx <= 0}
+                onClick={() => {
+                  if (chapterIdx > 0) setChapterIdx(chapterIdx - 1);
+                }}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points={isRtl ? '9 6 15 12 9 18' : '15 18 9 12 15 6'} />
+                </svg>
+              </button>
+
+              {/* Next chapter button */}
+              <button
+                className="reader-next-chapter"
+                aria-label="Next chapter"
+                disabled={chapterIdx >= chapterIds.length - 1}
+                onClick={() => {
+                  if (chapterIdx < chapterIds.length - 1) setChapterIdx(chapterIdx + 1);
+                }}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points={isRtl ? '15 18 9 12 15 6' : '9 6 15 12 9 18'} />
+                </svg>
+              </button>
+              {/* Content actions group */}
               <button
                 className="reader-search-icon"
                 ref={searchBtnRef}
@@ -720,7 +1706,41 @@ export default function BookReader() {
                 <MdSearch size={24} />
               </button>
 
-              {/* Language selector */}
+              <button
+                className="reader-share-icon"
+                ref={shareBtnRef}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const btn = shareBtnRef.current;
+                  if (btn) {
+                    const r = btn.getBoundingClientRect();
+                    setSharePanelStyle({ position: 'fixed', top: r.bottom + 8, left: r.left, minWidth: 220 });
+                  }
+                  setShowShareMenu((v) => !v);
+                }}
+                aria-label="Share"
+              >
+                <MdShare size={22} />
+              </button>
+
+              {/* Mobile expand (More) menu */}
+              <button
+                className="reader-more-icon"
+                ref={moreBtnRef}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const btn = moreBtnRef.current;
+                  if (btn) {
+                    const r = btn.getBoundingClientRect();
+                    setMorePanelStyle({ position: 'fixed', top: r.bottom + 8, right: Math.max(12, window.innerWidth - r.right), minWidth: 220 });
+                  }
+                  setShowMoreMenu((v) => !v);
+                }}
+                aria-label="More"
+              >
+                <MdMoreVert size={22} />
+              </button>
+
               <button
                 ref={langBtnRef}
                 className="reader-lang-icon"
@@ -738,15 +1758,8 @@ export default function BookReader() {
                 <MdTranslate size={26} />
               </button>
 
-              <button
-                className="reader-darkmode-toggle"
-                onClick={() => setIsDark((d) => !d)}
-                aria-label="Toggle dark mode"
-              >
-                {isDark ? <MdDarkMode size={22} /> : <MdLightMode size={22} />}
-              </button>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              {/* Appearance controls group */}
+              <div className="reader-text-size-controls" style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 4 }}>
                 <button
                   className="reader-text-size-btn"
                   aria-label="Decrease text size"
@@ -774,6 +1787,14 @@ export default function BookReader() {
                   A +
                 </button>
               </div>
+
+              <button
+                className="reader-darkmode-toggle"
+                onClick={() => setIsDark((d) => !d)}
+                aria-label="Toggle dark mode"
+              >
+                {isDark ? <MdDarkMode size={22} /> : <MdLightMode size={22} />}
+              </button>
               {isDesktop && (
                 <>
                   <input
@@ -791,21 +1812,121 @@ export default function BookReader() {
         </div>
       </header>
 
-      {showChaptersMenu && (
-        <>
-          <div className="reader-anchor-backdrop" onClick={() => setShowChaptersMenu(false)} />
-          <div
-            className="reader-chapters-panel"
-            style={chaptersPanelStyle || { position: 'fixed', top: 72, left: 16, minWidth: 280 }}
-            onClick={(e) => e.stopPropagation()}
+      {showShareMenu && (
+        <div
+          ref={shareMenuRef}
+          className="reader-share-dropdown"
+          style={sharePanelStyle || undefined}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button onClick={() => handleShareApp('facebook')} aria-label="Share on Facebook">
+            <FaFacebookF size={16} />
+            <span>Facebook</span>
+          </button>
+          <button onClick={() => handleShareApp('twitter')} aria-label="Share on X (Twitter)">
+            <FaXTwitter size={16} />
+            <span>X (Twitter)</span>
+          </button>
+          <button onClick={() => handleShareApp('whatsapp')} aria-label="Share on WhatsApp">
+            <FaWhatsapp size={18} />
+            <span>WhatsApp</span>
+          </button>
+          <button onClick={() => handleShareApp('email')} aria-label="Share via Email">
+            <IoMdMail size={18} />
+            <span>Email</span>
+          </button>
+        </div>
+      )}
+
+      {showMoreMenu && (
+        <div
+          ref={moreMenuRef}
+          className="reader-share-dropdown"
+          style={morePanelStyle || undefined}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            onClick={() => {
+              const btn = moreBtnRef.current;
+              if (btn) {
+                const r = btn.getBoundingClientRect();
+                const panelW = 360;
+                const maxAllowed = Math.max(120, window.innerWidth - 32);
+                const w = Math.min(panelW, maxAllowed);
+                let left = r.left;
+                if (left + w + 16 > window.innerWidth) left = Math.max(12, window.innerWidth - w - 16);
+                if (left < 12) left = 12;
+                setChaptersPanelStyle({ position: 'fixed', top: r.bottom + 8, left, width: w, maxWidth: '92%', zIndex: 9999 });
+              }
+              setShowChaptersMenu(true);
+              setShowMoreMenu(false);
+            }}
+            aria-label="Contents"
           >
-            <div className="reader-modal-header">
-              <strong>Contents</strong>
-              <button onClick={() => setShowChaptersMenu(false)}>✕</button>
-            </div>
-            <ul className="reader-toc-list">
-              {toc.length === 0 && <li className="reader-toc-empty">No contents</li>}
-              {toc.map((t, i) => (
+            <MdMenu size={20} />
+            <span>Contents</span>
+          </button>
+          <button
+            onClick={() => {
+              const btn = moreBtnRef.current;
+              if (btn) {
+                const r = btn.getBoundingClientRect();
+                setLangPanelStyle({ position: 'fixed', top: r.bottom + 8, left: r.left, minWidth: 220 });
+              }
+              setShowLangMenu(true);
+              setShowMoreMenu(false);
+            }}
+            aria-label="Language"
+          >
+            <MdTranslate size={20} />
+            <span>Language</span>
+          </button>
+          <button
+            onClick={() => {
+              setIsDark((d) => !d);
+              setShowMoreMenu(false);
+            }}
+            aria-label="Toggle dark mode"
+          >
+            {isDark ? <MdDarkMode size={20} /> : <MdLightMode size={20} />}
+            <span>{isDark ? 'Light mode' : 'Dark mode'}</span>
+          </button>
+          <button onClick={() => handleShareApp('facebook')} aria-label="Share on Facebook">
+            <FaFacebookF size={16} />
+            <span>Facebook</span>
+          </button>
+          <button onClick={() => handleShareApp('twitter')} aria-label="Share on X (Twitter)">
+            <FaXTwitter size={16} />
+            <span>X (Twitter)</span>
+          </button>
+          <button onClick={() => handleShareApp('whatsapp')} aria-label="Share on WhatsApp">
+            <FaWhatsapp size={18} />
+            <span>WhatsApp</span>
+          </button>
+          <button onClick={() => handleShareApp('email')} aria-label="Share via Email">
+            <IoMdMail size={18} />
+            <span>Email</span>
+          </button>
+        </div>
+      )}
+
+      {showChaptersMenu && (
+        <div
+          ref={chaptersMenuRef}
+          className="reader-chapters-panel"
+          style={chaptersPanelStyle || { position: 'fixed', top: 72, left: 16, minWidth: 280 }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="reader-modal-header">
+            <strong>Contents</strong>
+            <button onClick={() => setShowChaptersMenu(false)}>✕</button>
+          </div>
+          <ul className="reader-toc-list">
+            {toc.length === 0 && <li className="reader-toc-empty">No contents</li>}
+            {toc.map((t, i) => {
+              const chapterNum = getChapterNumber(t.title);
+              const titleOnly = chapterNum ? stripChapterPrefix(t.title) : t.title;
+              return (
                 <li key={t.href}>
                   <button
                     className={i === chapterIdx ? 'active' : ''}
@@ -814,59 +1935,66 @@ export default function BookReader() {
                       setShowChaptersMenu(false);
                     }}
                   >
-                    {t.title}
+                    {chapterNum && <span className="reader-toc-num">Chapter {chapterNum}</span>}
+                    <span className="reader-toc-title">{titleOnly}</span>
                   </button>
                 </li>
-              ))}
-            </ul>
-          </div>
-        </>
+              );
+            })}
+          </ul>
+        </div>
       )}
 
       {showOpeningToc && (
         <div className="reader-opening-toc" onClick={() => { /* click backdrop does nothing */ }}>
+          <div className="reader-opening-toc-blur" aria-hidden="true" />
           <div className="opening-toc-card" onClick={(e) => e.stopPropagation()}>
             <div className="reader-modal-header">
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <strong style={{ fontSize: '1.1rem' }}>Contents</strong>
+                <div style={{ display: 'grid' }}>
+                  <strong style={{ fontSize: '1.15rem' }}>{displayTitle}</strong>
+                  <span style={{ fontSize: '0.92rem', opacity: 0.75 }}>Contents</span>
+                </div>
               </div>
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.9rem' }}>
-                  <input type="checkbox" defaultChecked={localStorage.getItem('reader-opening-toc') !== '0'} onChange={(e) => {
-                    try { localStorage.setItem('reader-opening-toc', e.target.checked ? '1' : '0'); } catch {}
-                  }} /> Show on startup
-                </label>
                 <button onClick={() => setShowOpeningToc(false)}>✕</button>
               </div>
             </div>
             <div style={{ paddingTop: 8, display: 'grid', gap: 6, maxHeight: '64vh', overflow: 'auto' }}>
               {toc.length === 0 && <div style={{ padding: 12 }}>No contents available</div>}
-              {toc.map((t, i) => (
-                <button key={t.href} className={i === chapterIdx ? 'active' : ''} onClick={() => { setChapterIdx(i); setShowOpeningToc(false); }} style={{ textAlign: 'left', padding: '10px 12px', borderRadius: 10, border: 'none', background: 'transparent', cursor: 'pointer' }}>
-                  <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                    <div className="reader-toc-title" style={{ fontWeight: i === chapterIdx ? 700 : 500 }}>{t.title}</div>
-                  </div>
-                </button>
-              ))}
+              {toc.map((t, i) => {
+                const chapterNum = getChapterNumber(t.title);
+                const titleOnly = chapterNum ? stripChapterPrefix(t.title) : t.title;
+                return (
+                  <button key={t.href} className={i === chapterIdx ? 'active' : ''} onClick={() => { setChapterIdx(i); setShowOpeningToc(false); }} style={{ textAlign: 'left', padding: '10px 12px', borderRadius: 10, border: 'none', background: 'transparent', cursor: 'pointer' }}>
+                    <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                      {chapterNum && <div className="reader-toc-num" style={{ minWidth: 80 }}>Chapter {chapterNum}</div>}
+                      <div className="reader-toc-title" style={{ fontWeight: i === chapterIdx ? 700 : 500, flex: 1 }}>{titleOnly}</div>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
       )}
 
-      <main className="reader-main">
-        {loading ? (
-          <div>Loading…</div>
-        ) : (
-          <div className="reader-wrapper" style={{ width: isDesktop ? `${pageWidth}px` : '100%', fontSize: `${textSize}px`, position: 'relative' }}>
-            <div ref={contentRef} className="reader-book-html" dangerouslySetInnerHTML={{ __html: displayedHtml }} />
-            <footer className="reader-footer">
-              <div className="reader-footer-inner">
-                {(COPYRIGHTS[lang] || `© ${getBookTitleFromFolder(lang) || LANGUAGE_NAMES[lang] || lang}`)}
-              </div>
-            </footer>
-          </div>
-        )}
-      </main>
+      <BookContent
+        loading={loading}
+        isDesktop={isDesktop}
+        pageWidth={pageWidth}
+        textSize={textSize}
+        displayedHtml={displayedHtml}
+        contentRef={contentRef}
+        copyrightText={(COPYRIGHTS[lang] || `© ${getBookTitleFromFolder(lang) || LANGUAGE_NAMES[lang] || lang}`)}
+        lang={lang}
+        chapterIdx={chapterIdx}
+        chapterTitle={chapterTitle}
+        audioMinimized={audioMinimized}
+        setAudioMinimized={setAudioMinimized}
+        onNextChapter={handleNextChapter}
+        onPrevChapter={handlePrevChapter}
+      />
 
       {showSearch && (
         <div className="reader-search-modal" onClick={() => setShowSearch(false)}>
@@ -893,8 +2021,7 @@ export default function BookReader() {
               {/* Render simple snippets for results */}
               {searchResults.length === 0 && <div className="reader-search-noresults">No results</div>}
               {searchResults.map((r, i) => {
-                const html = chapters[r.idx] || '';
-                const text = html.replace(/<[^>]+>/g, ' ');
+                const text = getChapterText(r.idx);
                 let displayQ = (searchQuery || '').trim();
                 if ((displayQ.startsWith('"') && displayQ.endsWith('"')) || (displayQ.startsWith("'") && displayQ.endsWith("'"))) {
                   displayQ = displayQ.slice(1, -1).trim();
@@ -941,28 +2068,153 @@ export default function BookReader() {
       )}
 
       {showLangMenu && (
-        <div className="reader-anchor-backdrop" onClick={() => setShowLangMenu(false)}>
-          <div className="reader-lang-panel" style={langPanelStyle || undefined} onClick={(e) => e.stopPropagation()}>
-            <ul>
-              {LANGUAGE_FOLDERS.map((f) => (
-                <li key={f}>
-                  <button
-                    disabled={f === lang}
-                    onClick={() => {
-                      setLang(f);
-                      setChapterIdx(0);
-                      setShowLangMenu(false);
-                    }}
-                  >
-                    {LANGUAGE_NAMES[f] || f}
-                  </button>
-                </li>
-              ))}
-            </ul>
+        <div
+          ref={langMenuRef}
+          className="reader-lang-panel"
+          style={langPanelStyle || undefined}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <ul>
+            {LANGUAGE_FOLDERS.map((f) => (
+              <li key={f}>
+                <button
+                  disabled={f === lang}
+                  onClick={() => {
+                    setLang(f);
+                    setChapterIdx(0);
+                    setShowLangMenu(false);
+                  }}
+                >
+                  {LANGUAGE_NAMES[f] || f}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Text selection share popup */}
+      {showSharePopup && (
+        <div
+          ref={sharePopupRef}
+          className="reader-share-popup"
+          style={(() => {
+            // Clamp popup position to viewport
+            const width = 260; // estimated popup width
+            const margin = 8;
+            let left = sharePopupPos.left;
+            let top = sharePopupPos.top;
+            if (typeof window !== 'undefined') {
+              const maxLeft = window.innerWidth - width / 2 - margin;
+              const minLeft = width / 2 + margin;
+              if (left > maxLeft) left = maxLeft;
+              if (left < minLeft) left = minLeft;
+              // Clamp top if needed (optional, for very small screens)
+              const minTop = margin;
+              const maxTop = window.innerHeight - 60;
+              if (top < minTop) top = minTop;
+              if (top > maxTop) top = maxTop;
+            }
+            return {
+                  position: 'absolute',
+                  top: `${top}px`,
+                  left: `${left}px`,
+                  transform: 'translateX(-50%)',
+                  zIndex: 10000,
+                  background: isDark ? '#23243a' : '#fff',
+                  color: isDark ? '#ffe066' : '#23235a',
+                  border: '1.5px solid #e0e0e0',
+                  borderRadius: 8,
+                  padding: '6px'
+                };
+          })()}
+          onMouseDown={e => { restoreSelection(); e.stopPropagation(); e.preventDefault(); }}
+          onTouchStart={e => { restoreSelection(); e.stopPropagation(); e.preventDefault(); }}
+          onMouseEnter={restoreSelection}
+        >
+          <div className="reader-share-popup-content">
+            <button 
+              onClick={handleCopy}
+              aria-label="Copy text"
+              title="Copy"
+            >
+              <MdContentCopy size={18} />
+            </button>
+            {typeof navigator !== 'undefined' && typeof navigator.share === 'function' && (
+              <button 
+                onClick={() => handleShare('native')}
+                aria-label="Share"
+                title="Share"
+              >
+                <MdShare size={18} />
+              </button>
+            )}
+            <button 
+              onClick={() => handleShare('facebook')}
+              aria-label="Share on Facebook"
+              title="Facebook"
+            >
+              <FaFacebookF size={16} />
+            </button>
+            <button 
+              onClick={() => handleShare('twitter')}
+              aria-label="Share on X/Twitter"
+              title="X (Twitter)"
+            >
+              <FaXTwitter size={16} />
+            </button>
+            <button 
+              onClick={() => handleShare('whatsapp')}
+              aria-label="Share on WhatsApp"
+              title="WhatsApp"
+            >
+              <FaWhatsapp size={18} />
+            </button>
+            <button 
+              onClick={() => handleShare('email')}
+              aria-label="Share via Email"
+              title="Email"
+            >
+              <IoMdMail size={18} />
+            </button>
+            <button 
+              onClick={() => {
+                setShowSharePopup(false);
+                // restore iOS touch callout when popup closed
+                try {
+                  if (contentRef.current && (contentRef.current as any).style) {
+                    (contentRef.current as any).style.webkitTouchCallout = '';
+                  }
+                } catch {}
+                window.getSelection()?.removeAllRanges();
+              }}
+              aria-label="Close"
+              title="Close"
+              className="reader-share-close"
+            >
+              <MdClose size={16} />
+            </button>
           </div>
+        </div>
+      )}
+      {showCopyToast && (
+        <div
+          className="reader-share-feedback reader-share-feedback-near"
+          role="status"
+          aria-live="polite"
+          style={{
+            position: 'absolute',
+            top: `${copyToastPos.top}px`,
+            left: `${copyToastPos.left}px`,
+            transform: 'translateX(-50%)',
+            zIndex: 10001,
+          }}
+        >
+          Copied
         </div>
       )}
     </div>
   );
     }
+
 
