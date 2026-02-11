@@ -1,0 +1,9 @@
+[build]
+  command = "npm ci && npm run build"
+  publish = "dist"
+
+# SPA fallback so deep links like /en/chapter-1/... are served by the app.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

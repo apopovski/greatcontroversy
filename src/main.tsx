@@ -4,10 +4,13 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import './index.css';
 
-
-if ('serviceWorker' in navigator) {
+// Register the service worker only in production builds.
+// The file lives in `public/` so it is emitted at `/service-worker.js`.
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/src/service-worker.js');
+    navigator.serviceWorker.register('/service-worker.js').catch(() => {
+      // ignore registration errors (e.g., unsupported or blocked contexts)
+    });
   });
 }
 
