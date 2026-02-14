@@ -22,6 +22,78 @@ html[data-theme='dark']{
   --reader-modal-fg: #e6e6e6;
 }
 
+/* RTL (Right-to-Left) support for Arabic and other RTL languages */
+html[dir='rtl'] {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir='rtl'] .reader-header-bar-inner {
+  flex-direction: row-reverse;
+}
+
+html[dir='rtl'] .reader-header-controls {
+  flex-direction: row-reverse;
+}
+
+html[dir='rtl'] .reader-right-controls {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+html[dir='rtl'] .reader-header-title {
+  text-align: right;
+  margin-right: 0;
+  margin-left: 12px;
+  order: -1;
+}
+
+html[dir='rtl'] .reader-toc-list button {
+  text-align: right;
+}
+
+html[dir='rtl'] .reader-book-html,
+html[dir='rtl'] .reader-book-html p,
+html[dir='rtl'] .reader-book-html blockquote,
+html[dir='rtl'] .reader-book-html div,
+html[dir='rtl'] .reader-book-html h1,
+html[dir='rtl'] .reader-book-html h2,
+html[dir='rtl'] .reader-book-html h3,
+html[dir='rtl'] .reader-book-html h4 {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir='rtl'] .reader-wrapper {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir='rtl'] .reader-footer {
+  text-align: right;
+}
+
+html[dir='rtl'] .reader-share-popup {
+  direction: ltr;
+}
+
+html[dir='rtl'] .reader-modal-centered {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir='rtl'] .reader-search-panel,
+html[dir='rtl'] .reader-lang-panel,
+html[dir='rtl'] .reader-chapters-panel {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir='rtl'] .reader-opening-toc-inline {
+  direction: rtl;
+  text-align: right;
+}
+
 *{box-sizing:border-box}
 html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--reader-bg);color:var(--reader-fg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial}
 
@@ -54,6 +126,88 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
 .reader-darkmode-toggle{width:32px;height:32px;padding:4px;border-radius:6px}
 .reader-darkmode-toggle svg{width:18px;height:18px}
 
+/* Header share icon */
+.reader-share-icon{
+  background:none;
+  border:0;
+  padding:6px;
+  border-radius:6px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  color:inherit;
+}
+.reader-share-icon:hover{
+  color:var(--reader-accent);
+  background:rgba(100,110,255,0.08);
+}
+
+.reader-more-icon{
+  background:none;
+  border:0;
+  padding:6px;
+  border-radius:6px;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  color:inherit;
+}
+.reader-more-icon:hover{
+  color:var(--reader-accent);
+  background:rgba(100,110,255,0.08);
+}
+
+/* Share dropdown panel */
+.reader-share-dropdown{
+  background:var(--reader-modal-bg);
+  color:var(--reader-modal-fg);
+  border-radius:10px;
+  box-shadow:0 8px 28px rgba(0,0,0,0.18);
+  padding:8px;
+  position:fixed;
+  z-index:1402;
+  min-width:220px;
+  display:grid;
+  gap:4px;
+  animation: shareMenuIn 0.12s ease-out;
+}
+.reader-share-dropdown button{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:100%;
+  padding:8px 10px;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  color:inherit;
+  border-radius:8px;
+  text-align:left;
+}
+.reader-share-dropdown button:hover{
+  background:rgba(100,110,255,0.08);
+  color:var(--reader-accent);
+}
+
+@media (max-width:640px) {
+  .reader-share-dropdown button{
+    font-size:1.02rem;
+    padding:10px 12px;
+  }
+}
+
+@keyframes shareMenuIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Chapters and language panels use same animation */
+.reader-chapters-panel, .reader-lang-panel {
+  animation: shareMenuIn 0.12s ease-out;
+}
+
 /* Text size buttons */
 .reader-text-size-btn{background:none;border:0;padding:6px 8px;border-radius:6px;cursor:pointer;color:inherit;font-weight:600}
 .reader-text-size-btn:hover{background:rgba(0,0,0,0.04)}
@@ -80,10 +234,10 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
 .reader-toc-list{list-style:none;margin:8px 0 0;padding:0}
 .reader-toc-list li{margin:0}
 /* Subtle divider under each chapter for improved visual separation */
-.reader-toc-list button{width:100%;text-align:left;padding:10px 8px;border:none;background:none;border-radius:6px;cursor:pointer;font-size:1.05rem;line-height:1.18;display:grid;grid-template-columns:1fr;column-gap:12px;align-items:start;border-bottom:1px solid var(--reader-border)}
+.reader-toc-list button{width:100%;text-align:left;padding:10px 8px;border:none;background:none;border-radius:6px;cursor:pointer;font-size:1.05rem;line-height:1.18;display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:start;border-bottom:1px solid var(--reader-border)}
 .reader-toc-list li:last-child .reader-toc-num + .reader-toc-title, .reader-toc-list li:last-child button{border-bottom:0}
-.reader-toc-list button .reader-toc-num{opacity:0.85;white-space:nowrap;font-weight:600;color:var(--reader-modal-fg)}
-.reader-toc-list button .reader-toc-title{display:block}
+.reader-toc-list button .reader-toc-num{opacity:0.85;white-space:nowrap;font-weight:600;color:var(--reader-modal-fg);grid-column:1}
+.reader-toc-list button .reader-toc-title{display:block;grid-column:2;word-wrap:break-word;overflow-wrap:anywhere}
 
 /* Prevent horizontal scrolling in the anchored chapters/contents panel and
   ensure long titles wrap cleanly. The opening TOC already has similar
@@ -181,15 +335,32 @@ span.dropcap {
    the header content is centered above the main content area. */
 @media (min-width:900px) {
   .reader-header-controls { justify-content:flex-start; }
-  .reader-title-center { order: 0; text-align:left; margin-right:12px; margin-left: 0px; }
+  .reader-header-title { order: 0; text-align:left; margin-right:12px; margin-left: 0px; }
   .reader-burger-icon { order: 1; }
-  .reader-lang-icon { order: 2; }
-  .reader-prev-chapter { order: 3; }
-  .reader-next-chapter { order: 4; }
-  /* place search immediately after navigation arrows */
-  .reader-search-icon { order: 5; margin-left: 8px; }
-  /* keep the right-controls group (size/bookmark/darkmode) at the far right */
-  .reader-right-controls { order: 6; margin-left: auto; }
+  .reader-prev-chapter { order: 2; }
+  .reader-next-chapter { order: 3; }
+  /* Right-side controls: content actions followed by appearance */
+  .reader-right-controls { order: 4; margin-left: auto; }
+  .reader-search-icon { order: 1; }
+  .reader-share-icon { order: 2; }
+  .reader-lang-icon { order: 3; }
+  /* Appearance controls at the end */
+  .reader-text-size-btn { order: 4; }
+  .reader-darkmode-toggle { order: 5; }
+}
+
+/* RTL desktop layout */
+@media (min-width:900px) {
+  html[dir='rtl'] .reader-header-controls { justify-content:flex-start; }
+  html[dir='rtl'] .reader-header-title { order: 4; text-align:right; margin-left:12px; margin-right: 0px; }
+  html[dir='rtl'] .reader-burger-icon { order: 3; }
+  html[dir='rtl'] .reader-prev-chapter { order: 2; }
+  html[dir='rtl'] .reader-next-chapter { order: 1; }
+  html[dir='rtl'] .reader-right-controls { order: 0; margin-right: auto; margin-left: 0; }
+  html[dir='rtl'] .reader-search-icon { order: 5; }
+  html[dir='rtl'] .reader-share-icon { order: 4; }
+  html[dir='rtl'] .reader-lang-icon { order: 3; }
+  html[dir='rtl'] .reader-darkmode-toggle { order: 1; }
 }
 .reader-wrapper,.reader-main{position:relative;z-index:1}
 
@@ -208,47 +379,57 @@ span.dropcap {
   .reader-header-bar-inner{padding-right:56px}
 }
 
-/* Mobile: allow header controls to wrap and move the title to its own line
-   so all icons can fit. Title appears above the controls on narrow viewports. */
+/* Mobile: title on its own row, controls below */
 @media (max-width:640px) {
-  /* Make the header expand vertically so a stacked title can be visible
-     (the header uses a fixed 56px height by default which hid the title).
-     Keep the control row on a single line and allow horizontal scrolling
-     if it doesn't fit so icons are still reachable on small screens. */
-  .reader-header-bar { height: auto; padding: 8px 0; }
-  .reader-header-bar-inner { display:flex; flex-direction:column; gap:6px; padding-left:0.75rem; padding-right:0.75rem; }
+  .reader-header-bar { height: auto; padding: 6px 0; }
+  .reader-header-bar-inner { display:flex; flex-direction:column; gap:6px; padding-left:0.5rem; padding-right:0.5rem; align-items:stretch; }
 
-  .reader-header-controls { display:flex; flex-wrap:nowrap; align-items:center; gap:6px; overflow-x:auto; -webkit-overflow-scrolling:touch; }
-  /* Ensure the title takes a full row on narrow screens by forcing a full-width block. */
-  /* Left-align the title on mobile so it matches the control alignment */
-  .reader-title-center { order:-1; flex: 0 0 100%; width:100%; padding-left:0; padding-right:8px; font-size:0.98rem; text-align:left; display:block; }
-  .reader-title-center { margin-left: 0px; }
-  /* reduce spacing for icon group to fit more items per row */
-  .reader-header-controls > div, .reader-header-controls > button { margin:0; }
-  /* ensure the right-edge search icon remains tappable */
-  /* Remove absolute positioning of the search icon on mobile so it sits
-     in the same vertical line as the other icons (in the controls row). */
-  .reader-search-icon{ position: static; right: auto; top: auto; transform: none; margin-left: 0; }
+  /* Title row */
+  .reader-header-title { display:block; width:100%; text-align:left; padding:0 4px; font-size:0.98rem; flex: 0 0 100%; order: -1; margin-right:auto; }
 
-  /* Mobile-specific ordering: present icons in a logical left-to-right order
-     without changing the desktop markup. Numbers chosen to leave room for
-     other controls if needed. */
-  .reader-burger-icon { order: 1; }
-  .reader-lang-icon { order: 2; }
-  .reader-prev-chapter { order: 3; }
-  .reader-next-chapter { order: 4; }
-  /* group on the right: size controls, bookmark, darkmode */
-  .reader-right-controls { order: 5; display:flex; align-items:center; gap:8px; }
-  .reader-search-icon { order: 8; }
-  /* internal ordering inside the right-controls container */
-  .reader-right-controls .reader-size-controls { order: 1; }
-  .reader-right-controls .reader-bookmark-btn { order: 2; }
-  .reader-right-controls .reader-darkmode-toggle { order: 3; }
+  /* Controls row: title on its own row, icons right-aligned below */
+  .reader-header-controls { display:flex; flex-wrap:nowrap; align-items:center; gap:3px; flex:1; min-width:0; width:100%; justify-content:flex-end; overflow-x:hidden; }
+  .reader-header-controls > button, .reader-right-controls { flex: 0 0 auto; }
+
+  /* Essential controls on mobile (right side) */
+  .reader-burger-icon { display:none !important; }
+  .reader-prev-chapter { order: 2; flex-shrink: 0; }
+  .reader-next-chapter { order: 3; flex-shrink: 0; }
+
+  /* Right controls group (More + search + text size) */
+  .reader-right-controls { 
+    order: 4; 
+    display:flex; 
+    align-items:center; 
+    gap:3px;
+    margin-left: auto;
+    flex-shrink: 0;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+  }
+
+  /* On mobile, hide non-essential icons and use More menu */
+  .reader-lang-icon { display:none !important; }
+  .reader-share-icon { display:none !important; }
+  .reader-darkmode-toggle { display:none !important; }
+  .reader-text-size-controls { order: 1; display:flex; align-items:center; gap:6px; }
+  .reader-search-icon { order: 2; flex-shrink: 0; position: static; right: auto; top: auto; transform: none; }
+  .reader-more-icon { display:inline-flex !important; order: 3; margin-left: 0; }
+  
+  /* Text size controls - combine into single button visually */
+  .reader-text-size-btn { padding:4px 6px; font-size:0.9rem; }
+  
+  .reader-darkmode-toggle { order: 5; flex-shrink: 0; padding:4px; }
+
+  /* Reduce padding on buttons for mobile */
+  .reader-burger-icon,
+  .reader-prev-chapter,
+  .reader-next-chapter,
+  .reader-search-icon,
+  .reader-share-icon { padding: 4px; }
 }
 
-/* Ensure there's comfortable spacing between the stacked header and the
-   book content on narrow screens so the top of the chapter isn't hidden
-   under the header. This compensates for the header height being auto. */
+/* Ensure there's comfortable spacing between the header and book content on narrow screens */
 @media (max-width:640px) {
   .reader-wrapper { padding-top: 96px; }
 }
@@ -257,22 +438,23 @@ span.dropcap {
    differ; use -webkit- prefixed properties and !important to ensure the
    title occupies its own line above controls on narrow devices. */
 @media (max-width:740px) {
-  .reader-title-center {
+  .reader-header-title {
     order: -1 !important;
     -webkit-order: -1 !important;
     flex: 0 0 100% !important;
     -webkit-flex: 0 0 100% !important;
     width: 100% !important;
     display: block !important;
-    text-align: center !important;
-    padding-left: 0 !important;
+    text-align: left !important;
+    padding-left: 4px !important;
     padding-right: 8px !important;
+    color: var(--reader-fg) !important;
   }
   .reader-header-controls { flex-wrap: wrap !important; }
 }
 
 /* Modern search modal (centered card) */
-.reader-search-modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.48);z-index:2600}
+.reader-search-modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:2600}
 .reader-search-card{width:min(920px,94%);max-height:80vh;display:flex;flex-direction:column;background:var(--reader-modal-bg);color:var(--reader-modal-fg);border-radius:12px;box-shadow:0 20px 60px rgba(16,24,40,0.35);overflow:hidden}
 .reader-search-card .reader-search-bar{display:flex;gap:8px;align-items:center;padding:12px;border-bottom:1px solid rgba(0,0,0,0.06);background:transparent}
 .reader-search-input{flex:1;padding:10px 12px;border-radius:8px;border:1px solid var(--reader-border);font-size:1rem;background:transparent;color:inherit;outline:none}
@@ -302,25 +484,54 @@ span.dropcap {
 .reader-search-result:hover{background:rgba(100,110,255,0.06);transform:translateY(-1px)}
 .reader-search-noresults{padding:18px;text-align:center;color:#888}
 
-/* Opening Table of Contents (full-screen welcome card) */
-.reader-opening-toc{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(6,10,34,0.6),rgba(6,10,34,0.4));z-index:3000;padding:32px}
-.opening-toc-card{width:min(1100px,96%);max-width:1100px;background:var(--reader-modal-bg);color:var(--reader-modal-fg);border-radius:14px;padding:18px;box-shadow:0 30px 80px rgba(6,10,34,0.6);border:1px solid rgba(255,255,255,0.02)}
-.opening-toc-card .reader-modal-header{padding-bottom:6px}
-.opening-toc-card button{background:none;border:0;cursor:pointer;color:inherit}
-.opening-toc-card .reader-toc-num{min-width:36px;text-align:right;font-weight:700;color:var(--reader-accent)}
-.opening-toc-card .reader-toc-title{font-size:1.05rem}
+/* Opening Table of Contents (inline opening page) */
+.reader-opening-toc-inline{
+  border:1px solid var(--reader-border);
+  background:linear-gradient(to bottom, rgba(100,110,255,0.05), transparent 40%);
+  border-radius:14px;
+  padding:16px;
+  margin-top:8px;
+}
 
-/* Prevent horizontal scrolling inside the contents modal and allow long
-  chapter titles to wrap to multiple lines. Ensure the number column stays
-  fixed while the title takes remaining space and can break. */
-.opening-toc-card{overflow-x:hidden}
-.opening-toc-card button{white-space:normal;overflow-wrap:anywhere;word-break:break-word}
-.opening-toc-card .reader-toc-num{flex:0 0 36px}
-.opening-toc-card .reader-toc-title{flex:1 1 auto;white-space:normal;overflow-wrap:anywhere;word-break:break-word}
+.reader-opening-toc-inline-header{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  padding-bottom:10px;
+  border-bottom:1px solid var(--reader-border);
+}
+
+.reader-opening-title{
+  margin:0;
+  font-size:1.35rem;
+  line-height:1.2;
+}
+
+.reader-opening-subtitle{
+  margin-top:4px;
+  font-size:0.95rem;
+  opacity:0.75;
+}
+
+.reader-opening-continue{
+  border:1px solid var(--reader-border);
+  background:rgba(100,110,255,0.10);
+  color:inherit;
+  padding:8px 10px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:700;
+}
+
+.reader-opening-continue:hover{background:rgba(100,110,255,0.16)}
+
+.reader-opening-toc-list{margin-top:10px}
 
 @media (max-width:720px){
-  .opening-toc-card{padding:12px;border-radius:10px}
-  .reader-opening-toc{padding:18px}
+  .reader-opening-toc-inline{padding:12px;border-radius:12px}
+  .reader-opening-title{font-size:1.2rem}
 }
 
 @media (max-width:720px){.reader-search-card{width:94%;border-radius:10px}.reader-search-bar{padding:10px}.reader-search-input{font-size:0.95rem}}
@@ -422,6 +633,15 @@ div.reader.header-title {
 
 /* Small feedback toast used for share/highlight messages */
 .reader-share-feedback{position:fixed;left:50%;transform:translateX(-50%);bottom:64px;background:var(--reader-modal-bg);color:var(--reader-modal-fg);padding:8px 12px;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,0.18);z-index:4001;font-weight:600}
+.reader-share-feedback-near{
+  position: absolute;
+  bottom: auto;
+  left: auto;
+  transform: translateX(-50%);
+  font-size: 0.92rem;
+  padding: 6px 10px;
+  border-radius: 999px;
+}
 
 /* Debug overlay shown when enabled to capture selection state and fallback matching */
 .reader-debug-overlay{position:fixed;left:12px;bottom:18px;background:rgba(0,0,0,0.78);color:#fff;padding:10px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.36);z-index:6000;font-size:0.9rem;line-height:1.2;max-width:360px}
@@ -442,10 +662,90 @@ div.reader.header-title {
 .reader-highlight-toggle .highlight-toggle-btn:hover{transform:translateY(-2px)}
 .reader-highlight-toggle, .reader-highlight-toggle .highlight-toggle-btn { pointer-events: auto; }
 .reader-highlight-toggle .highlight-toggle-btn { touch-action: manipulation; }
-.user-highlight{background:rgba(255,200,102,0.28);padding:0 0.06em;border-radius:4px}
+.user-highlight{
+  background: rgba(255, 215, 0, 0.85);
+  color: #1a1a1a;
+  padding: 0 0.12em;
+  border-radius: 6px;
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.18);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
 
 /* Ensure nothing left open or malformed in this file */
 
 /* Force-hide the page width slider (keeps markup in place for now) */
 .reader-width-slider{display:none !important}
 
+/* Text selection share popup */
+.reader-share-popup {
+  pointer-events: auto;
+  animation: fadeInUp 0.15s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.reader-share-popup-content {
+  display: flex;
+  gap: 4px;
+  background: var(--reader-modal-bg);
+  border: 1px solid var(--reader-border);
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: 0 12px 34px rgba(12, 20, 40, 0.28);
+  backdrop-filter: blur(8px);
+}
+
+.reader-share-popup-content button {
+  background: var(--reader-bg);
+  border: 0;
+  padding: 10px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--reader-fg);
+  transition: all 0.12s ease;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.reader-share-popup-content button:hover {
+  background: var(--reader-accent);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(100, 108, 255, 0.24);
+}
+
+.reader-share-popup-content button.reader-share-close {
+  background: rgba(255, 0, 0, 0.08);
+}
+
+.reader-share-popup-content button.reader-share-close:hover {
+  background: rgba(255, 0, 0, 0.16);
+  color: #d32f2f;
+  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
+}
+
+html[data-theme='dark'] .reader-share-popup-content button:hover {
+  box-shadow: 0 6px 18px rgba(100, 108, 255, 0.4);
+}
+
+/* Restore visible selection highlight inside the reader */
+.reader-book-html ::selection {
+  background: rgba(138, 180, 255, 0.45);
+  color: inherit;
+}
+.reader-book-html *::selection {
+  background: rgba(138, 180, 255, 0.45);
+  color: inherit;
+}

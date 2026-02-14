@@ -467,11 +467,23 @@ export default function BookReader() {
   const [showCopyToast, setShowCopyToast] = useState(false);
   const [copyToastPos, setCopyToastPos] = useState({ top: 0, left: 0 });
   const [showOpeningToc, setShowOpeningToc] = useState(() => {
-    // If navigating via a URL path or if there's a hash fragment (paragraph anchor), don't show the TOC overlay
-    const hasUrlPath = /^\/([^/]+)\/[^/]+-\d+\//.test(window.location.pathname);
-    const hasHashFragment = window.location.hash && window.location.hash.startsWith('#gc-p-');
-    if (hasUrlPath || hasHashFragment) return false;
-    return true;
+    // Show the TOC page only on the root route (/) or language-only routes (/{lang}).
+    // If navigating via a deep link (chapter route) or a paragraph hash, don't force the TOC.
+    const path = window.location.pathname || '/';
+    const hasHashFragment = !!(window.location.hash && window.location.hash.startsWith('#gc-p-'));
+    if (hasHashFragment) return false;
+
+    const isRoot = path === '/' || path === '';
+    if (isRoot) return true;
+
+    const m = path.match(/^\/([^/]+)\/?$/);
+    if (m) {
+      const slug = decodeURIComponent(m[1] || '').toLowerCase();
+      if (LANG_SLUG_TO_FOLDER[slug]) return true;
+    }
+
+    // Any route with 2+ segments should be treated as a deep link.
+    return false;
   });
   const sharePopupRef = useRef<HTMLDivElement | null>(null);
   const selectionRangeRef = useRef<Range | null>(null);
@@ -1312,13 +1324,6 @@ export default function BookReader() {
             });
           }, { timeout: 2000 });
         }
-        // Show the opening TOC when chapters are available (first load)
-        try {
-          const show = localStorage.getItem('reader-opening-toc');
-          if (show === null) setShowOpeningToc(true);
-        } catch {
-          // ignore
-        }
       })
       .catch(() => {
         // failed to load selected language — leave chapters empty so the UI
@@ -1338,6 +1343,16 @@ export default function BookReader() {
     if (!chapterIds.length) return;
     // Use short language code (ISO 639-1) for URLs
     const abbr = (LANGUAGE_ABBREV[lang] || '').toLowerCase();
+
+     // Contents view: keep a stable language-only route so the opening page is linkable.
+    if (showOpeningToc) {
+      const path = abbr ? `/${abbr}` : '/';
+      if (window.location.pathname !== path) {
+        window.history.replaceState({}, '', path);
+      }
+      return;
+    }
+
     const chapterTitle = toc[chapterIdx]?.title || '';
     const chapterNumber = getChapterNumber(chapterTitle) ?? (chapterIdx + 1);
     const strippedTitle = stripChapterPrefix(chapterTitle);
@@ -1347,7 +1362,7 @@ export default function BookReader() {
     if (window.location.pathname !== path) {
       window.history.replaceState({}, '', path);
     }
-  }, [lang, chapterIdx, chapterIds.length, toc]);
+  }, [lang, chapterIdx, chapterIds.length, toc, showOpeningToc]);
 
   // Lazily extract and cache chapter HTML from the stored document
   function extractChapterHtml(doc: Document, id: string, entries: TocEntry[]): string {
@@ -1596,8 +1611,14 @@ export default function BookReader() {
   const displayTitle = (lang || '').split(' - Ellen')[0].trim();
   const isRtl = (lang || '').toLowerCase().includes('alsra');
 
+  const wrapperStyle: React.CSSProperties = {
+    width: isDesktop ? `${pageWidth}px` : '100%',
+    fontSize: `${textSize}px`,
+    position: 'relative',
+  };
+
   return (
-    <div className={`reader-root${showOpeningToc ? ' opening-toc-active' : ''}`}>
+    <div className="reader-root">
       {/* Language title removed — header icons now indicate language */}
       <header className="reader-header-bar">
         <div className="reader-header-bar-inner" style={{ width: isDesktop ? `${pageWidth}px` : '100%' }}>
@@ -1608,7 +1629,14 @@ export default function BookReader() {
               style={{ fontWeight: 600 }}
               role="button"
               tabIndex={0}
-              onClick={() => setShowOpeningToc(true)}
+              onClick={() => {
+                setShowOpeningToc(true);
+                try {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                } catch {
+                  window.scrollTo(0, 0);
+                }
+              }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
@@ -1662,8 +1690,9 @@ export default function BookReader() {
               <button
                 className="reader-prev-chapter"
                 aria-label="Previous chapter"
-                disabled={chapterIdx <= 0}
+                disabled={showOpeningToc || chapterIdx <= 0}
                 onClick={() => {
+                  if (showOpeningToc) return;
                   if (chapterIdx > 0) setChapterIdx(chapterIdx - 1);
                 }}
               >
@@ -1676,8 +1705,9 @@ export default function BookReader() {
               <button
                 className="reader-next-chapter"
                 aria-label="Next chapter"
-                disabled={chapterIdx >= chapterIds.length - 1}
+                disabled={showOpeningToc || chapterIdx >= chapterIds.length - 1}
                 onClick={() => {
+                  if (showOpeningToc) return;
                   if (chapterIdx < chapterIds.length - 1) setChapterIdx(chapterIdx + 1);
                 }}
               >
@@ -1945,56 +1975,91 @@ export default function BookReader() {
         </div>
       )}
 
-      {showOpeningToc && (
-        <div className="reader-opening-toc" onClick={() => { /* click backdrop does nothing */ }}>
-          <div className="reader-opening-toc-blur" aria-hidden="true" />
-          <div className="opening-toc-card" onClick={(e) => e.stopPropagation()}>
-            <div className="reader-modal-header">
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <div style={{ display: 'grid' }}>
-                  <strong style={{ fontSize: '1.15rem' }}>{displayTitle}</strong>
-                  <span style={{ fontSize: '0.92rem', opacity: 0.75 }}>Contents</span>
+      {showOpeningToc ? (
+        <main className="reader-main">
+          <div className="reader-wrapper" style={wrapperStyle}>
+            {loading ? (
+              <div>Loading…</div>
+            ) : (
+              <section className="reader-opening-toc-inline" aria-label="Table of contents">
+                <div className="reader-opening-toc-inline-header">
+                  <div className="reader-opening-toc-inline-titles">
+                    <h1 className="reader-opening-title">{displayTitle}</h1>
+                    <div className="reader-opening-subtitle">Contents</div>
+                  </div>
+                  <div className="reader-opening-toc-inline-actions">
+                    <button
+                      className="reader-opening-continue"
+                      onClick={() => {
+                        setShowOpeningToc(false);
+                        try {
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } catch {
+                          window.scrollTo(0, 0);
+                        }
+                      }}
+                      aria-label="Continue reading"
+                    >
+                      Continue
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <button onClick={() => setShowOpeningToc(false)}>✕</button>
-              </div>
-            </div>
-            <div style={{ paddingTop: 8, display: 'grid', gap: 6, maxHeight: '64vh', overflow: 'auto' }}>
-              {toc.length === 0 && <div style={{ padding: 12 }}>No contents available</div>}
-              {toc.map((t, i) => {
-                const chapterNum = getChapterNumber(t.title);
-                const titleOnly = chapterNum ? stripChapterPrefix(t.title) : t.title;
-                return (
-                  <button key={t.href} className={i === chapterIdx ? 'active' : ''} onClick={() => { setChapterIdx(i); setShowOpeningToc(false); }} style={{ textAlign: 'left', padding: '10px 12px', borderRadius: 10, border: 'none', background: 'transparent', cursor: 'pointer' }}>
-                    <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                      {chapterNum && <div className="reader-toc-num" style={{ minWidth: 80 }}>Chapter {chapterNum}</div>}
-                      <div className="reader-toc-title" style={{ fontWeight: i === chapterIdx ? 700 : 500, flex: 1 }}>{titleOnly}</div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
 
-      <BookContent
-        loading={loading}
-        isDesktop={isDesktop}
-        pageWidth={pageWidth}
-        textSize={textSize}
-        displayedHtml={displayedHtml}
-        contentRef={contentRef}
-        copyrightText={(COPYRIGHTS[lang] || `© ${getBookTitleFromFolder(lang) || LANGUAGE_NAMES[lang] || lang}`)}
-        lang={lang}
-        chapterIdx={chapterIdx}
-        chapterTitle={chapterTitle}
-        audioMinimized={audioMinimized}
-        setAudioMinimized={setAudioMinimized}
-        onNextChapter={handleNextChapter}
-        onPrevChapter={handlePrevChapter}
-      />
+                <ul className="reader-toc-list reader-opening-toc-list">
+                  {toc.length === 0 && <li className="reader-toc-empty">No contents available</li>}
+                  {toc.map((t, i) => {
+                    const chapterNum = getChapterNumber(t.title);
+                    const titleOnly = chapterNum ? stripChapterPrefix(t.title) : t.title;
+                    const chapterLabel = LANGUAGE_CHAPTER_LABELS[lang] || 'Chapter';
+                    return (
+                      <li key={t.href}>
+                        <button
+                          className={i === chapterIdx ? 'active' : ''}
+                          onClick={() => {
+                            setChapterIdx(i);
+                            setShowOpeningToc(false);
+                            try {
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            } catch {
+                              window.scrollTo(0, 0);
+                            }
+                          }}
+                        >
+                          {chapterNum && <span className="reader-toc-num">{chapterLabel} {chapterNum}</span>}
+                          <span className="reader-toc-title">{titleOnly}</span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            )}
+
+            <footer className="reader-footer">
+              <div className="reader-footer-inner">
+                {COPYRIGHTS[lang] || `© ${getBookTitleFromFolder(lang) || LANGUAGE_NAMES[lang] || lang}`}
+              </div>
+            </footer>
+          </div>
+        </main>
+      ) : (
+        <BookContent
+          loading={loading}
+          isDesktop={isDesktop}
+          pageWidth={pageWidth}
+          textSize={textSize}
+          displayedHtml={displayedHtml}
+          contentRef={contentRef}
+          copyrightText={(COPYRIGHTS[lang] || `© ${getBookTitleFromFolder(lang) || LANGUAGE_NAMES[lang] || lang}`)}
+          lang={lang}
+          chapterIdx={chapterIdx}
+          chapterTitle={chapterTitle}
+          audioMinimized={audioMinimized}
+          setAudioMinimized={setAudioMinimized}
+          onNextChapter={handleNextChapter}
+          onPrevChapter={handlePrevChapter}
+        />
+      )}
 
       {showSearch && (
         <div className="reader-search-modal" onClick={() => setShowSearch(false)}>

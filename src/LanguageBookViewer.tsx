@@ -311,9 +311,19 @@ export function LanguageBookViewer() {
       </header>
       <main className="modern-reader-content">
         <div className="modern-reader-controls">
-          <button disabled={selectedChapterIdx === 0} onClick={() => setSelectedChapterIdx(i => Math.max(i - 1, 0))} aria-label="Previous chapter" style={{ fontSize: '1.2em', padding: '0.3em 0.7em' }}><span aria-hidden="true">&#8592;</span></button>
-          <span className="modern-reader-chapter-title">{chapters[selectedChapterIdx]?.title || ''}</span>
-          <button disabled={selectedChapterIdx === chapters.length - 1} onClick={() => setSelectedChapterIdx(i => Math.min(i + 1, chapters.length - 1))} aria-label="Next chapter" style={{ fontSize: '1.2em', padding: '0.3em 0.7em' }}><span aria-hidden="true">&#8594;</span></button>
+          {selectedLang === "alSra` al`Zym - Ellen G. White" ? (
+            <>
+              <button disabled={selectedChapterIdx === chapters.length - 1} onClick={() => setSelectedChapterIdx(i => Math.min(i + 1, chapters.length - 1))} aria-label="Next chapter" style={{ fontSize: '1.2em', padding: '0.3em 0.7em' }}><span aria-hidden="true">&#8594;</span></button>
+              <span className="modern-reader-chapter-title">{chapters[selectedChapterIdx]?.title || ''}</span>
+              <button disabled={selectedChapterIdx === 0} onClick={() => setSelectedChapterIdx(i => Math.max(i - 1, 0))} aria-label="Previous chapter" style={{ fontSize: '1.2em', padding: '0.3em 0.7em' }}><span aria-hidden="true">&#8592;</span></button>
+            </>
+          ) : (
+            <>
+              <button disabled={selectedChapterIdx === 0} onClick={() => setSelectedChapterIdx(i => Math.max(i - 1, 0))} aria-label="Previous chapter" style={{ fontSize: '1.2em', padding: '0.3em 0.7em' }}><span aria-hidden="true">&#8592;</span></button>
+              <span className="modern-reader-chapter-title">{chapters[selectedChapterIdx]?.title || ''}</span>
+              <button disabled={selectedChapterIdx === chapters.length - 1} onClick={() => setSelectedChapterIdx(i => Math.min(i + 1, chapters.length - 1))} aria-label="Next chapter" style={{ fontSize: '1.2em', padding: '0.3em 0.7em' }}><span aria-hidden="true">&#8594;</span></button>
+            </>
+          )}
           <button title="Decrease text size" onClick={() => setTextSize(s => Math.max(0.7, s - 0.1))}>A-</button>
           <button title="Increase text size" onClick={() => setTextSize(s => Math.min(2, s + 0.1))}>A+</button>
           {/* Search UI will be added here */}
