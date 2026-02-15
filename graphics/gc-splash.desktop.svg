@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1920 1080" role="img" aria-labelledby="gc-splash-desktop-title gc-splash-desktop-desc">
+  <title id="gc-splash-desktop-title">The Great Controversy — splash illustration (desktop)</title>
+  <desc id="gc-splash-desktop-desc">Desktop-optimized wrapper for the splash: centers the original artwork on a 16:9 canvas.</desc>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <!-- Embed the canonical portrait SVG and center it horizontally on a 16:9 canvas. -->
+  <!-- Original portrait SVG (612x792) scaled by 1.363636 to 834x1080 and centered -->
+  <image xlink:href="gc-splash.svg" href="gc-splash.svg" x="543" y="0" width="834" height="1080" preserveAspectRatio="xMidYMid meet" />
+</svg>
