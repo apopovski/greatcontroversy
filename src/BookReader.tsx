@@ -18,6 +18,7 @@ type BookContentProps = {
   copyrightText: string;
   lang: string;
   chapterIdx: number;
+  timelineInfo: TimelineInfo | null;
 };
 
 const BookContent = React.memo(function BookContent({
@@ -30,6 +31,7 @@ const BookContent = React.memo(function BookContent({
   copyrightText,
   lang,
   chapterIdx,
+  timelineInfo,
   chapterTitle,
   audioMinimized,
   setAudioMinimized,
@@ -59,7 +61,20 @@ const BookContent = React.memo(function BookContent({
   return (
     <main className="reader-main">
       <div className="reader-wrapper" style={wrapperStyle}>
-        <div ref={contentRef} className="reader-book-html" dangerouslySetInnerHTML={{ __html: displayedHtml }} />
+        <div className="reader-content-layout">
+          <div className="reader-book-content">
+            <div ref={contentRef} className="reader-book-html" dangerouslySetInnerHTML={{ __html: displayedHtml }} />
+          </div>
+          {timelineInfo && (
+            <aside className="reader-timeline" aria-label="Timeline">
+              <div className="reader-timeline-card">
+                <div className="reader-timeline-eyebrow">Timeline</div>
+                <div className="reader-timeline-label">{timelineInfo.label}</div>
+                <div className="reader-timeline-range">{timelineInfo.range}</div>
+              </div>
+            </aside>
+          )}
+        </div>
         <footer className="reader-footer">
           <div className="reader-footer-inner">
             {copyrightText}
@@ -79,6 +94,25 @@ const BookContent = React.memo(function BookContent({
   prev.chapterTitle === next.chapterTitle &&
   prev.audioMinimized === next.audioMinimized
 ));
+
+type TimelineInfo = {
+  label: string;
+  range: string;
+  start?: number;
+  end?: number;
+};
+
+const TIMELINE_LABELS: Array<{ match: RegExp; label: string }> = [
+  { match: /reformation/, label: 'Reformation era' },
+  { match: /renaissance/, label: 'Renaissance' },
+  { match: /middle ages|medieval|dark ages/, label: 'Middle Ages' },
+  { match: /french revolution/, label: 'French Revolution' },
+  { match: /great disappointment/, label: 'Great Disappointment' },
+  { match: /papacy|papal|rome/, label: 'Papal era' },
+  { match: /persecution|martyr/, label: 'Persecution era' },
+  { match: /early church|apostolic/, label: 'Early church' },
+  { match: /modern|contemporary/, label: 'Modern era' },
+];
 
 const LANGUAGE_FOLDERS = [
   'The Great Controversy - Ellen G. White 2',
@@ -206,6 +240,62 @@ function stripChapterPrefix(title: string) {
   return (title || '')
     .replace(/^\s*chapter\s+\d+\s*[-—–:]*\s*/i, '')
     .trim();
+}
+
+function extractTimelineInfo(html: string, chapterTitle: string): TimelineInfo | null {
+  if (!html) return null;
+  try {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const raw = (doc.body.textContent || '').replace(/\s+/g, ' ').trim();
+    if (!raw) return null;
+
+    const sample = raw.slice(0, 3200);
+    const lower = sample.toLowerCase();
+
+    const rangeMatches = Array.from(sample.matchAll(/(1[0-9]{3}|20[0-9]{2})\s*[–-]\s*(1[0-9]{3}|20[0-9]{2})/g));
+    let start: number | undefined;
+    let end: number | undefined;
+
+    if (rangeMatches.length) {
+      const m = rangeMatches[0];
+      start = Number(m[1]);
+      end = Number(m[2]);
+      if (Number.isNaN(start) || Number.isNaN(end)) {
+        start = undefined;
+        end = undefined;
+      }
+    }
+
+    if (start === undefined || end === undefined) {
+      const years = Array.from(sample.matchAll(/\b(1[0-9]{3}|20[0-9]{2})\b/g))
+        .map((m) => Number(m[1]))
+        .filter((n) => !Number.isNaN(n));
+      if (years.length >= 2) {
+        const slice = years.slice(0, 8);
+        start = Math.min(...slice);
+        end = Math.max(...slice);
+      } else if (years.length === 1) {
+        start = years[0];
+        end = years[0];
+      }
+    }
+
+    if (start === undefined || end === undefined) return null;
+    if (end < start) [start, end] = [end, start];
+
+    const label = (() => {
+      const match = TIMELINE_LABELS.find((t) => t.match.test(lower));
+      if (match) return match.label;
+      const stripped = stripChapterPrefix(chapterTitle || '');
+      if (stripped && stripped.length <= 60) return stripped;
+      return 'Historical period';
+    })();
+
+    const range = start === end ? String(start) : `${start}–${end}`;
+    return { label, range, start, end };
+  } catch {
+    return null;
+  }
 }
 
 const LANG_SLUG_TO_FOLDER: Record<string, string> = Object.fromEntries(
@@ -1570,6 +1660,11 @@ export default function BookReader() {
     [htmlWithParagraphIds, lang, chapterIdx, toc]
   );
 
+  const timelineInfo = useMemo(
+    () => extractTimelineInfo(currentHtml, chapterTitle),
+    [currentHtml, chapterTitle]
+  );
+
   // If URL has a paragraph hash, try to scroll it into view
   useEffect(() => {
     const hash = (window.location.hash || '').replace(/^#/, '');
@@ -2053,6 +2148,7 @@ export default function BookReader() {
           copyrightText={(COPYRIGHTS[lang] || `© ${getBookTitleFromFolder(lang) || LANGUAGE_NAMES[lang] || lang}`)}
           lang={lang}
           chapterIdx={chapterIdx}
+          timelineInfo={timelineInfo}
           chapterTitle={chapterTitle}
           audioMinimized={audioMinimized}
           setAudioMinimized={setAudioMinimized}
