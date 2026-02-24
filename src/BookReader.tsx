@@ -692,6 +692,38 @@ export default function BookReader() {
   const [sharePanelStyle, setSharePanelStyle] = useState<React.CSSProperties | null>(null);
   const [morePanelStyle, setMorePanelStyle] = useState<React.CSSProperties | null>(null);
 
+  const getAnchoredPanelStyle = (btn: HTMLButtonElement | null, preferredWidth = 260): React.CSSProperties => {
+    const viewportWidth = window.innerWidth;
+    const margin = 12;
+    const maxAllowed = Math.max(160, viewportWidth - margin * 2);
+    const width = Math.min(preferredWidth, maxAllowed);
+
+    if (!btn) {
+      return {
+        position: 'fixed',
+        top: 72,
+        left: margin,
+        width,
+        maxWidth: `calc(100vw - ${margin * 2}px)`,
+        zIndex: 9999,
+      };
+    }
+
+    const r = btn.getBoundingClientRect();
+    let left = r.left;
+    if (left + width + margin > viewportWidth) left = viewportWidth - width - margin;
+    if (left < margin) left = margin;
+
+    return {
+      position: 'fixed',
+      top: r.bottom + 8,
+      left,
+      width,
+      maxWidth: `calc(100vw - ${margin * 2}px)`,
+      zIndex: 9999,
+    };
+  };
+
   useEffect(() => {
     const mq = window.matchMedia('(min-width:900px)');
     const fn = () => setIsDesktop(!!mq.matches);
@@ -1871,11 +1903,7 @@ export default function BookReader() {
                 className="reader-lang-icon"
                 onClick={(e) => {
                   e.stopPropagation();
-                  const btn = langBtnRef.current;
-                  if (btn) {
-                    const r = btn.getBoundingClientRect();
-                    setLangPanelStyle({ position: 'fixed', top: r.bottom + 8, left: r.left, minWidth: 220 });
-                  }
+                  setLangPanelStyle(getAnchoredPanelStyle(langBtnRef.current, 260));
                   setShowLangMenu((v) => !v);
                 }}
                 aria-label="Language"
@@ -1993,11 +2021,7 @@ export default function BookReader() {
           </button>
           <button
             onClick={() => {
-              const btn = moreBtnRef.current;
-              if (btn) {
-                const r = btn.getBoundingClientRect();
-                setLangPanelStyle({ position: 'fixed', top: r.bottom + 8, left: r.left, minWidth: 220 });
-              }
+              setLangPanelStyle(getAnchoredPanelStyle(moreBtnRef.current, 260));
               setShowLangMenu(true);
               setShowMoreMenu(false);
             }}
