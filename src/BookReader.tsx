@@ -507,7 +507,15 @@ function escapeHtml(input: string) {
 
 function parseAmharicBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
   const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
-  const chapterHeading = /^\s*ምዕራፍ\s+([^\s—-]+)\s*[—-]\s*(.+)\s*$/;
+  const chapterHeading = /^\s*ምዕራፍ\s+(\S+)\s*[-—–]\s*(.+?)\s*$/u;
+  const normalizeAmharicTitle = (s: string) =>
+    (s || '')
+      .replace(/^\s*[-:]+\s*/u, '')
+      .replace(/\s*[-:]+\s*$/gu, '')
+      .replace(/[*]+.*$/u, '')
+      .replace(/\s*[-—–]\s*/gu, '—')
+      .replace(/\s+/gu, ' ')
+      .trim();
 
   type Section = { id: string; title: string; lines: string[] };
   const sections: Section[] = [];
@@ -528,9 +536,11 @@ function parseAmharicBook(raw: string): { toc: TocEntry[]; chapterIds: string[];
     if (match) {
       pushCurrent();
       chapterCount += 1;
+      const chapterNo = (match[1] || '').trim();
+      const chapterTitle = (match[2] || '').trim();
       current = {
         id: `amh-ch-${chapterCount}`,
-        title: trimmed,
+        title: normalizeAmharicTitle(`ምዕራፍ ${chapterNo}—${chapterTitle}`),
         lines: [],
       };
       continue;
