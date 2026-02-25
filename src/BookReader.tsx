@@ -92,6 +92,8 @@ const SERBIAN_FOLDER = 'Serbian - Ellen G. White';
 const SERBIAN_SOURCE_PATH = '/book-content/txt/GC-Serbian.txt';
 const FARSI_FOLDER = 'Farsi - Ellen G. White';
 const FARSI_SOURCE_PATH = '/book-content/txt/GC-Farsi.txt';
+const AFRIKAANS_FOLDER = 'Afrikaans - Ellen G. White';
+const AFRIKAANS_SOURCE_PATH = '/book-content/txt/GC-Afrikaans.txt';
 
 const DESKTOP_WIDTH_MIN = 640;
 const DESKTOP_WIDTH_MAX = 820;
@@ -129,6 +131,7 @@ const LANGUAGE_FOLDERS = [
   CHINESE_FOLDER,
   SERBIAN_FOLDER,
   FARSI_FOLDER,
+  AFRIKAANS_FOLDER,
 ];
 
 const LANGUAGE_ABBREV: Record<string, string> = {
@@ -154,12 +157,14 @@ const LANGUAGE_ABBREV: Record<string, string> = {
   [CHINESE_FOLDER]: 'zh',
   [SERBIAN_FOLDER]: 'sr',
   [FARSI_FOLDER]: 'fa',
+  [AFRIKAANS_FOLDER]: 'af',
 };
 
 const BOOK_TITLE_OVERRIDES: Record<string, string> = {
   [CHINESE_FOLDER]: '善恶之争',
   [SERBIAN_FOLDER]: 'Велика Борба Између Христа И Сотоне',
   [FARSI_FOLDER]: 'نبرد عظیم',
+  [AFRIKAANS_FOLDER]: 'Die Groot Stryd',
 };
 
 const getBookTitleFromFolder = (folder: string) =>
@@ -188,6 +193,7 @@ const LANGUAGE_URL_NAMES: Record<string, string> = {
   [CHINESE_FOLDER]: '中文',
   [SERBIAN_FOLDER]: 'Српски',
   [FARSI_FOLDER]: 'فارسی',
+  [AFRIKAANS_FOLDER]: 'Afrikaans',
 };
 
 const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
@@ -213,6 +219,7 @@ const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
   [CHINESE_FOLDER]: '章',
   [SERBIAN_FOLDER]: 'Поглавље',
   [FARSI_FOLDER]: 'فصل',
+  [AFRIKAANS_FOLDER]: 'Hoofstuk',
 };
 
 const COPYRIGHTS: Record<string, string> = {
@@ -752,6 +759,75 @@ function parseFarsiBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; c
       current = {
         id: `fa-ch-${chapterCount}`,
         title: normalizeFarsiTitle(match[1] || ''),
+        lines: [],
+      };
+      continue;
+    }
+
+    if (current) current.lines.push(line);
+  }
+  pushCurrent();
+
+  const toParagraphs = (sectionLines: string[]) => {
+    const paras: string[] = [];
+    let buf: string[] = [];
+    const flush = () => {
+      const t = buf.join(' ').replace(/\s+/g, ' ').trim();
+      if (t) paras.push(`<p>${escapeHtml(t)}</p>`);
+      buf = [];
+    };
+
+    sectionLines.forEach((ln) => {
+      const t = (ln || '').trim();
+      if (!t) flush();
+      else buf.push(t);
+    });
+    flush();
+    return paras.join('\n');
+  };
+
+  const toc: TocEntry[] = sections.map((s) => ({ title: s.title, href: `#${s.id}` }));
+  const chapterIds = sections.map((s) => s.id);
+  const chapterHtml = sections.map((s) => {
+    const heading = `<h2 class="chapterhead">${escapeHtml(s.title)}</h2>`;
+    const body = toParagraphs(s.lines);
+    return `<div id="${s.id}">\n${heading}\n${body}\n</div>`;
+  });
+
+  return { toc, chapterIds, chapterHtml };
+}
+
+function parseAfrikaansBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
+  const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
+  const chapterMarker = /^\s*@@CHAPTER@@\s*(.+?)\s*$/;
+  const normalizeAfrikaansTitle = (s: string) =>
+    (s || '')
+      .replace(/^\s*hoofstuk\s+/i, 'Hoofstuk ')
+      .replace(/^\s*inleiding\s*$/i, 'Inleiding')
+      .replace(/\s*[—–-]\s*/g, '—')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+  type Section = { id: string; title: string; lines: string[] };
+  const sections: Section[] = [];
+  let current: Section | null = null;
+  let sectionCount = 0;
+
+  const pushCurrent = () => {
+    if (!current) return;
+    sections.push(current);
+    current = null;
+  };
+
+  for (const line of lines) {
+    const trimmed = (line || '').trim();
+    const match = trimmed.match(chapterMarker);
+    if (match) {
+      pushCurrent();
+      sectionCount += 1;
+      current = {
+        id: `af-ch-${sectionCount}`,
+        title: normalizeAfrikaansTitle(match[1] || ''),
         lines: [],
       };
       continue;
@@ -1534,7 +1610,7 @@ export default function BookReader() {
       throw new Error('Not found');
     };
 
-    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === SERBIAN_FOLDER || lang === FARSI_FOLDER) {
+    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === SERBIAN_FOLDER || lang === FARSI_FOLDER || lang === AFRIKAANS_FOLDER) {
       const sourcePath =
         lang === AMHARIC_FOLDER
           ? AMHARIC_SOURCE_PATH
@@ -1542,7 +1618,9 @@ export default function BookReader() {
             ? CHINESE_SOURCE_PATH
             : lang === SERBIAN_FOLDER
               ? SERBIAN_SOURCE_PATH
-              : FARSI_SOURCE_PATH;
+              : lang === FARSI_FOLDER
+                ? FARSI_SOURCE_PATH
+                : AFRIKAANS_SOURCE_PATH;
       fetch(sourcePath)
         .then((r) => {
           if (!r.ok) throw new Error('Source file missing');
@@ -1556,7 +1634,9 @@ export default function BookReader() {
                 ? parseChineseBook(raw)
                 : lang === SERBIAN_FOLDER
                   ? parseSerbianBook(raw)
-                  : parseFarsiBook(raw);
+                  : lang === FARSI_FOLDER
+                    ? parseFarsiBook(raw)
+                    : parseAfrikaansBook(raw);
           setToc(parsed.toc);
           setChapterIds(parsed.chapterIds);
           setBookDoc(null);
