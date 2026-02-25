@@ -94,6 +94,8 @@ const FARSI_FOLDER = 'Farsi - Ellen G. White';
 const FARSI_SOURCE_PATH = '/book-content/txt/GC-Farsi.txt';
 const AFRIKAANS_FOLDER = 'Afrikaans - Ellen G. White';
 const AFRIKAANS_SOURCE_PATH = '/book-content/txt/GC-Afrikaans.txt';
+const HINDI_FOLDER = 'Hindi - Ellen G. White';
+const HINDI_SOURCE_PATH = '/book-content/txt/GC-Hindi.txt';
 
 const DESKTOP_WIDTH_MIN = 640;
 const DESKTOP_WIDTH_MAX = 820;
@@ -132,6 +134,7 @@ const LANGUAGE_FOLDERS = [
   SERBIAN_FOLDER,
   FARSI_FOLDER,
   AFRIKAANS_FOLDER,
+  HINDI_FOLDER,
 ];
 
 const LANGUAGE_ABBREV: Record<string, string> = {
@@ -158,6 +161,7 @@ const LANGUAGE_ABBREV: Record<string, string> = {
   [SERBIAN_FOLDER]: 'sr',
   [FARSI_FOLDER]: 'fa',
   [AFRIKAANS_FOLDER]: 'af',
+  [HINDI_FOLDER]: 'hi',
 };
 
 const BOOK_TITLE_OVERRIDES: Record<string, string> = {
@@ -165,6 +169,7 @@ const BOOK_TITLE_OVERRIDES: Record<string, string> = {
   [SERBIAN_FOLDER]: 'Велика Борба Између Христа И Сотоне',
   [FARSI_FOLDER]: 'نبرد عظیم',
   [AFRIKAANS_FOLDER]: 'Die Groot Stryd',
+  [HINDI_FOLDER]: 'महान संघर्ष',
 };
 
 const getBookTitleFromFolder = (folder: string) =>
@@ -194,6 +199,7 @@ const LANGUAGE_URL_NAMES: Record<string, string> = {
   [SERBIAN_FOLDER]: 'Српски',
   [FARSI_FOLDER]: 'فارسی',
   [AFRIKAANS_FOLDER]: 'Afrikaans',
+  [HINDI_FOLDER]: 'हिन्दी',
 };
 
 const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
@@ -220,6 +226,7 @@ const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
   [SERBIAN_FOLDER]: 'Поглавље',
   [FARSI_FOLDER]: 'فصل',
   [AFRIKAANS_FOLDER]: 'Hoofstuk',
+  [HINDI_FOLDER]: 'पाठ',
 };
 
 const COPYRIGHTS: Record<string, string> = {
@@ -345,7 +352,7 @@ function applyDropcap(html: string, langKey: string, chapterIndex: number, toc: 
     const name = LANGUAGE_NAMES[langKey] || '';
     // Do not apply dropcap for Arabic/Chinese languages
     // (RTL and CJK layouts often need custom typography handling)
-    if (name.toLowerCase() === 'arabic' || name.toLowerCase() === 'farsi' || name.toLowerCase() === 'persian' || langKey === CHINESE_FOLDER || langKey === FARSI_FOLDER) return html;
+    if (name.toLowerCase() === 'arabic' || name.toLowerCase() === 'farsi' || name.toLowerCase() === 'persian' || langKey === CHINESE_FOLDER || langKey === FARSI_FOLDER || langKey === HINDI_FOLDER) return html;
     if (typeof chapterIndex !== 'number' || chapterIndex < 0) return html;
     const doc = new DOMParser().parseFromString(html || '', 'text/html');
     // Strip any styles or stylesheet links from the parsed chapter to avoid
@@ -829,6 +836,74 @@ function parseAfrikaansBook(raw: string): { toc: TocEntry[]; chapterIds: string[
       current = {
         id: `af-ch-${sectionCount}`,
         title: normalizeAfrikaansTitle(match[1] || ''),
+        lines: [],
+      };
+      continue;
+    }
+
+    if (current) current.lines.push(line);
+  }
+  pushCurrent();
+
+  const toParagraphs = (sectionLines: string[]) => {
+    const paras: string[] = [];
+    let buf: string[] = [];
+    const flush = () => {
+      const t = buf.join(' ').replace(/\s+/g, ' ').trim();
+      if (t) paras.push(`<p>${escapeHtml(t)}</p>`);
+      buf = [];
+    };
+
+    sectionLines.forEach((ln) => {
+      const t = (ln || '').trim();
+      if (!t) flush();
+      else buf.push(t);
+    });
+    flush();
+    return paras.join('\n');
+  };
+
+  const toc: TocEntry[] = sections.map((s) => ({ title: s.title, href: `#${s.id}` }));
+  const chapterIds = sections.map((s) => s.id);
+  const chapterHtml = sections.map((s) => {
+    const heading = `<h2 class="chapterhead">${escapeHtml(s.title)}</h2>`;
+    const body = toParagraphs(s.lines);
+    return `<div id="${s.id}">\n${heading}\n${body}\n</div>`;
+  });
+
+  return { toc, chapterIds, chapterHtml };
+}
+
+function parseHindiBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
+  const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
+  const chapterMarker = /^\s*@@CHAPTER@@\s*(.+?)\s*$/;
+  const normalizeHindiTitle = (s: string) =>
+    (s || '')
+      .replace(/^\s*[-:]+\s*/, '')
+      .replace(/\s*[-:]+\s*$/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+  type Section = { id: string; title: string; lines: string[] };
+  const sections: Section[] = [];
+  let current: Section | null = null;
+  let sectionCount = 0;
+
+  const pushCurrent = () => {
+    if (!current) return;
+    sections.push(current);
+    current = null;
+  };
+
+  for (const line of lines) {
+    const trimmed = (line || '').trim();
+    const match = trimmed.match(chapterMarker);
+    if (match) {
+      pushCurrent();
+      sectionCount += 1;
+      current = {
+        id: `hi-ch-${sectionCount}`,
+        title: normalizeHindiTitle(match[1] || ''),
         lines: [],
       };
       continue;
@@ -1611,7 +1686,7 @@ export default function BookReader() {
       throw new Error('Not found');
     };
 
-    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === SERBIAN_FOLDER || lang === FARSI_FOLDER || lang === AFRIKAANS_FOLDER) {
+    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === SERBIAN_FOLDER || lang === FARSI_FOLDER || lang === AFRIKAANS_FOLDER || lang === HINDI_FOLDER) {
       const sourcePath =
         lang === AMHARIC_FOLDER
           ? AMHARIC_SOURCE_PATH
@@ -1621,7 +1696,9 @@ export default function BookReader() {
               ? SERBIAN_SOURCE_PATH
               : lang === FARSI_FOLDER
                 ? FARSI_SOURCE_PATH
-                : AFRIKAANS_SOURCE_PATH;
+                : lang === AFRIKAANS_FOLDER
+                  ? AFRIKAANS_SOURCE_PATH
+                  : HINDI_SOURCE_PATH;
       fetch(sourcePath)
         .then((r) => {
           if (!r.ok) throw new Error('Source file missing');
@@ -1637,7 +1714,9 @@ export default function BookReader() {
                   ? parseSerbianBook(raw)
                   : lang === FARSI_FOLDER
                     ? parseFarsiBook(raw)
-                    : parseAfrikaansBook(raw);
+                    : lang === AFRIKAANS_FOLDER
+                      ? parseAfrikaansBook(raw)
+                      : parseHindiBook(raw);
           setToc(parsed.toc);
           setChapterIds(parsed.chapterIds);
           setBookDoc(null);
