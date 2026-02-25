@@ -40,7 +40,7 @@ ${Z}
 ${j}
 </div>`});return{toc:b,chapterIds:U,chapterHtml:H}}function v1(o){const M=(o||"").replace(/\r\n?/g,`
 `).split(`
-`),N=/^\s*@@CHAPTER@@\s*(.+?)\s*$/,f=D=>(D||"").replace(/^\s*[-:]+\s*/,"").replace(/\s*[-:]+\s*$/g,"").replace(/\s+/g," ").trim(),L=[];let R=null,V=0;const J=()=>{R&&(L.push(R),R=null)};for(const D of M){const j=(D||"").trim().match(N);if(j){J(),V+=1,R={id:`hi-ch-${V}`,title:f(j[1]||""),lines:[]};continue}R&&R.lines.push(D)}J();const G=D=>{const Z=[];let j=[];const et=()=>{const at=j.join(" ").replace(/\s+/g," ").trim();at&&Z.push(`<p>${Pe(at)}</p>`),j=[]};return D.forEach(at=>{const ot=(at||"").trim();ot?j.push(ot):et()}),et(),Z.join(`
+`),N=/^\s*@@CHAPTER@@\s*(.+?)\s*$/,f=D=>(D||"").replace(/^\s*[-:]+\s*/,"").replace(/\s*[-:]+\s*$/g,"").replace(/^\s*पाठ\s*([०-९0-9]+)\s*[-—–:]?\s*/u,"पाठ $1 - ").replace(/^\s*पाठ\s*([०-९0-9]+)\s*-\s*/u,"पाठ $1 - ").replace(/[*]+.*$/u,"").replace(/\s+/g," ").trim(),L=[];let R=null,V=0;const J=()=>{R&&(L.push(R),R=null)};for(const D of M){const j=(D||"").trim().match(N);if(j){J(),V+=1,R={id:`hi-ch-${V}`,title:f(j[1]||""),lines:[]};continue}R&&R.lines.push(D)}J();const G=D=>{const Z=[];let j=[];const et=()=>{const at=j.join(" ").replace(/\s+/g," ").trim();at&&Z.push(`<p>${Pe(at)}</p>`),j=[]};return D.forEach(at=>{const ot=(at||"").trim();ot?j.push(ot):et()}),et(),Z.join(`
 `)},b=L.map(D=>({title:D.title,href:`#${D.id}`})),U=L.map(D=>D.id),H=L.map(D=>{const Z=`<h2 class="chapterhead">${Pe(D.title)}</h2>`,j=G(D.lines);return`<div id="${D.id}">
 ${Z}
 ${j}
