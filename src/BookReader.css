@@ -408,11 +408,13 @@ span.dropcap {
   /* Right-side controls: content actions followed by appearance */
   .reader-right-controls { order: 4; margin-left: auto; }
   .reader-search-icon { order: 1; }
-  .reader-share-icon { order: 2; }
-  .reader-lang-icon { order: 3; }
+  .reader-bookmark-btn { order: 2; }
+  .reader-share-icon { order: 3; }
+  .reader-lang-icon { order: 4; }
   /* Appearance controls at the end */
-  .reader-text-size-btn { order: 4; }
-  .reader-darkmode-toggle { order: 5; }
+  .reader-text-size-controls { order: 5; }
+  .reader-darkmode-toggle { order: 6; }
+  .reader-width-slider { order: 7; }
 }
 
 /* RTL desktop layout */
@@ -423,10 +425,13 @@ span.dropcap {
   html[dir='rtl'] .reader-prev-chapter { order: 2; }
   html[dir='rtl'] .reader-next-chapter { order: 1; }
   html[dir='rtl'] .reader-right-controls { order: 0; margin-right: auto; margin-left: 0; }
-  html[dir='rtl'] .reader-search-icon { order: 5; }
-  html[dir='rtl'] .reader-share-icon { order: 4; }
-  html[dir='rtl'] .reader-lang-icon { order: 3; }
-  html[dir='rtl'] .reader-darkmode-toggle { order: 1; }
+  html[dir='rtl'] .reader-search-icon { order: 7; }
+  html[dir='rtl'] .reader-bookmark-btn { order: 6; }
+  html[dir='rtl'] .reader-share-icon { order: 5; }
+  html[dir='rtl'] .reader-lang-icon { order: 4; }
+  html[dir='rtl'] .reader-text-size-controls { order: 3; }
+  html[dir='rtl'] .reader-darkmode-toggle { order: 2; }
+  html[dir='rtl'] .reader-width-slider { order: 1; }
 }
 .reader-wrapper,.reader-main{position:relative;z-index:1}
 

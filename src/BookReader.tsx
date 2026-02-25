@@ -2152,6 +2152,15 @@ export default function BookReader() {
               </button>
 
               <button
+                className={`reader-bookmark-btn${isCurrentBookmarked ? ' active' : ''}`}
+                aria-label={showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark this chapter'}
+                title={showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark this chapter'}
+                onClick={handleBookmark}
+              >
+                {isCurrentBookmarked ? <MdBookmark size={18} /> : <MdBookmarkBorder size={18} />}
+              </button>
+
+              <button
                 className="reader-share-icon"
                 ref={shareBtnRef}
                 onClick={(e) => {
@@ -2246,14 +2255,6 @@ export default function BookReader() {
                     value={pageWidth}
                     onChange={(e) => setPageWidth(Number(e.target.value))}
                   />
-                  <button
-                    className={`reader-bookmark-btn${isCurrentBookmarked ? ' active' : ''}`}
-                    aria-label={showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark this chapter'}
-                    title={showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark this chapter'}
-                    onClick={handleBookmark}
-                  >
-                    {isCurrentBookmarked ? <MdBookmark size={18} /> : <MdBookmarkBorder size={18} />}
-                  </button>
                 </>
               )}
             </div>
