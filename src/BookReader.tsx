@@ -1,7 +1,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './BookReader.css';
-import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode, MdContentCopy, MdShare, MdClose, MdMoreVert, MdRefresh } from 'react-icons/md';
+import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode, MdContentCopy, MdShare, MdClose, MdMoreVert, MdBookmarkBorder, MdBookmark } from 'react-icons/md';
 import { FaFacebookF, FaXTwitter, FaWhatsapp } from 'react-icons/fa6';
 import { IoMdMail } from 'react-icons/io';
 import { LANGUAGE_NAMES } from './utils/language';
@@ -347,13 +347,13 @@ function applyDropcap(html: string, langKey: string, chapterIndex: number, toc: 
     let p: Element | null = null;
     const heading = doc.body.querySelector('h1,h2,h3,h4,h5,h6');
     // If the chapter heading indicates meta sections like "Information about this Book",
-    // "Introduction" or "Preface/Foreword", do not apply the visual dropcap.
+    // "Introduction", "Preface/Foreword", or "Appendix", do not apply the visual dropcap.
     if (heading) {
       const ht = (heading.textContent || '').trim();
-      if (/information\s+about.*book/i.test(ht) || /^\s*introduction\b/i.test(ht) || /\b(preface|foreword)\b/i.test(ht)) return html;
+      if (/information\s+about.*book/i.test(ht) || /^\s*introduction\b/i.test(ht) || /\b(preface|foreword|appendix)\b/i.test(ht)) return html;
     }
-    // Also check the TOC entry (if provided) for Preface/Introduction and skip
-    if (Array.isArray(toc) && toc[chapterIndex] && /^(?:\s*(?:preface|introduction|foreword)\b)/i.test((toc[chapterIndex].title || '').trim())) {
+    // Also check the TOC entry (if provided) for Preface/Introduction/Appendix and skip
+    if (Array.isArray(toc) && toc[chapterIndex] && /^(?:\s*(?:preface|introduction|foreword|appendix)\b)/i.test((toc[chapterIndex].title || '').trim())) {
       return html;
     }
     if (heading) {
@@ -643,6 +643,7 @@ function parseChineseBook(raw: string): { toc: TocEntry[]; chapterIds: string[];
 }
 
 export default function BookReader() {
+  type ReaderBookmark = { lang: string; chapterIdx: number; ts: number };
   // --- SEARCH & SHARE POPUP STATE ---
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Array<{ idx: number; occ: number }>>([]);
@@ -691,6 +692,17 @@ export default function BookReader() {
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [showCopyToast, setShowCopyToast] = useState(false);
   const [copyToastPos, setCopyToastPos] = useState({ top: 0, left: 0 });
+  const [bookmark, setBookmark] = useState<ReaderBookmark | null>(() => {
+    try {
+      const raw = localStorage.getItem('reader-bookmark');
+      if (!raw) return null;
+      const parsed = JSON.parse(raw) as ReaderBookmark;
+      if (!parsed || typeof parsed.lang !== 'string' || typeof parsed.chapterIdx !== 'number') return null;
+      return parsed;
+    } catch {
+      return null;
+    }
+  });
   const [showOpeningToc, setShowOpeningToc] = useState(() => {
     // Show the TOC page only on the root route (/) or language-only routes (/{lang}).
     // If navigating via a deep link (chapter route) or a paragraph hash, don't force the TOC.
@@ -1116,6 +1128,38 @@ export default function BookReader() {
     }
   }, [showSharePopup, selectedText]);
 
+  // Keep share popup near selected text while scrolling/resizing so it stays in viewport
+  useEffect(() => {
+    if (!showSharePopup) return;
+
+    const reposition = () => {
+      let rect: DOMRect | null = null;
+      try {
+        rect = selectionRangeRef.current?.getBoundingClientRect?.() || null;
+      } catch {
+        rect = null;
+      }
+
+      if (rect) {
+        const isIOS = typeof navigator !== 'undefined' && /iP(ad|hone|od)/i.test(navigator.userAgent || '');
+        const nativeOffset = isIOS ? 110 : 56;
+        setSharePopupPos({
+          top: rect.top - nativeOffset,
+          left: rect.left + Math.max(rect.width / 2, 0),
+        });
+        lastSelectionRectRef.current = rect;
+      }
+    };
+
+    reposition();
+    window.addEventListener('scroll', reposition, { passive: true });
+    window.addEventListener('resize', reposition);
+    return () => {
+      window.removeEventListener('scroll', reposition);
+      window.removeEventListener('resize', reposition);
+    };
+  }, [showSharePopup]);
+
   // Show a lightweight share popup when the user selects text, but do NOT
   // alter the browser selection or apply persistent highlights. This preserves
   // the standard selection visuals while providing a white share modal.
@@ -1154,8 +1198,8 @@ export default function BookReader() {
         // Increase offset slightly so our popup sits above the iOS native menu.
         const nativeOffset = isIOS ? 110 : 56; // iOS native menu can occupy more space
         setSharePopupPos({
-          top: rect.top + window.scrollY - nativeOffset,
-          left: rect.left + window.scrollX + Math.max(rect.width / 2, 0),
+          top: rect.top - nativeOffset,
+          left: rect.left + Math.max(rect.width / 2, 0),
         });
         setShowSharePopup(true);
         // Temporarily disable iOS native touch callout so the app popup is used
@@ -1680,8 +1724,7 @@ export default function BookReader() {
     const chapterNumber = getChapterNumber(chapterTitle) ?? (chapterIdx + 1);
     const strippedTitle = stripChapterPrefix(chapterTitle);
     const slug = slugifyAscii(strippedTitle || chapterTitle) || `chapter-${chapterNumber}`;
-    const label = slugifyAscii(LANGUAGE_CHAPTER_LABELS[lang] || 'Chapter') || 'chapter';
-    const path = `/${abbr}/${label}-${chapterNumber}/${slug}`;
+    const path = `/${abbr}/chapter-${chapterNumber}/${slug}`;
     if (window.location.pathname !== path) {
       window.history.replaceState({}, '', path);
     }
@@ -1959,16 +2002,35 @@ export default function BookReader() {
     fontSize: `${textSize}px`,
     position: 'relative',
   };
+  const isCurrentBookmarked =
+    !showOpeningToc &&
+    !!bookmark &&
+    bookmark.lang === lang &&
+    bookmark.chapterIdx === chapterIdx;
 
-  const resetDesktopWidth = () => {
-    const recommended = getRecommendedDesktopWidth(window.innerWidth || 1280);
-    setPageWidth(Math.min(recommended, desktopWidthLimit));
+  const handleBookmark = () => {
+    if (showOpeningToc && bookmark) {
+      if (bookmark.lang !== lang) {
+        pendingChapterIdxRef.current = bookmark.chapterIdx;
+        pendingChapterNumberRef.current = null;
+        setLang(bookmark.lang);
+      } else {
+        setChapterIdx(bookmark.chapterIdx);
+      }
+      setShowOpeningToc(false);
+      return;
+    }
+
+    if (isCurrentBookmarked) {
+      localStorage.removeItem('reader-bookmark');
+      setBookmark(null);
+      return;
+    }
+
+    const next: ReaderBookmark = { lang, chapterIdx, ts: Date.now() };
+    localStorage.setItem('reader-bookmark', JSON.stringify(next));
+    setBookmark(next);
   };
-  const recommendedDesktopWidth = Math.min(
-    getRecommendedDesktopWidth(window.innerWidth || 1280),
-    desktopWidthLimit
-  );
-  const isResetWidthNeeded = Math.abs(pageWidth - recommendedDesktopWidth) > 1;
 
   return (
     <div className="reader-root">
@@ -2185,12 +2247,12 @@ export default function BookReader() {
                     onChange={(e) => setPageWidth(Number(e.target.value))}
                   />
                   <button
-                    className={`reader-text-size-btn reader-width-reset-btn${isResetWidthNeeded ? ' is-active' : ''}`}
-                    aria-label="Reset content width"
-                    title="Reset width"
-                    onClick={resetDesktopWidth}
+                    className={`reader-bookmark-btn${isCurrentBookmarked ? ' active' : ''}`}
+                    aria-label={showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark this chapter'}
+                    title={showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark this chapter'}
+                    onClick={handleBookmark}
                   >
-                    <MdRefresh size={16} />
+                    {isCurrentBookmarked ? <MdBookmark size={18} /> : <MdBookmarkBorder size={18} />}
                   </button>
                 </>
               )}
@@ -2534,7 +2596,7 @@ export default function BookReader() {
               if (top > maxTop) top = maxTop;
             }
             return {
-                  position: 'absolute',
+              position: 'fixed',
                   top: `${top}px`,
                   left: `${left}px`,
                   transform: 'translateX(-50%)',
