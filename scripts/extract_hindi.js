@@ -70,6 +70,9 @@ function normalizeTitle(s = '') {
   return String(s)
     .replace(/^\s*[-:]+\s*/, '')
     .replace(/\s*[-:]+\s*$/g, '')
+    .replace(/^\s*पाठ\s*([०-९0-9]+)\s*[-—–:]?\s*/u, 'पाठ $1 - ')
+    .replace(/^\s*पाठ\s*([०-९0-9]+)\s*-\s*/u, 'पाठ $1 - ')
+    .replace(/[*]+.*$/u, '')
     .replace(/\s+/g, ' ')
     .trim();
 }
