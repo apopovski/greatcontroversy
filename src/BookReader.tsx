@@ -102,6 +102,11 @@ type TimelineInfo = {
   end?: number;
 };
 
+const AMHARIC_FOLDER = 'Amharic - Ellen G. White';
+const AMHARIC_SOURCE_PATH = '/book-content/txt/Amharic.rtf';
+const CHINESE_FOLDER = 'Chinese - Ellen G. White';
+const CHINESE_SOURCE_PATH = '/book-content/txt/GC-Chinese.txt';
+
 const TIMELINE_LABELS: Array<{ match: RegExp; label: string }> = [
   { match: /reformation/, label: 'Reformation era' },
   { match: /renaissance/, label: 'Renaissance' },
@@ -133,6 +138,8 @@ const LANGUAGE_FOLDERS = [
   "Vielikaia bor'ba - Ellen G. White",
   'Wielki boj - Ellen G. White',
   "alSra` al`Zym - Ellen G. White",
+  AMHARIC_FOLDER,
+  CHINESE_FOLDER,
 ];
 
 const LANGUAGE_ABBREV: Record<string, string> = {
@@ -154,6 +161,8 @@ const LANGUAGE_ABBREV: Record<string, string> = {
   "Vielikaia bor'ba - Ellen G. White": 'ru',
   'Wielki boj - Ellen G. White': 'pl',
   "alSra` al`Zym - Ellen G. White": 'ar',
+  [AMHARIC_FOLDER]: 'am',
+  [CHINESE_FOLDER]: 'zh',
 };
 
 const getBookTitleFromFolder = (folder: string) => (folder || '').split(' - Ellen')[0].trim();
@@ -177,6 +186,8 @@ const LANGUAGE_URL_NAMES: Record<string, string> = {
   "Vielikaia bor'ba - Ellen G. White": 'Русский',
   'Wielki boj - Ellen G. White': 'Polski',
   "alSra` al`Zym - Ellen G. White": 'العربية',
+  [AMHARIC_FOLDER]: 'አማርኛ',
+  [CHINESE_FOLDER]: '中文',
 };
 
 const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
@@ -198,6 +209,8 @@ const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
   "Vielikaia bor'ba - Ellen G. White": 'Glava',
   'Wielki boj - Ellen G. White': 'Rozdział',
   "alSra` al`Zym - Ellen G. White": 'الفصل',
+  [AMHARIC_FOLDER]: 'ምዕራፍ',
+  [CHINESE_FOLDER]: '章',
 };
 
 const COPYRIGHTS: Record<string, string> = {
@@ -517,6 +530,178 @@ function transformChapterHeading(html: string) {
   } catch {
     return html;
   }
+}
+
+function escapeHtml(input: string) {
+  return (input || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function parseAmharicBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
+  const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
+  const chapterHeading = /^\s*ምዕራፍ\s+([^\s—-]+)\s*[—-]\s*(.+)\s*$/;
+
+  type Section = { id: string; title: string; lines: string[] };
+  const sections: Section[] = [];
+
+  let introLines: string[] = [];
+  let current: Section | null = null;
+  let chapterCount = 0;
+
+  const pushCurrent = () => {
+    if (!current) return;
+    sections.push(current);
+    current = null;
+  };
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    const match = trimmed.match(chapterHeading);
+    if (match) {
+      pushCurrent();
+      chapterCount += 1;
+      current = {
+        id: `amh-ch-${chapterCount}`,
+        title: trimmed,
+        lines: [],
+      };
+      continue;
+    }
+
+    if (current) {
+      current.lines.push(line);
+    } else {
+      introLines.push(line);
+    }
+  }
+  pushCurrent();
+
+  const introClean = introLines.join('\n').trim();
+  if (introClean) {
+    sections.unshift({
+      id: 'amh-intro',
+      title: 'መቅድም',
+      lines: introLines,
+    });
+  }
+
+  const toParagraphs = (sectionLines: string[]) => {
+    const paras: string[] = [];
+    let buf: string[] = [];
+    const flush = () => {
+      const t = buf.join(' ').replace(/\s+/g, ' ').trim();
+      if (t) paras.push(`<p>${escapeHtml(t)}</p>`);
+      buf = [];
+    };
+
+    sectionLines.forEach((ln) => {
+      const t = (ln || '').trim();
+      if (!t) {
+        flush();
+      } else {
+        buf.push(t);
+      }
+    });
+    flush();
+    return paras.join('\n');
+  };
+
+  const toc: TocEntry[] = sections.map((s) => ({ title: s.title, href: `#${s.id}` }));
+  const chapterIds = sections.map((s) => s.id);
+  const chapterHtml = sections.map((s) => {
+    const headingTag = s.id === 'amh-intro' ? 'h2' : 'h2';
+    const heading = `<${headingTag} class="chapterhead">${escapeHtml(s.title)}</${headingTag}>`;
+    const body = toParagraphs(s.lines);
+    return `<div id="${s.id}">\n${heading}\n${body}\n</div>`;
+  });
+
+  return { toc, chapterIds, chapterHtml };
+}
+
+function parseChineseBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
+  const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
+  const chapterHeading = /^\s*第\s*([0-9０-９]{1,3}|[一二三四五六七八九十百千〇零两兩]{1,6})\s*章\s*[—–\-：:]?\s*(.*?)\s*$/;
+
+  type Section = { id: string; title: string; lines: string[] };
+  const sections: Section[] = [];
+
+  let introLines: string[] = [];
+  let current: Section | null = null;
+  let chapterCount = 0;
+
+  const pushCurrent = () => {
+    if (!current) return;
+    sections.push(current);
+    current = null;
+  };
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    const match = trimmed.match(chapterHeading);
+    if (match) {
+      pushCurrent();
+      chapterCount += 1;
+      const chapterNo = (match[1] || '').trim();
+      const chapterTail = (match[2] || '').trim();
+      current = {
+        id: `zh-ch-${chapterCount}`,
+        title: chapterTail ? `第${chapterNo}章 ${chapterTail}` : `第${chapterNo}章`,
+        lines: [],
+      };
+      continue;
+    }
+
+    if (current) {
+      current.lines.push(line);
+    } else {
+      introLines.push(line);
+    }
+  }
+  pushCurrent();
+
+  const introClean = introLines.join('\n').trim();
+  if (introClean) {
+    sections.unshift({
+      id: 'zh-intro',
+      title: '引言',
+      lines: introLines,
+    });
+  }
+
+  const toParagraphs = (sectionLines: string[]) => {
+    const paras: string[] = [];
+    let buf: string[] = [];
+    const flush = () => {
+      const t = buf.join(' ').replace(/\s+/g, ' ').trim();
+      if (t) paras.push(`<p>${escapeHtml(t)}</p>`);
+      buf = [];
+    };
+
+    sectionLines.forEach((ln) => {
+      const t = (ln || '').trim();
+      if (!t) {
+        flush();
+      } else {
+        buf.push(t);
+      }
+    });
+    flush();
+    return paras.join('\n');
+  };
+
+  const toc: TocEntry[] = sections.map((s) => ({ title: s.title, href: `#${s.id}` }));
+  const chapterIds = sections.map((s) => s.id);
+  const chapterHtml = sections.map((s) => {
+    const heading = `<h2 class="chapterhead">${escapeHtml(s.title)}</h2>`;
+    const body = toParagraphs(s.lines);
+    return `<div id="${s.id}">\n${heading}\n${body}\n</div>`;
+  });
+
+  return { toc, chapterIds, chapterHtml };
 }
 
 export default function BookReader() {
@@ -1187,6 +1372,53 @@ export default function BookReader() {
       throw new Error('Not found');
     };
 
+    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER) {
+      const sourcePath = lang === AMHARIC_FOLDER ? AMHARIC_SOURCE_PATH : CHINESE_SOURCE_PATH;
+      fetch(sourcePath)
+        .then((r) => {
+          if (!r.ok) throw new Error('Source file missing');
+          return r.text();
+        })
+        .then((raw) => {
+          const parsed = lang === AMHARIC_FOLDER ? parseAmharicBook(raw) : parseChineseBook(raw);
+          setToc(parsed.toc);
+          setChapterIds(parsed.chapterIds);
+          setBookDoc(null);
+
+          chapterCache.current.clear();
+          plainTextCache.current.clear();
+          parsed.chapterHtml.forEach((html, i) => {
+            chapterCache.current.set(i, html);
+            plainTextCache.current.set(i, html.replace(/<[^>]+>/g, ' '));
+          });
+
+          let defaultIdx = 0;
+          const desiredNumber = pendingChapterNumberRef.current;
+          const desiredIdx = pendingChapterIdxRef.current;
+          if (typeof desiredNumber === 'number') {
+            const idxFromNum = Math.max(0, Math.min(parsed.chapterIds.length - 1, desiredNumber - 1));
+            setChapterIdx(idxFromNum);
+          } else if (typeof desiredIdx === 'number' && desiredIdx >= 0 && desiredIdx < parsed.chapterIds.length) {
+            setChapterIdx(desiredIdx);
+          } else {
+            setChapterIdx(defaultIdx);
+          }
+
+          pendingChapterIdxRef.current = null;
+          pendingChapterNumberRef.current = null;
+          setLoading(false);
+        })
+        .catch(() => {
+          setToc([]);
+          setChapterIds([]);
+          setBookDoc(null);
+          chapterCache.current.clear();
+          plainTextCache.current.clear();
+          setLoading(false);
+        });
+      return;
+    }
+
     const encodedBase = `/book-content/html/${encodeURIComponent(lang)}`;
     const rawBase = `/book-content/html/${lang}`;
     const candidates = [
@@ -1738,6 +1970,23 @@ export default function BookReader() {
   const displayTitle = (lang || '').split(' - Ellen')[0].trim();
   const isRtl = (lang || '').toLowerCase().includes('alsra');
 
+  const languageMenuFolders = useMemo(() => {
+    const englishFolder = 'The Great Controversy - Ellen G. White 2';
+    const collator = new Intl.Collator('en', { sensitivity: 'base', numeric: true });
+
+    const sortedRest = LANGUAGE_FOLDERS
+      .filter((f) => f !== englishFolder)
+      .sort((a, b) => {
+        const aLabel = LANGUAGE_NAMES[a] || LANGUAGE_URL_NAMES[a] || a;
+        const bLabel = LANGUAGE_NAMES[b] || LANGUAGE_URL_NAMES[b] || b;
+        return collator.compare(aLabel, bLabel);
+      });
+
+    return LANGUAGE_FOLDERS.includes(englishFolder)
+      ? [englishFolder, ...sortedRest]
+      : sortedRest;
+  }, []);
+
   const wrapperStyle: React.CSSProperties = {
     width: isDesktop ? `${pageWidth}px` : '100%',
     fontSize: `${textSize}px`,
@@ -2260,7 +2509,7 @@ export default function BookReader() {
           onClick={(e) => e.stopPropagation()}
         >
           <ul>
-            {LANGUAGE_FOLDERS.map((f) => (
+            {languageMenuFolders.map((f) => (
               <li key={f}>
                 <button
                   disabled={f === lang}
