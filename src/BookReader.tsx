@@ -804,6 +804,7 @@ function parseAfrikaansBook(raw: string): { toc: TocEntry[]; chapterIds: string[
     (s || '')
       .replace(/^\s*hoofstuk\s+/i, 'Hoofstuk ')
       .replace(/^\s*inleiding\s*$/i, 'Inleiding')
+      .replace(/\*.*$/, '')
       .replace(/\s*[—–-]\s*/g, '—')
       .replace(/\s+/g, ' ')
       .trim();

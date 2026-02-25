@@ -22,6 +22,7 @@ function cleanText(s = '') {
 function normalizeAfrikaansTitle(s = '') {
   return String(s)
     .replace(/^\s*hoofstuk\s+/i, 'Hoofstuk ')
+    .replace(/\*.*$/, '')
     .replace(/\s*[—–-]\s*/g, '—')
     .replace(/\s+/g, ' ')
     .trim();
