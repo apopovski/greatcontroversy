@@ -306,8 +306,9 @@ function addParagraphIds(html: string, chapterNumber: number) {
 function applyDropcap(html: string, langKey: string, chapterIndex: number, toc: TocEntry[]) {
   try {
     const name = LANGUAGE_NAMES[langKey] || '';
-    // Do not apply dropcap for Arabic languages (RTL layouts often need custom handling)
-    if (name.toLowerCase() === 'arabic') return html;
+    // Do not apply dropcap for Arabic/Chinese languages
+    // (RTL and CJK layouts often need custom typography handling)
+    if (name.toLowerCase() === 'arabic' || langKey === CHINESE_FOLDER) return html;
     if (typeof chapterIndex !== 'number' || chapterIndex < 0) return html;
     const doc = new DOMParser().parseFromString(html || '', 'text/html');
     // Strip any styles or stylesheet links from the parsed chapter to avoid
@@ -544,6 +545,7 @@ function parseAmharicBook(raw: string): { toc: TocEntry[]; chapterIds: string[];
 function parseChineseBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
   const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
   const chapterHeading = /^\s*第\s*([0-9０-９]{1,3}|[一二三四五六七八九十百千〇零两兩]{1,6})\s*章\s*[—–\-：:]?\s*(.*?)\s*$/;
+  const gcsMarker = /\bGCS\s*\d+(?:\.\d+)?\b/gi;
 
   type Section = { id: string; title: string; lines: string[] };
   const sections: Section[] = [];
@@ -595,7 +597,11 @@ function parseChineseBook(raw: string): { toc: TocEntry[]; chapterIds: string[];
     const paras: string[] = [];
     let buf: string[] = [];
     const flush = () => {
-      const t = buf.join(' ').replace(/\s+/g, ' ').trim();
+      const t = buf
+        .join(' ')
+        .replace(gcsMarker, '')
+        .replace(/\s+/g, ' ')
+        .trim();
       if (t) paras.push(`<p>${escapeHtml(t)}</p>`);
       buf = [];
     };
@@ -1878,10 +1884,13 @@ export default function BookReader() {
     });
   }, [chapterIdx, displayedHtml]);
 
-  // Derive a readable book title from the language folder name.
-  // Many folders are named like "<Localized Title> - Ellen G. White" so split off
-  // the author suffix to get the localized title for the header.
-  const displayTitle = (lang || '').split(' - Ellen')[0].trim();
+  // Derive a readable book title from language mapping/folder name.
+  // This uses BOOK_TITLE_OVERRIDES (e.g. Chinese) when available.
+  const displayTitle = getBookTitleFromFolder(lang);
+  const contentsLabel = lang === CHINESE_FOLDER ? '目录' : 'Contents';
+  const tableOfContentsLabel = lang === CHINESE_FOLDER ? '目录' : 'Table of contents';
+  const noContentsLabel = lang === CHINESE_FOLDER ? '暂无目录' : 'No contents';
+  const noContentsAvailableLabel = lang === CHINESE_FOLDER ? '暂无目录' : 'No contents available';
   const isRtl = (lang || '').toLowerCase().includes('alsra');
 
   const languageMenuFolders = useMemo(() => {
@@ -1969,7 +1978,7 @@ export default function BookReader() {
                 }
                 setShowChaptersMenu((v) => !v);
               }}
-              aria-label="Contents"
+              aria-label={contentsLabel}
             >
               <MdMenu size={28} />
             </button>
@@ -2177,10 +2186,10 @@ export default function BookReader() {
               setShowChaptersMenu(true);
               setShowMoreMenu(false);
             }}
-            aria-label="Contents"
+            aria-label={contentsLabel}
           >
             <MdMenu size={20} />
-            <span>Contents</span>
+            <span>{contentsLabel}</span>
           </button>
           <button
             onClick={() => {
@@ -2230,11 +2239,11 @@ export default function BookReader() {
           onClick={(e) => e.stopPropagation()}
         >
           <div className="reader-modal-header">
-            <strong>Contents</strong>
+            <strong>{contentsLabel}</strong>
             <button onClick={() => setShowChaptersMenu(false)}>✕</button>
           </div>
           <ul className="reader-toc-list">
-            {toc.length === 0 && <li className="reader-toc-empty">No contents</li>}
+            {toc.length === 0 && <li className="reader-toc-empty">{noContentsLabel}</li>}
             {toc.map((t, i) => {
               const chapterNum = getChapterNumber(t.title);
               const titleOnly = chapterNum ? stripChapterPrefix(t.title) : t.title;
@@ -2263,11 +2272,11 @@ export default function BookReader() {
             {loading ? (
               <div>Loading…</div>
             ) : (
-              <section className="reader-opening-toc-inline" aria-label="Table of contents">
+              <section className="reader-opening-toc-inline" aria-label={tableOfContentsLabel}>
                 <div className="reader-opening-toc-inline-header">
                   <div className="reader-opening-toc-inline-titles">
                     <h1 className="reader-opening-title">{displayTitle}</h1>
-                    <div className="reader-opening-subtitle">Contents</div>
+                    <div className="reader-opening-subtitle">{contentsLabel}</div>
                   </div>
                   <div className="reader-opening-toc-inline-actions">
                     <button
@@ -2288,7 +2297,7 @@ export default function BookReader() {
                 </div>
 
                 <ul className="reader-toc-list reader-opening-toc-list">
-                  {toc.length === 0 && <li className="reader-toc-empty">No contents available</li>}
+                  {toc.length === 0 && <li className="reader-toc-empty">{noContentsAvailableLabel}</li>}
                   {toc.map((t, i) => {
                     const chapterNum = getChapterNumber(t.title);
                     const titleOnly = chapterNum ? stripChapterPrefix(t.title) : t.title;
