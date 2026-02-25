@@ -34,7 +34,7 @@ ${k}
 ${Q}
 </div>`});return{toc:T,chapterIds:H,chapterHtml:D}}function h1(o){const M=(o||"").replace(/\r\n?/g,`
 `).split(`
-`),_=/^\s*@@CHAPTER@@\s*(.+?)\s*$/,f=B=>(B||"").replace(/^\s*hoofstuk\s+/i,"Hoofstuk ").replace(/^\s*inleiding\s*$/i,"Inleiding").replace(/\s*[—–-]\s*/g,"—").replace(/\s+/g," ").trim(),w=[];let R=null,V=0;const J=()=>{R&&(w.push(R),R=null)};for(const B of M){const Q=(B||"").trim().match(_);if(Q){J(),V+=1,R={id:`af-ch-${V}`,title:f(Q[1]||""),lines:[]};continue}R&&R.lines.push(B)}J();const G=B=>{const k=[];let Q=[];const lt=()=>{const ut=Q.join(" ").replace(/\s+/g," ").trim();ut&&k.push(`<p>${dl(ut)}</p>`),Q=[]};return B.forEach(ut=>{const dt=(ut||"").trim();dt?Q.push(dt):lt()}),lt(),k.join(`
+`),_=/^\s*@@CHAPTER@@\s*(.+?)\s*$/,f=B=>(B||"").replace(/^\s*hoofstuk\s+/i,"Hoofstuk ").replace(/^\s*inleiding\s*$/i,"Inleiding").replace(/\*.*$/,"").replace(/\s*[—–-]\s*/g,"—").replace(/\s+/g," ").trim(),w=[];let R=null,V=0;const J=()=>{R&&(w.push(R),R=null)};for(const B of M){const Q=(B||"").trim().match(_);if(Q){J(),V+=1,R={id:`af-ch-${V}`,title:f(Q[1]||""),lines:[]};continue}R&&R.lines.push(B)}J();const G=B=>{const k=[];let Q=[];const lt=()=>{const ut=Q.join(" ").replace(/\s+/g," ").trim();ut&&k.push(`<p>${dl(ut)}</p>`),Q=[]};return B.forEach(ut=>{const dt=(ut||"").trim();dt?Q.push(dt):lt()}),lt(),k.join(`
 `)},T=w.map(B=>({title:B.title,href:`#${B.id}`})),H=w.map(B=>B.id),D=w.map(B=>{const k=`<h2 class="chapterhead">${dl(B.title)}</h2>`,Q=G(B.lines);return`<div id="${B.id}">
 ${k}
 ${Q}
