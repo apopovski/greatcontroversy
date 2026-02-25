@@ -1,7 +1,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './BookReader.css';
-import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode, MdContentCopy, MdShare, MdClose, MdMoreVert } from 'react-icons/md';
+import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode, MdContentCopy, MdShare, MdClose, MdMoreVert, MdRefresh } from 'react-icons/md';
 import { FaFacebookF, FaXTwitter, FaWhatsapp } from 'react-icons/fa6';
 import { IoMdMail } from 'react-icons/io';
 import { LANGUAGE_NAMES } from './utils/language';
@@ -88,6 +88,19 @@ const AMHARIC_FOLDER = 'Amharic - Ellen G. White';
 const AMHARIC_SOURCE_PATH = '/book-content/txt/Amharic.rtf';
 const CHINESE_FOLDER = 'Chinese - Ellen G. White';
 const CHINESE_SOURCE_PATH = '/book-content/txt/GC-Chinese.txt';
+
+const DESKTOP_WIDTH_MIN = 640;
+const DESKTOP_WIDTH_MAX = 820;
+const DESKTOP_WIDTH_RECOMMENDED_MIN = 680;
+const DESKTOP_WIDTH_RECOMMENDED_MAX = 760;
+
+function getRecommendedDesktopWidth(viewportWidth: number) {
+  const target = Math.round(viewportWidth * 0.67);
+  return Math.max(
+    DESKTOP_WIDTH_RECOMMENDED_MIN,
+    Math.min(DESKTOP_WIDTH_RECOMMENDED_MAX, target)
+  );
+}
 
 const LANGUAGE_FOLDERS = [
   'The Great Controversy - Ellen G. White 2',
@@ -653,7 +666,19 @@ export default function BookReader() {
   const plainTextCache = useRef<Map<number, string>>(new Map());
   const [chapterIdx, setChapterIdx] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [pageWidth, setPageWidth] = useState(720);
+  const [pageWidth, setPageWidth] = useState(() => {
+    const saved = localStorage.getItem('reader-page-width');
+    if (saved) {
+      const n = Number(saved);
+      if (!Number.isNaN(n)) {
+        return Math.max(DESKTOP_WIDTH_MIN, Math.min(DESKTOP_WIDTH_MAX, n));
+      }
+    }
+    return getRecommendedDesktopWidth(window.innerWidth || 1280);
+  });
+  const [desktopWidthLimit, setDesktopWidthLimit] = useState(() =>
+    Math.max(DESKTOP_WIDTH_MIN, Math.min(DESKTOP_WIDTH_MAX, (window.innerWidth || 1280) - 48))
+  );
   const [textSize, setTextSize] = useState(() => {
     const v = localStorage.getItem('reader-text-size');
     return v ? Number(v) : 18;
@@ -841,6 +866,25 @@ export default function BookReader() {
     mq.addEventListener?.('change', fn);
     return () => mq.removeEventListener?.('change', fn);
   }, []);
+
+  useEffect(() => {
+    const updateDesktopWidth = () => {
+      const limit = Math.max(
+        DESKTOP_WIDTH_MIN,
+        Math.min(DESKTOP_WIDTH_MAX, window.innerWidth - 48)
+      );
+      setDesktopWidthLimit(limit);
+      setPageWidth((w) => Math.min(w, limit));
+    };
+
+    updateDesktopWidth();
+    window.addEventListener('resize', updateDesktopWidth);
+    return () => window.removeEventListener('resize', updateDesktopWidth);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('reader-page-width', String(pageWidth));
+  }, [pageWidth]);
 
   useEffect(() => {
     if (!showShareMenu) return;
@@ -1916,6 +1960,16 @@ export default function BookReader() {
     position: 'relative',
   };
 
+  const resetDesktopWidth = () => {
+    const recommended = getRecommendedDesktopWidth(window.innerWidth || 1280);
+    setPageWidth(Math.min(recommended, desktopWidthLimit));
+  };
+  const recommendedDesktopWidth = Math.min(
+    getRecommendedDesktopWidth(window.innerWidth || 1280),
+    desktopWidthLimit
+  );
+  const isResetWidthNeeded = Math.abs(pageWidth - recommendedDesktopWidth) > 1;
+
   return (
     <div className="reader-root">
       {/* Language title removed — header icons now indicate language */}
@@ -2125,11 +2179,19 @@ export default function BookReader() {
                   <input
                     className="reader-width-slider"
                     type="range"
-                    min={500}
-                    max={1400}
+                    min={DESKTOP_WIDTH_MIN}
+                    max={desktopWidthLimit}
                     value={pageWidth}
                     onChange={(e) => setPageWidth(Number(e.target.value))}
                   />
+                  <button
+                    className={`reader-text-size-btn reader-width-reset-btn${isResetWidthNeeded ? ' is-active' : ''}`}
+                    aria-label="Reset content width"
+                    title="Reset width"
+                    onClick={resetDesktopWidth}
+                  >
+                    <MdRefresh size={16} />
+                  </button>
                 </>
               )}
             </div>
