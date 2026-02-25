@@ -600,6 +600,14 @@ function parseChineseBook(raw: string): { toc: TocEntry[]; chapterIds: string[];
   const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
   const chapterHeading = /^\s*第\s*([0-9０-９]{1,3}|[一二三四五六七八九十百千〇零两兩]{1,6})\s*章\s*[—–\-：:]?\s*(.*?)\s*$/;
   const gcsMarker = /\bGCS\s*\d+(?:\.\d+)?\b/gi;
+  const normalizeChineseTitle = (chapterNo: string, chapterTail: string) => {
+    const tail = (chapterTail || '')
+      .replace(/[*]+.*$/u, '')
+      .replace(/^\s*[-—–:：]+\s*/u, '')
+      .replace(/\s+/gu, ' ')
+      .trim();
+    return tail ? `第${(chapterNo || '').trim()}章 ${tail}` : `第${(chapterNo || '').trim()}章`;
+  };
 
   type Section = { id: string; title: string; lines: string[] };
   const sections: Section[] = [];
@@ -624,7 +632,7 @@ function parseChineseBook(raw: string): { toc: TocEntry[]; chapterIds: string[];
       const chapterTail = (match[2] || '').trim();
       current = {
         id: `zh-ch-${chapterCount}`,
-        title: chapterTail ? `第${chapterNo}章 ${chapterTail}` : `第${chapterNo}章`,
+        title: normalizeChineseTitle(chapterNo, chapterTail),
         lines: [],
       };
       continue;
@@ -686,6 +694,13 @@ function parseChineseBook(raw: string): { toc: TocEntry[]; chapterIds: string[];
 function parseSerbianBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
   const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
   const chapterHeading = /^\s*Поглавље\s+([IVXLCDM]+|\d+)\s*[—–\-:]\s*(.*?)\s*$/i;
+  const normalizeSerbianTitle = (s: string) =>
+    (s || '')
+      .replace(/^\s*Поглавље\s+/iu, 'Поглавље ')
+      .replace(/\s*[-—–:]\s*/gu, ' — ')
+      .replace(/[*]+.*$/u, '')
+      .replace(/\s+/gu, ' ')
+      .trim();
 
   type Section = { id: string; title: string; lines: string[] };
   const sections: Section[] = [];
@@ -706,7 +721,7 @@ function parseSerbianBook(raw: string): { toc: TocEntry[]; chapterIds: string[];
       chapterCount += 1;
       current = {
         id: `sr-ch-${chapterCount}`,
-        title: trimmed,
+        title: normalizeSerbianTitle(trimmed),
         lines: [],
       };
       continue;
