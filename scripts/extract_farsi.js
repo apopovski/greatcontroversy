@@ -17,6 +17,13 @@ function cleanText(s = '') {
     .trim();
 }
 
+function normalizeFarsiTitle(s = '') {
+  return String(s)
+    .replace(/^\s*(\d{1,3})\s*[—–:-]\s*/, '$1—')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 (async () => {
   const token = await getToken();
   const headers = { Authorization: `Bearer ${token}` };
@@ -25,7 +32,7 @@ function cleanText(s = '') {
   const sections = toc
     .filter((x) => x.level === 1)
     .map((x) => ({
-      title: cleanText(x.title || ''),
+      title: normalizeFarsiTitle(cleanText(x.title || '')),
       paraId: String(x.para_id || ''),
     }))
     .filter((x) => x.title && x.paraId.includes('.'));

@@ -248,12 +248,15 @@ function getChapterNumber(title: string) {
   const t = (title || '').trim();
   const m = t.match(/\bchapter\s+(\d+)\b/i);
   if (m && m[1]) return Number(m[1]);
+  const n = t.match(/^(\d{1,3})\s*[—–-]/);
+  if (n && n[1]) return Number(n[1]);
   return null;
 }
 
 function stripChapterPrefix(title: string) {
   return (title || '')
     .replace(/^\s*chapter\s+\d+\s*[-—–:]*\s*/i, '')
+    .replace(/^\s*\d{1,3}\s*[—–:-]\s*/i, '')
     .trim();
 }
 
@@ -723,6 +726,11 @@ function parseSerbianBook(raw: string): { toc: TocEntry[]; chapterIds: string[];
 function parseFarsiBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
   const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
   const chapterMarker = /^\s*@@CHAPTER@@\s*(.+?)\s*$/;
+  const normalizeFarsiTitle = (s: string) =>
+    (s || '')
+      .replace(/^\s*(\d{1,3})\s*[—–:-]\s*/, '$1—')
+      .replace(/\s+/g, ' ')
+      .trim();
 
   type Section = { id: string; title: string; lines: string[] };
   const sections: Section[] = [];
@@ -743,7 +751,7 @@ function parseFarsiBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; c
       chapterCount += 1;
       current = {
         id: `fa-ch-${chapterCount}`,
-        title: (match[1] || '').trim(),
+        title: normalizeFarsiTitle(match[1] || ''),
         lines: [],
       };
       continue;
