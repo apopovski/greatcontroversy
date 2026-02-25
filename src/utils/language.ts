@@ -33,4 +33,5 @@ export const LANGUAGE_NAMES: Record<string, string> = {
   'Amharic - Ellen G. White': 'Amharic',
   'Chinese - Ellen G. White': 'Chinese',
   'Serbian - Ellen G. White': 'Serbian',
+  'Farsi - Ellen G. White': 'Farsi',
 };
