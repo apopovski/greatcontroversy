@@ -88,6 +88,8 @@ const AMHARIC_FOLDER = 'Amharic - Ellen G. White';
 const AMHARIC_SOURCE_PATH = '/book-content/txt/Amharic.rtf';
 const CHINESE_FOLDER = 'Chinese - Ellen G. White';
 const CHINESE_SOURCE_PATH = '/book-content/txt/GC-Chinese.txt';
+const SERBIAN_FOLDER = 'Serbian - Ellen G. White';
+const SERBIAN_SOURCE_PATH = '/book-content/txt/GC-Serbian.txt';
 
 const DESKTOP_WIDTH_MIN = 640;
 const DESKTOP_WIDTH_MAX = 820;
@@ -123,6 +125,7 @@ const LANGUAGE_FOLDERS = [
   "alSra` al`Zym - Ellen G. White",
   AMHARIC_FOLDER,
   CHINESE_FOLDER,
+  SERBIAN_FOLDER,
 ];
 
 const LANGUAGE_ABBREV: Record<string, string> = {
@@ -146,10 +149,12 @@ const LANGUAGE_ABBREV: Record<string, string> = {
   "alSra` al`Zym - Ellen G. White": 'ar',
   [AMHARIC_FOLDER]: 'am',
   [CHINESE_FOLDER]: 'zh',
+  [SERBIAN_FOLDER]: 'sr',
 };
 
 const BOOK_TITLE_OVERRIDES: Record<string, string> = {
   [CHINESE_FOLDER]: '善恶之争',
+  [SERBIAN_FOLDER]: 'Велика Борба Између Христа И Сотоне',
 };
 
 const getBookTitleFromFolder = (folder: string) =>
@@ -176,6 +181,7 @@ const LANGUAGE_URL_NAMES: Record<string, string> = {
   "alSra` al`Zym - Ellen G. White": 'العربية',
   [AMHARIC_FOLDER]: 'አማርኛ',
   [CHINESE_FOLDER]: '中文',
+  [SERBIAN_FOLDER]: 'Српски',
 };
 
 const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
@@ -199,6 +205,7 @@ const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
   "alSra` al`Zym - Ellen G. White": 'الفصل',
   [AMHARIC_FOLDER]: 'ምዕራፍ',
   [CHINESE_FOLDER]: '章',
+  [SERBIAN_FOLDER]: 'Поглавље',
 };
 
 const COPYRIGHTS: Record<string, string> = {
@@ -626,6 +633,70 @@ function parseChineseBook(raw: string): { toc: TocEntry[]; chapterIds: string[];
       } else {
         buf.push(t);
       }
+    });
+    flush();
+    return paras.join('\n');
+  };
+
+  const toc: TocEntry[] = sections.map((s) => ({ title: s.title, href: `#${s.id}` }));
+  const chapterIds = sections.map((s) => s.id);
+  const chapterHtml = sections.map((s) => {
+    const heading = `<h2 class="chapterhead">${escapeHtml(s.title)}</h2>`;
+    const body = toParagraphs(s.lines);
+    return `<div id="${s.id}">\n${heading}\n${body}\n</div>`;
+  });
+
+  return { toc, chapterIds, chapterHtml };
+}
+
+function parseSerbianBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
+  const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
+  const chapterHeading = /^\s*Поглавље\s+([IVXLCDM]+|\d+)\s*[—–\-:]\s*(.*?)\s*$/i;
+
+  type Section = { id: string; title: string; lines: string[] };
+  const sections: Section[] = [];
+  let current: Section | null = null;
+  let chapterCount = 0;
+
+  const pushCurrent = () => {
+    if (!current) return;
+    sections.push(current);
+    current = null;
+  };
+
+  for (const line of lines) {
+    const trimmed = (line || '').trim();
+    const match = trimmed.match(chapterHeading);
+    if (match) {
+      pushCurrent();
+      chapterCount += 1;
+      current = {
+        id: `sr-ch-${chapterCount}`,
+        title: trimmed,
+        lines: [],
+      };
+      continue;
+    }
+
+    if (current) {
+      current.lines.push(line);
+    }
+  }
+  pushCurrent();
+
+  const toParagraphs = (sectionLines: string[]) => {
+    const paras: string[] = [];
+    let buf: string[] = [];
+    const flush = () => {
+      const t = buf.join(' ').replace(/\s+/g, ' ').trim();
+      if (t) paras.push(`<p>${escapeHtml(t)}</p>`);
+      buf = [];
+    };
+
+    sectionLines.forEach((ln) => {
+      const t = (ln || '').trim();
+      if (!t) flush();
+      else buf.push(t);
     });
     flush();
     return paras.join('\n');
@@ -1385,15 +1456,25 @@ export default function BookReader() {
       throw new Error('Not found');
     };
 
-    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER) {
-      const sourcePath = lang === AMHARIC_FOLDER ? AMHARIC_SOURCE_PATH : CHINESE_SOURCE_PATH;
+    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === SERBIAN_FOLDER) {
+      const sourcePath =
+        lang === AMHARIC_FOLDER
+          ? AMHARIC_SOURCE_PATH
+          : lang === CHINESE_FOLDER
+            ? CHINESE_SOURCE_PATH
+            : SERBIAN_SOURCE_PATH;
       fetch(sourcePath)
         .then((r) => {
           if (!r.ok) throw new Error('Source file missing');
           return r.text();
         })
         .then((raw) => {
-          const parsed = lang === AMHARIC_FOLDER ? parseAmharicBook(raw) : parseChineseBook(raw);
+          const parsed =
+            lang === AMHARIC_FOLDER
+              ? parseAmharicBook(raw)
+              : lang === CHINESE_FOLDER
+                ? parseChineseBook(raw)
+                : parseSerbianBook(raw);
           setToc(parsed.toc);
           setChapterIds(parsed.chapterIds);
           setBookDoc(null);
