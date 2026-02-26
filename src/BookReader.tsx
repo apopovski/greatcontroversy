@@ -98,6 +98,8 @@ const HINDI_FOLDER = 'Hindi - Ellen G. White';
 const HINDI_SOURCE_PATH = '/book-content/txt/GC-Hindi.txt';
 const BENGALI_FOLDER = 'Bengali - Ellen G. White';
 const BENGALI_SOURCE_PATH = '/book-content/txt/GC-Bengali.txt';
+const INDONESIAN_FOLDER = 'Indonesian - Ellen G. White';
+const INDONESIAN_SOURCE_PATH = '/book-content/txt/GC-Indonesian.txt';
 
 const DESKTOP_WIDTH_MIN = 640;
 const DESKTOP_WIDTH_MAX = 820;
@@ -138,6 +140,7 @@ const LANGUAGE_FOLDERS = [
   AFRIKAANS_FOLDER,
   HINDI_FOLDER,
   BENGALI_FOLDER,
+  INDONESIAN_FOLDER,
 ];
 
 const LANGUAGE_ABBREV: Record<string, string> = {
@@ -166,6 +169,7 @@ const LANGUAGE_ABBREV: Record<string, string> = {
   [AFRIKAANS_FOLDER]: 'af',
   [HINDI_FOLDER]: 'hi',
   [BENGALI_FOLDER]: 'bn',
+  [INDONESIAN_FOLDER]: 'id',
 };
 
 const BOOK_TITLE_OVERRIDES: Record<string, string> = {
@@ -175,6 +179,7 @@ const BOOK_TITLE_OVERRIDES: Record<string, string> = {
   [AFRIKAANS_FOLDER]: 'Die Groot Stryd',
   [HINDI_FOLDER]: 'महान संघर्ष',
   [BENGALI_FOLDER]: 'মহা বিবাদ',
+  [INDONESIAN_FOLDER]: 'Kemenangan Akhir',
 };
 
 const getBookTitleFromFolder = (folder: string) =>
@@ -206,6 +211,7 @@ const LANGUAGE_URL_NAMES: Record<string, string> = {
   [AFRIKAANS_FOLDER]: 'Afrikaans',
   [HINDI_FOLDER]: 'हिन्दी',
   [BENGALI_FOLDER]: 'বাংলা',
+  [INDONESIAN_FOLDER]: 'Bahasa Indonesia',
 };
 
 const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
@@ -234,6 +240,7 @@ const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
   [AFRIKAANS_FOLDER]: 'Hoofstuk',
   [HINDI_FOLDER]: 'पाठ',
   [BENGALI_FOLDER]: 'অধ্যায়',
+  [INDONESIAN_FOLDER]: 'Bab',
 };
 
 const COPYRIGHTS: Record<string, string> = {
@@ -1047,6 +1054,76 @@ function parseBengaliBook(raw: string): { toc: TocEntry[]; chapterIds: string[];
   return { toc, chapterIds, chapterHtml };
 }
 
+function parseIndonesianBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
+  const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
+  const chapterMarker = /^\s*@@CHAPTER@@\s*(.+?)\s*$/;
+  const normalizeIndonesianTitle = (s: string) =>
+    (s || '')
+      .replace(/^\s*[-:]+\s*/, '')
+      .replace(/\s*[-:]+\s*$/g, '')
+      .replace(/\s*[—–-]\s*/g, '—')
+      .replace(/[*]+.*$/u, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+  type Section = { id: string; title: string; lines: string[] };
+  const sections: Section[] = [];
+  let current: Section | null = null;
+  let sectionCount = 0;
+
+  const pushCurrent = () => {
+    if (!current) return;
+    sections.push(current);
+    current = null;
+  };
+
+  for (const line of lines) {
+    const trimmed = (line || '').trim();
+    const match = trimmed.match(chapterMarker);
+    if (match) {
+      pushCurrent();
+      sectionCount += 1;
+      current = {
+        id: `id-ch-${sectionCount}`,
+        title: normalizeIndonesianTitle(match[1] || ''),
+        lines: [],
+      };
+      continue;
+    }
+
+    if (current) current.lines.push(line);
+  }
+  pushCurrent();
+
+  const toParagraphs = (sectionLines: string[]) => {
+    const paras: string[] = [];
+    let buf: string[] = [];
+    const flush = () => {
+      const t = buf.join(' ').replace(/\s+/g, ' ').trim();
+      if (t) paras.push(`<p>${escapeHtml(t)}</p>`);
+      buf = [];
+    };
+
+    sectionLines.forEach((ln) => {
+      const t = (ln || '').trim();
+      if (!t) flush();
+      else buf.push(t);
+    });
+    flush();
+    return paras.join('\n');
+  };
+
+  const toc: TocEntry[] = sections.map((s) => ({ title: s.title, href: `#${s.id}` }));
+  const chapterIds = sections.map((s) => s.id);
+  const chapterHtml = sections.map((s) => {
+    const heading = `<h2 class="chapterhead">${escapeHtml(s.title)}</h2>`;
+    const body = toParagraphs(s.lines);
+    return `<div id="${s.id}">\n${heading}\n${body}\n</div>`;
+  });
+
+  return { toc, chapterIds, chapterHtml };
+}
+
 export default function BookReader() {
   type ReaderBookmark = { lang: string; chapterIdx: number; ts: number };
   // --- SEARCH & SHARE POPUP STATE ---
@@ -1791,7 +1868,7 @@ export default function BookReader() {
       throw new Error('Not found');
     };
 
-    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === SERBIAN_FOLDER || lang === FARSI_FOLDER || lang === AFRIKAANS_FOLDER || lang === HINDI_FOLDER || lang === BENGALI_FOLDER) {
+    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === SERBIAN_FOLDER || lang === FARSI_FOLDER || lang === AFRIKAANS_FOLDER || lang === HINDI_FOLDER || lang === BENGALI_FOLDER || lang === INDONESIAN_FOLDER) {
       const sourcePath =
         lang === AMHARIC_FOLDER
           ? AMHARIC_SOURCE_PATH
@@ -1805,7 +1882,9 @@ export default function BookReader() {
                   ? AFRIKAANS_SOURCE_PATH
                   : lang === HINDI_FOLDER
                     ? HINDI_SOURCE_PATH
-                    : BENGALI_SOURCE_PATH;
+                    : lang === BENGALI_FOLDER
+                      ? BENGALI_SOURCE_PATH
+                      : INDONESIAN_SOURCE_PATH;
       fetch(sourcePath)
         .then((r) => {
           if (!r.ok) throw new Error('Source file missing');
@@ -1825,7 +1904,9 @@ export default function BookReader() {
                       ? parseAfrikaansBook(raw)
                       : lang === HINDI_FOLDER
                         ? parseHindiBook(raw)
-                        : parseBengaliBook(raw);
+                        : lang === BENGALI_FOLDER
+                          ? parseBengaliBook(raw)
+                          : parseIndonesianBook(raw);
           setToc(parsed.toc);
           setChapterIds(parsed.chapterIds);
           setBookDoc(null);
