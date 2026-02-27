@@ -1,8 +1,19 @@
 // Offline support for app shell + runtime-cached book assets.
 // Kept intentionally dependency-free.
 
-const CACHE_NAME = 'book-reader-v3';
-const CORE_ASSETS = ['/', '/index.html', '/manifest.json'];
+const CACHE_NAME = 'book-reader-v4';
+const CORE_ASSETS = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/offline-precache.json',
+  '/service-worker.js',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/icon-192-maskable.png',
+  '/icon-512-maskable.png',
+  '/apple-touch-icon.png',
+];
 const PRECACHE_MANIFEST_PATH = '/offline-precache.json';
 
 async function getManifestAssets() {
@@ -25,6 +36,12 @@ async function addMany(cache, urls) {
       // Continue even if a single asset fails.
     }
   }
+}
+
+async function putInCache(req, res) {
+  if (!res || !res.ok) return;
+  const cache = await caches.open(CACHE_NAME);
+  await cache.put(req, res.clone());
 }
 
 self.addEventListener('install', (event) => {
@@ -64,10 +81,20 @@ self.addEventListener('fetch', (event) => {
   const isDataFile = url.pathname.startsWith('/data/');
 
   // Navigations: network-first, fall back to cached app shell.
-  // This preserves the URL in the address bar (no redirect-to-/ behavior).
+  // Cache-first helps reopening while offline even after app restart.
   if (req.mode === 'navigate') {
     event.respondWith(
-      fetch(req).catch(() => caches.match('/index.html'))
+      (async () => {
+        const cached = await caches.match(req);
+        if (cached) return cached;
+        try {
+          const res = await fetch(req);
+          event.waitUntil(putInCache(req, res.clone()));
+          return res;
+        } catch {
+          return (await caches.match('/index.html')) || Response.error();
+        }
+      })()
     );
     return;
   }
@@ -77,36 +104,47 @@ self.addEventListener('fetch', (event) => {
   const isStatic = dest === 'script' || dest === 'style' || dest === 'image' || dest === 'font';
 
   // Book/text/data files are fetched by JS with destination="".
-  // Cache-first lets users keep reading already-opened languages offline.
+  // Stale-while-revalidate keeps offline reopen reliable and updates when online.
   if (isBookContent || isDataFile) {
     event.respondWith(
-      caches.match(req).then((cached) => {
-        if (cached) return cached;
-        return fetch(req).then((res) => {
-          if (res && res.ok) {
-            const copy = res.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
-          }
-          return res;
-        });
-      })
+      (async () => {
+        const cached = await caches.match(req);
+        const networkFetch = fetch(req)
+          .then((res) => {
+            event.waitUntil(putInCache(req, res.clone()));
+            return res;
+          })
+          .catch(() => null);
+
+        if (cached) {
+          event.waitUntil(networkFetch);
+          return cached;
+        }
+
+        const net = await networkFetch;
+        return net || Response.error();
+      })()
     );
     return;
   }
 
   if (isStatic) {
     event.respondWith(
-      caches.match(req).then((cached) => {
-        if (cached) return cached;
-        return fetch(req).then((res) => {
-          // Only cache successful basic/cors responses.
-          if (res && res.ok) {
-            const copy = res.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
-          }
-          return res;
-        });
-      })
+      (async () => {
+        const cached = await caches.match(req);
+        if (cached) {
+          event.waitUntil(
+            fetch(req)
+              .then((res) => putInCache(req, res))
+              .catch(() => null)
+          );
+          return cached;
+        }
+
+        const res = await fetch(req);
+        event.waitUntil(putInCache(req, res.clone()));
+        return res;
+      })()
     );
   }
 });

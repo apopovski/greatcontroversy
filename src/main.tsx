@@ -14,6 +14,14 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
   });
 }
 
+// Ask the browser to persist storage so offline caches survive app restarts
+// and are less likely to be evicted under storage pressure.
+if ('storage' in navigator && 'persist' in navigator.storage) {
+  navigator.storage.persist().catch(() => {
+    // best-effort only
+  });
+}
+
 const container = document.getElementById('root');
 if (container) {
   const root = createRoot(container);
