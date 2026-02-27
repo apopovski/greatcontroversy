@@ -320,6 +320,35 @@ const LANGUAGE_CONTENTS_LABELS: Record<string, string> = {
   [INDONESIAN_FOLDER]: 'Daftar Isi',
 };
 
+const LANGUAGE_CONTINUE_LABELS: Record<string, string> = {
+  'The Great Controversy - Ellen G. White 2': 'Continue',
+  'El Conflicto de los Siglos - Ellen G. White': 'Continuar',
+  'Der grosse Kampf - Ellen G. White': 'Weiter',
+  'Il gran conflitto - Ellen G. White': 'Continua',
+  'MOD EN BEDRE FREMTID - Ellen G. White': 'Fortsæt',
+  'Mot historiens klimaks - Ellen G. White': 'Fortsett',
+  'O Grande Conflito - Ellen G. White': 'Continuar',
+  'O Le Finauga Tele - Ellen G. White': 'Fa‘aauau',
+  'Suur Voitlus - Ellen G. White': 'Jätka',
+  'Tragedia veacurilor - Ellen G. White': 'Continuă',
+  'VELIKA BORBA IZMEDU KRISTA I SOTONE - Ellen G. White': 'Nastavi',
+  "VIeLIKATA BORBA MIeZhDU KhRISTA i SATANA - Ellen G. White": 'Продължи',
+  'Velke drama veku - Ellen G. White': 'Pokračovať',
+  'Velky spor vekov - Ellen G. White': 'Pokračovat',
+  "Vielika borot'ba - Ellen G. White": 'Продовжити',
+  "Vielikaia bor'ba - Ellen G. White": 'Продолжить',
+  'Wielki boj - Ellen G. White': 'Kontynuuj',
+  "alSra` al`Zym - Ellen G. White": 'متابعة',
+  [AMHARIC_FOLDER]: 'ቀጥል',
+  [CHINESE_FOLDER]: '继续',
+  [SERBIAN_FOLDER]: 'Настави',
+  [FARSI_FOLDER]: 'ادامه',
+  [AFRIKAANS_FOLDER]: 'Gaan voort',
+  [HINDI_FOLDER]: 'जारी रखें',
+  [BENGALI_FOLDER]: 'চালিয়ে যান',
+  [INDONESIAN_FOLDER]: 'Lanjutkan',
+};
+
 const COPYRIGHTS: Record<string, string> = {
   // Use the localized book title (derived from the language folder) as the copyright holder.
   ...Object.fromEntries(LANGUAGE_FOLDERS.map(f => [f, `© 2026 ${getBookTitleFromFolder(f)}`]))
@@ -2756,6 +2785,7 @@ export default function BookReader() {
   const noContentsLabel = lang === CHINESE_FOLDER ? '暂无目录' : 'No contents';
   const noContentsAvailableLabel = lang === CHINESE_FOLDER ? '暂无目录' : 'No contents available';
   const contactWhatsAppLabel = CONTACT_WHATSAPP_LABELS[lang] || 'Contact on WhatsApp';
+  const continueLabel = LANGUAGE_CONTINUE_LABELS[lang] || 'Continue';
   const isRtl = (lang || '').toLowerCase().includes('alsra') || lang === FARSI_FOLDER;
 
   const languageMenuFolders = useMemo(() => {
@@ -3197,9 +3227,9 @@ export default function BookReader() {
                           window.scrollTo(0, 0);
                         }
                       }}
-                      aria-label="Continue reading"
+                      aria-label={continueLabel}
                     >
-                      Continue
+                      {continueLabel}
                     </button>
                   </div>
                 </div>
