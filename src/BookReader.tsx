@@ -1,12 +1,19 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './BookReader.css';
-import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode, MdContentCopy, MdShare, MdClose, MdMoreVert, MdBookmarkBorder, MdBookmark } from 'react-icons/md';
+import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode, MdContentCopy, MdShare, MdClose, MdMoreVert, MdBookmarkBorder, MdBookmark, MdDownload, MdCheckCircle } from 'react-icons/md';
 import { FaFacebookF, FaXTwitter, FaWhatsapp } from 'react-icons/fa6';
 import { IoMdMail } from 'react-icons/io';
 import { LANGUAGE_NAMES } from './utils/language';
 
 type TocEntry = { title: string; href: string };
+
+type BeforeInstallPromptEvent = Event & {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+};
+
+const IOS_INSTALL_HINT_DISMISSED_KEY = 'reader-ios-install-hint-dismissed';
 
 type BookContentProps = {
   loading: boolean;
@@ -1174,6 +1181,9 @@ export default function BookReader() {
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [showCopyToast, setShowCopyToast] = useState(false);
   const [copyToastPos, setCopyToastPos] = useState({ top: 0, left: 0 });
+  const [installPromptEvent, setInstallPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isAppInstalled, setIsAppInstalled] = useState(false);
+  const [showIosInstallHint, setShowIosInstallHint] = useState(false);
   const [bookmark, setBookmark] = useState<ReaderBookmark | null>(() => {
     try {
       const raw = localStorage.getItem('reader-bookmark');
@@ -1798,6 +1808,64 @@ export default function BookReader() {
       if (copyToastTimerRef.current) window.clearTimeout(copyToastTimerRef.current);
     };
   }, []);
+
+  useEffect(() => {
+    const checkInstalled = () => {
+      const standaloneMedia = window.matchMedia?.('(display-mode: standalone)');
+      const standaloneIOS = (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
+      const installed = Boolean(standaloneMedia?.matches || standaloneIOS);
+      setIsAppInstalled(installed);
+
+      const ua = navigator.userAgent || '';
+      const isIOS = /iPad|iPhone|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      const isSafari = /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS|YaBrowser/i.test(ua);
+      const dismissed = localStorage.getItem(IOS_INSTALL_HINT_DISMISSED_KEY) === '1';
+      setShowIosInstallHint(Boolean(isIOS && isSafari && !installed && !dismissed));
+    };
+
+    const onBeforeInstallPrompt = (event: Event) => {
+      event.preventDefault();
+      setInstallPromptEvent(event as BeforeInstallPromptEvent);
+    };
+
+    const onAppInstalled = () => {
+      setIsAppInstalled(true);
+      setInstallPromptEvent(null);
+      setShowIosInstallHint(false);
+    };
+
+    checkInstalled();
+
+    window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt as EventListener);
+    window.addEventListener('appinstalled', onAppInstalled);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt as EventListener);
+      window.removeEventListener('appinstalled', onAppInstalled);
+    };
+  }, []);
+
+  const handleInstallApp = async () => {
+    if (!installPromptEvent) return;
+    try {
+      await installPromptEvent.prompt();
+      await installPromptEvent.userChoice;
+    } catch {
+      // no-op
+    } finally {
+      setInstallPromptEvent(null);
+      setShowMoreMenu(false);
+    }
+  };
+
+  const dismissIosInstallHint = () => {
+    setShowIosInstallHint(false);
+    try {
+      localStorage.setItem(IOS_INSTALL_HINT_DISMISSED_KEY, '1');
+    } catch {
+      // no-op
+    }
+  };
 
   const handleShareApp = (platform: string) => {
     const bookTitle = getBookTitleFromFolder(lang) || (lang || '').split(' - Ellen')[0].trim() || 'The Great Controversy';
@@ -2545,6 +2613,22 @@ export default function BookReader() {
     setBookmark(next);
   };
 
+  const decreaseTextSize = () => {
+    setTextSize((s) => {
+      const next = Math.max(12, s - 1);
+      localStorage.setItem('reader-text-size', String(next));
+      return next;
+    });
+  };
+
+  const increaseTextSize = () => {
+    setTextSize((s) => {
+      const next = Math.min(36, s + 1);
+      localStorage.setItem('reader-text-size', String(next));
+      return next;
+    });
+  };
+
   return (
     <div className="reader-root">
       {/* Language title removed — header icons now indicate language */}
@@ -2645,6 +2729,15 @@ export default function BookReader() {
               </button>
               {/* Content actions group */}
               <button
+                className={`reader-bookmark-btn${isCurrentBookmarked ? ' active' : ''}`}
+                aria-label={showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark this chapter'}
+                title={showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark this chapter'}
+                onClick={handleBookmark}
+              >
+                {isCurrentBookmarked ? <MdBookmark size={18} /> : <MdBookmarkBorder size={18} />}
+              </button>
+
+              <button
                 className="reader-search-icon"
                 ref={searchBtnRef}
                 onClick={() => {
@@ -2665,12 +2758,16 @@ export default function BookReader() {
               </button>
 
               <button
-                className={`reader-bookmark-btn${isCurrentBookmarked ? ' active' : ''}`}
-                aria-label={showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark this chapter'}
-                title={showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark this chapter'}
-                onClick={handleBookmark}
+                ref={langBtnRef}
+                className="reader-lang-icon"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLangPanelStyle(getAnchoredPanelStyle(langBtnRef.current, 260));
+                  setShowLangMenu((v) => !v);
+                }}
+                aria-label="Language"
               >
-                {isCurrentBookmarked ? <MdBookmark size={18} /> : <MdBookmarkBorder size={18} />}
+                <MdTranslate size={26} />
               </button>
 
               <button
@@ -2708,44 +2805,19 @@ export default function BookReader() {
                 <MdMoreVert size={22} />
               </button>
 
-              <button
-                ref={langBtnRef}
-                className="reader-lang-icon"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setLangPanelStyle(getAnchoredPanelStyle(langBtnRef.current, 260));
-                  setShowLangMenu((v) => !v);
-                }}
-                aria-label="Language"
-              >
-                <MdTranslate size={26} />
-              </button>
-
               {/* Appearance controls group */}
               <div className="reader-text-size-controls" style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 4 }}>
                 <button
                   className="reader-text-size-btn"
                   aria-label="Decrease text size"
-                  onClick={() => {
-                    setTextSize((s) => {
-                      const next = Math.max(12, s - 1);
-                      localStorage.setItem('reader-text-size', String(next));
-                      return next;
-                    });
-                  }}
+                  onClick={decreaseTextSize}
                 >
                   A −
                 </button>
                 <button
                   className="reader-text-size-btn"
                   aria-label="Increase text size"
-                  onClick={() => {
-                    setTextSize((s) => {
-                      const next = Math.min(36, s + 1);
-                      localStorage.setItem('reader-text-size', String(next));
-                      return next;
-                    });
-                  }}
+                  onClick={increaseTextSize}
                 >
                   A +
                 </button>
@@ -2774,6 +2846,18 @@ export default function BookReader() {
           </div>
         </div>
       </header>
+
+      {showIosInstallHint && (
+        <div className="reader-ios-install-hint" role="status" aria-live="polite">
+          <div className="reader-ios-install-hint-text">
+            <MdShare size={18} />
+            <span>Install on iPhone/iPad: tap <strong>Share</strong> then <strong>Add to Home Screen</strong>.</span>
+          </div>
+          <button className="reader-ios-install-hint-close" onClick={dismissIosInstallHint} aria-label="Dismiss install hint">
+            <MdClose size={18} />
+          </button>
+        </div>
+      )}
 
       {showShareMenu && (
         <div
@@ -2829,6 +2913,42 @@ export default function BookReader() {
             <MdMenu size={20} />
             <span>{contentsLabel}</span>
           </button>
+          {!isAppInstalled && installPromptEvent && (
+            <button onClick={handleInstallApp} aria-label="Install app">
+              <MdDownload size={20} />
+              <span>Install app</span>
+            </button>
+          )}
+          {isAppInstalled && (
+            <div className="reader-menu-status" aria-live="polite">
+              <MdCheckCircle size={20} />
+              <span>App installed</span>
+            </div>
+          )}
+          <button
+            onClick={() => {
+              setShowSearch(true);
+              setShowMoreMenu(false);
+              setTimeout(() => {
+                const el = document.querySelector('.reader-search-input') as HTMLInputElement | null;
+                el?.focus();
+              }, 120);
+            }}
+            aria-label="Search"
+          >
+            <MdSearch size={20} />
+            <span>Search</span>
+          </button>
+          <button
+            onClick={() => {
+              handleBookmark();
+              setShowMoreMenu(false);
+            }}
+            aria-label={showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark this chapter'}
+          >
+            {isCurrentBookmarked ? <MdBookmark size={20} /> : <MdBookmarkBorder size={20} />}
+            <span>{showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark'}</span>
+          </button>
           <button
             onClick={() => {
               setLangPanelStyle(getAnchoredPanelStyle(moreBtnRef.current, 260));
@@ -2839,6 +2959,26 @@ export default function BookReader() {
           >
             <MdTranslate size={20} />
             <span>Language</span>
+          </button>
+          <button
+            onClick={() => {
+              decreaseTextSize();
+              setShowMoreMenu(false);
+            }}
+            aria-label="Decrease text size"
+          >
+            <span style={{ fontWeight: 700 }}>A−</span>
+            <span>Smaller text</span>
+          </button>
+          <button
+            onClick={() => {
+              increaseTextSize();
+              setShowMoreMenu(false);
+            }}
+            aria-label="Increase text size"
+          >
+            <span style={{ fontWeight: 700 }}>A+</span>
+            <span>Larger text</span>
           </button>
           <button
             onClick={() => {
