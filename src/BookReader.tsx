@@ -21,6 +21,7 @@ type BookContentProps = {
   displayedHtml: string;
   contentRef: React.RefObject<HTMLDivElement | null>;
   copyrightText: string;
+  onContactWhatsApp: () => void;
   lang: string;
   chapterIdx: number;
 };
@@ -33,6 +34,7 @@ const BookContent = React.memo(function BookContent({
   displayedHtml,
   contentRef,
   copyrightText,
+  onContactWhatsApp,
   lang,
   chapterIdx,
   chapterTitle,
@@ -72,6 +74,15 @@ const BookContent = React.memo(function BookContent({
         <footer className="reader-footer">
           <div className="reader-footer-inner">
             {copyrightText}
+            {' · '}
+            <button
+              type="button"
+              onClick={onContactWhatsApp}
+              style={{ border: 'none', background: 'transparent', color: 'inherit', textDecoration: 'underline', cursor: 'pointer', padding: 0, font: 'inherit' }}
+              aria-label="Contact on WhatsApp"
+            >
+              Contact on WhatsApp
+            </button>
           </div>
         </footer>
       </div>
@@ -105,6 +116,8 @@ const BENGALI_FOLDER = 'Bengali - Ellen G. White';
 const BENGALI_SOURCE_PATH = '/book-content/txt/GC-Bengali.txt';
 const INDONESIAN_FOLDER = 'Indonesian - Ellen G. White';
 const INDONESIAN_SOURCE_PATH = '/book-content/txt/GC-Indonesian.txt';
+const CONTACT_WHATSAPP_NUMBER = '19562447002';
+const CONTACT_WHATSAPP_PREFILL = 'The Great Controversy — ';
 
 const DESKTOP_WIDTH_MIN = 640;
 const DESKTOP_WIDTH_MAX = 820;
@@ -1523,9 +1536,6 @@ export default function BookReader() {
     const isFarsi = lang === FARSI_FOLDER;
     const isRTL = isArabic || isFarsi;
     document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
-    if (isRTL) {
-      document.documentElement.setAttribute('lang', 'ar');
-    }
   }, [lang]);
 
   // Remove auto-highlight and share popup on selection end: restore standard selection behavior.
@@ -1880,6 +1890,13 @@ export default function BookReader() {
     if (shareUrl) {
       window.open(shareUrl, '_blank', 'width=720,height=520');
     }
+  };
+
+  const handleWhatsAppContact = () => {
+    const text = `${CONTACT_WHATSAPP_PREFILL}Hi, I would like to connect.`;
+    const url = `https://wa.me/${CONTACT_WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+    setShowMoreMenu(false);
   };
 
 
@@ -2539,11 +2556,26 @@ export default function BookReader() {
 
   useEffect(() => {
     const localizedTitle = displayTitle || 'The Great Controversy';
-    const fallbackDescription =
-      'The Great Controversy in multiple languages with offline support, search, and bookmarks.';
+    const languageName = LANGUAGE_NAMES[lang] || LANGUAGE_URL_NAMES[lang] || (LANGUAGE_ABBREV[lang] || 'en').toUpperCase();
+    const abbr = (LANGUAGE_ABBREV[lang] || 'en').toLowerCase();
+    const chapterTitle = (toc[chapterIdx]?.title || '').trim();
+    const chapterNumber = getChapterNumber(chapterTitle) ?? (chapterIdx + 1);
+    const cleanedChapterTitle = stripChapterPrefix(chapterTitle) || chapterTitle;
+    const hasChapterView = !showOpeningToc && chapterIds.length > 0;
 
-    document.title = localizedTitle;
-    document.documentElement.setAttribute('lang', LANGUAGE_ABBREV[lang] || 'en');
+    const pageTitle = hasChapterView && cleanedChapterTitle
+      ? `${cleanedChapterTitle} | ${localizedTitle}`
+      : `${localizedTitle} | ${languageName}`;
+
+    const fallbackDescription = hasChapterView && cleanedChapterTitle
+      ? `${cleanedChapterTitle} (${languageName}) — read in The Great Controversy reader with offline support, search, and bookmarks.`
+      : `${localizedTitle} in ${languageName}. Read online or offline with search, bookmarks, and chapter navigation.`;
+
+    document.title = pageTitle;
+    document.documentElement.setAttribute('lang', abbr);
+
+    const origin = window.location.origin;
+    const canonicalUrl = `${origin}${window.location.pathname}`;
 
     const setMetaName = (name: string, content: string) => {
       let meta = document.head.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null;
@@ -2565,13 +2597,100 @@ export default function BookReader() {
       meta.setAttribute('content', content);
     };
 
+    const setLink = (selector: string, rel: string, href: string, extra?: Record<string, string>) => {
+      let link = document.head.querySelector(selector) as HTMLLinkElement | null;
+      if (!link) {
+        link = document.createElement('link');
+        document.head.appendChild(link);
+      }
+      link.setAttribute('rel', rel);
+      link.setAttribute('href', href);
+      if (extra) {
+        Object.entries(extra).forEach(([k, v]) => link!.setAttribute(k, v));
+      }
+      return link;
+    };
+
     setMetaName('description', fallbackDescription);
-    setMetaProperty('og:title', localizedTitle);
+    setMetaName('robots', 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1');
+    setMetaProperty('og:title', pageTitle);
     setMetaProperty('og:description', fallbackDescription);
+    setMetaProperty('og:url', canonicalUrl);
+    setMetaProperty('og:type', hasChapterView ? 'article' : 'website');
     setMetaName('twitter:title', localizedTitle);
     setMetaName('twitter:description', fallbackDescription);
+    setMetaName('twitter:card', 'summary_large_image');
     setMetaName('apple-mobile-web-app-title', localizedTitle);
-  }, [displayTitle, lang]);
+
+    setLink('link[rel="canonical"]', 'canonical', canonicalUrl);
+
+    document.head.querySelectorAll('link[rel="alternate"][data-seo-alternate="1"]').forEach((node) => node.remove());
+    LANGUAGE_FOLDERS.forEach((folder) => {
+      const code = (LANGUAGE_ABBREV[folder] || '').toLowerCase();
+      if (!code) return;
+      const path = hasChapterView
+        ? `/${code}/chapter-${chapterNumber}/chapter-${chapterNumber}`
+        : `/${code}`;
+      const link = document.createElement('link');
+      link.setAttribute('rel', 'alternate');
+      link.setAttribute('hreflang', code);
+      link.setAttribute('href', `${origin}${path}`);
+      link.setAttribute('data-seo-alternate', '1');
+      document.head.appendChild(link);
+    });
+
+    const xDefault = document.createElement('link');
+    xDefault.setAttribute('rel', 'alternate');
+    xDefault.setAttribute('hreflang', 'x-default');
+    xDefault.setAttribute('href', `${origin}/`);
+    xDefault.setAttribute('data-seo-alternate', '1');
+    document.head.appendChild(xDefault);
+
+    const jsonLdPayload: Record<string, unknown> = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'WebSite',
+          name: 'The Great Controversy',
+          inLanguage: abbr,
+          url: origin,
+        },
+        {
+          '@type': 'Book',
+          name: localizedTitle,
+          inLanguage: abbr,
+          url: canonicalUrl,
+          author: {
+            '@type': 'Person',
+            name: 'Ellen G. White',
+          },
+        },
+      ],
+    };
+
+    if (hasChapterView && cleanedChapterTitle) {
+      (jsonLdPayload['@graph'] as Array<Record<string, unknown>>).push({
+        '@type': 'Chapter',
+        name: cleanedChapterTitle,
+        inLanguage: abbr,
+        isPartOf: {
+          '@type': 'Book',
+          name: localizedTitle,
+          url: `${origin}/${abbr}`,
+        },
+        url: canonicalUrl,
+      });
+    }
+
+    let jsonLd = document.head.querySelector('script[data-seo-jsonld="1"]') as HTMLScriptElement | null;
+    if (!jsonLd) {
+      jsonLd = document.createElement('script');
+      jsonLd.type = 'application/ld+json';
+      jsonLd.setAttribute('data-seo-jsonld', '1');
+      document.head.appendChild(jsonLd);
+    }
+    jsonLd.textContent = JSON.stringify(jsonLdPayload);
+  }, [displayTitle, lang, chapterIdx, toc, showOpeningToc, chapterIds.length]);
 
   const contentsLabel = lang === CHINESE_FOLDER ? '目录' : 'Contents';
   const tableOfContentsLabel = lang === CHINESE_FOLDER ? '目录' : 'Table of contents';
@@ -2880,9 +2999,9 @@ export default function BookReader() {
             <FaXTwitter size={16} />
             <span>X (Twitter)</span>
           </button>
-          <button onClick={() => handleShareApp('whatsapp')} aria-label="Share on WhatsApp">
+          <button onClick={handleWhatsAppContact} aria-label="Contact on WhatsApp">
             <FaWhatsapp size={18} />
-            <span>WhatsApp</span>
+            <span>Contact on WhatsApp</span>
           </button>
           <button onClick={() => handleShareApp('email')} aria-label="Share via Email">
             <IoMdMail size={18} />
@@ -2919,37 +3038,6 @@ export default function BookReader() {
           >
             {isCurrentBookmarked ? <MdBookmark size={20} /> : <MdBookmarkBorder size={20} />}
             <span>{showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark'}</span>
-          </button>
-          <button
-            onClick={() => {
-              setLangPanelStyle(getAnchoredPanelStyle(moreBtnRef.current, 260));
-              setShowLangMenu(true);
-              setShowMoreMenu(false);
-            }}
-            aria-label="Language"
-          >
-            <MdTranslate size={20} />
-            <span>Language</span>
-          </button>
-          <button
-            onClick={() => {
-              decreaseTextSize();
-              setShowMoreMenu(false);
-            }}
-            aria-label="Decrease text size"
-          >
-            <span style={{ fontWeight: 700 }}>A−</span>
-            <span>Smaller text</span>
-          </button>
-          <button
-            onClick={() => {
-              increaseTextSize();
-              setShowMoreMenu(false);
-            }}
-            aria-label="Increase text size"
-          >
-            <span style={{ fontWeight: 700 }}>A+</span>
-            <span>Larger text</span>
           </button>
           <button
             onClick={() => {
@@ -3078,6 +3166,15 @@ export default function BookReader() {
             <footer className="reader-footer">
               <div className="reader-footer-inner">
                 {COPYRIGHTS[lang] || `© ${getBookTitleFromFolder(lang) || LANGUAGE_NAMES[lang] || lang}`}
+                {' · '}
+                <button
+                  type="button"
+                  onClick={handleWhatsAppContact}
+                  style={{ border: 'none', background: 'transparent', color: 'inherit', textDecoration: 'underline', cursor: 'pointer', padding: 0, font: 'inherit' }}
+                  aria-label="Contact on WhatsApp"
+                >
+                  Contact on WhatsApp
+                </button>
               </div>
             </footer>
           </div>
@@ -3091,6 +3188,7 @@ export default function BookReader() {
           displayedHtml={displayedHtml}
           contentRef={contentRef}
           copyrightText={(COPYRIGHTS[lang] || `© ${getBookTitleFromFolder(lang) || LANGUAGE_NAMES[lang] || lang}`)}
+          onContactWhatsApp={handleWhatsAppContact}
           lang={lang}
           chapterIdx={chapterIdx}
           chapterTitle={chapterTitle}
