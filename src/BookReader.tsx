@@ -291,6 +291,35 @@ const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
   [INDONESIAN_FOLDER]: 'Bab',
 };
 
+const LANGUAGE_CONTENTS_LABELS: Record<string, string> = {
+  'The Great Controversy - Ellen G. White 2': 'Contents',
+  'El Conflicto de los Siglos - Ellen G. White': 'Contenido',
+  'Der grosse Kampf - Ellen G. White': 'Inhalt',
+  'Il gran conflitto - Ellen G. White': 'Indice',
+  'MOD EN BEDRE FREMTID - Ellen G. White': 'Indhold',
+  'Mot historiens klimaks - Ellen G. White': 'Innhold',
+  'O Grande Conflito - Ellen G. White': 'Conteúdo',
+  'O Le Finauga Tele - Ellen G. White': 'Mataupu',
+  'Suur Voitlus - Ellen G. White': 'Sisukord',
+  'Tragedia veacurilor - Ellen G. White': 'Cuprins',
+  'VELIKA BORBA IZMEDU KRISTA I SOTONE - Ellen G. White': 'Sadržaj',
+  "VIeLIKATA BORBA MIeZhDU KhRISTA i SATANA - Ellen G. White": 'Съдържание',
+  'Velke drama veku - Ellen G. White': 'Obsah',
+  'Velky spor vekov - Ellen G. White': 'Obsah',
+  "Vielika borot'ba - Ellen G. White": 'Зміст',
+  "Vielikaia bor'ba - Ellen G. White": 'Содержание',
+  'Wielki boj - Ellen G. White': 'Spis treści',
+  "alSra` al`Zym - Ellen G. White": 'المحتويات',
+  [AMHARIC_FOLDER]: 'ይዘት',
+  [CHINESE_FOLDER]: '目录',
+  [SERBIAN_FOLDER]: 'Садржај',
+  [FARSI_FOLDER]: 'فهرست',
+  [AFRIKAANS_FOLDER]: 'Inhoud',
+  [HINDI_FOLDER]: 'विषय सूची',
+  [BENGALI_FOLDER]: 'সূচিপত্র',
+  [INDONESIAN_FOLDER]: 'Daftar Isi',
+};
+
 const COPYRIGHTS: Record<string, string> = {
   // Use the localized book title (derived from the language folder) as the copyright holder.
   ...Object.fromEntries(LANGUAGE_FOLDERS.map(f => [f, `© 2026 ${getBookTitleFromFolder(f)}`]))
@@ -2722,8 +2751,8 @@ export default function BookReader() {
     jsonLd.textContent = JSON.stringify(jsonLdPayload);
   }, [displayTitle, lang, chapterIdx, toc, showOpeningToc, chapterIds.length]);
 
-  const contentsLabel = lang === CHINESE_FOLDER ? '目录' : 'Contents';
-  const tableOfContentsLabel = lang === CHINESE_FOLDER ? '目录' : 'Table of contents';
+  const contentsLabel = LANGUAGE_CONTENTS_LABELS[lang] || 'Contents';
+  const tableOfContentsLabel = contentsLabel;
   const noContentsLabel = lang === CHINESE_FOLDER ? '暂无目录' : 'No contents';
   const noContentsAvailableLabel = lang === CHINESE_FOLDER ? '暂无目录' : 'No contents available';
   const contactWhatsAppLabel = CONTACT_WHATSAPP_LABELS[lang] || 'Contact on WhatsApp';
@@ -3069,6 +3098,17 @@ export default function BookReader() {
           >
             {isCurrentBookmarked ? <MdBookmark size={20} /> : <MdBookmarkBorder size={20} />}
             <span>{showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark'}</span>
+          </button>
+          <button
+            onClick={() => {
+              setLangPanelStyle(getAnchoredPanelStyle(moreBtnRef.current, 260));
+              setShowLangMenu(true);
+              setShowMoreMenu(false);
+            }}
+            aria-label="Language"
+          >
+            <MdTranslate size={20} />
+            <span>Language</span>
           </button>
           <button
             onClick={() => {
