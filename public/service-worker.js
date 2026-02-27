@@ -8,11 +8,7 @@ const CORE_ASSETS = [
   '/manifest.json',
   '/offline-precache.json',
   '/service-worker.js',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/icon-192-maskable.png',
-  '/icon-512-maskable.png',
-  '/apple-touch-icon.png',
+  '/gc-icon.png',
 ];
 const PRECACHE_MANIFEST_PATH = '/offline-precache.json';
 const OFFLINE_STATUS_URL = '/__offline-status';
