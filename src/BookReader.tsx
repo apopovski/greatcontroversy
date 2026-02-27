@@ -22,6 +22,7 @@ type BookContentProps = {
   contentRef: React.RefObject<HTMLDivElement | null>;
   copyrightText: string;
   onContactWhatsApp: () => void;
+  contactWhatsAppLabel: string;
   lang: string;
   chapterIdx: number;
 };
@@ -35,6 +36,7 @@ const BookContent = React.memo(function BookContent({
   contentRef,
   copyrightText,
   onContactWhatsApp,
+  contactWhatsAppLabel,
   lang,
   chapterIdx,
   chapterTitle,
@@ -79,9 +81,9 @@ const BookContent = React.memo(function BookContent({
               type="button"
               onClick={onContactWhatsApp}
               style={{ border: 'none', background: 'transparent', color: 'inherit', textDecoration: 'underline', cursor: 'pointer', padding: 0, font: 'inherit' }}
-              aria-label="Contact on WhatsApp"
+              aria-label={contactWhatsAppLabel}
             >
-              Contact on WhatsApp
+              {contactWhatsAppLabel}
             </button>
           </div>
         </footer>
@@ -118,6 +120,34 @@ const INDONESIAN_FOLDER = 'Indonesian - Ellen G. White';
 const INDONESIAN_SOURCE_PATH = '/book-content/txt/GC-Indonesian.txt';
 const CONTACT_WHATSAPP_NUMBER = '19562447002';
 const CONTACT_WHATSAPP_PREFILL = 'The Great Controversy — ';
+const CONTACT_WHATSAPP_LABELS: Record<string, string> = {
+  'The Great Controversy - Ellen G. White 2': 'Contact on WhatsApp',
+  'El Conflicto de los Siglos - Ellen G. White': 'Contactar por WhatsApp',
+  'Der grosse Kampf - Ellen G. White': 'Kontakt per WhatsApp',
+  'Il gran conflitto - Ellen G. White': 'Contatta su WhatsApp',
+  'MOD EN BEDRE FREMTID - Ellen G. White': 'Kontakt på WhatsApp',
+  'Mot historiens klimaks - Ellen G. White': 'Kontakt på WhatsApp',
+  'O Grande Conflito - Ellen G. White': 'Contato no WhatsApp',
+  'O Le Finauga Tele - Ellen G. White': 'Contact on WhatsApp',
+  'Suur Voitlus - Ellen G. White': 'Võta ühendust WhatsAppis',
+  'Tragedia veacurilor - Ellen G. White': 'Contact pe WhatsApp',
+  'VELIKA BORBA IZMEDU KRISTA I SOTONE - Ellen G. White': 'Kontakt na WhatsAppu',
+  'VIeLIKATA BORBA MIeZhDU KhRISTA i SATANA - Ellen G. White': 'Контакт в WhatsApp',
+  'Velke drama veku - Ellen G. White': 'Kontakt na WhatsApp',
+  'Velky spor vekov - Ellen G. White': 'Kontakt na WhatsApp',
+  "Vielika borot'ba - Ellen G. White": 'Зв’язатися у WhatsApp',
+  "Vielikaia bor'ba - Ellen G. White": 'Связаться в WhatsApp',
+  'Wielki boj - Ellen G. White': 'Kontakt przez WhatsApp',
+  "alSra` al`Zym - Ellen G. White": 'تواصل عبر واتساب',
+  [AMHARIC_FOLDER]: 'በWhatsApp ያግኙን',
+  [CHINESE_FOLDER]: '通过 WhatsApp 联系',
+  [SERBIAN_FOLDER]: 'Kontaktirajte preko WhatsApp-а',
+  [FARSI_FOLDER]: 'ارتباط از طریق واتساپ',
+  [AFRIKAANS_FOLDER]: 'Kontak op WhatsApp',
+  [HINDI_FOLDER]: 'WhatsApp पर संपर्क करें',
+  [BENGALI_FOLDER]: 'WhatsApp-এ যোগাযোগ করুন',
+  [INDONESIAN_FOLDER]: 'Hubungi lewat WhatsApp',
+};
 
 const DESKTOP_WIDTH_MIN = 640;
 const DESKTOP_WIDTH_MAX = 820;
@@ -2696,6 +2726,7 @@ export default function BookReader() {
   const tableOfContentsLabel = lang === CHINESE_FOLDER ? '目录' : 'Table of contents';
   const noContentsLabel = lang === CHINESE_FOLDER ? '暂无目录' : 'No contents';
   const noContentsAvailableLabel = lang === CHINESE_FOLDER ? '暂无目录' : 'No contents available';
+  const contactWhatsAppLabel = CONTACT_WHATSAPP_LABELS[lang] || 'Contact on WhatsApp';
   const isRtl = (lang || '').toLowerCase().includes('alsra') || lang === FARSI_FOLDER;
 
   const languageMenuFolders = useMemo(() => {
@@ -2999,9 +3030,9 @@ export default function BookReader() {
             <FaXTwitter size={16} />
             <span>X (Twitter)</span>
           </button>
-          <button onClick={handleWhatsAppContact} aria-label="Contact on WhatsApp">
+          <button onClick={handleWhatsAppContact} aria-label={contactWhatsAppLabel}>
             <FaWhatsapp size={18} />
-            <span>Contact on WhatsApp</span>
+            <span>{contactWhatsAppLabel}</span>
           </button>
           <button onClick={() => handleShareApp('email')} aria-label="Share via Email">
             <IoMdMail size={18} />
@@ -3171,9 +3202,9 @@ export default function BookReader() {
                   type="button"
                   onClick={handleWhatsAppContact}
                   style={{ border: 'none', background: 'transparent', color: 'inherit', textDecoration: 'underline', cursor: 'pointer', padding: 0, font: 'inherit' }}
-                  aria-label="Contact on WhatsApp"
+                  aria-label={contactWhatsAppLabel}
                 >
-                  Contact on WhatsApp
+                  {contactWhatsAppLabel}
                 </button>
               </div>
             </footer>
@@ -3189,6 +3220,7 @@ export default function BookReader() {
           contentRef={contentRef}
           copyrightText={(COPYRIGHTS[lang] || `© ${getBookTitleFromFolder(lang) || LANGUAGE_NAMES[lang] || lang}`)}
           onContactWhatsApp={handleWhatsAppContact}
+          contactWhatsAppLabel={contactWhatsAppLabel}
           lang={lang}
           chapterIdx={chapterIdx}
           chapterTitle={chapterTitle}
