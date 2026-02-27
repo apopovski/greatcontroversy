@@ -11,6 +11,23 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
     navigator.serviceWorker.register('/service-worker.js').catch(() => {
       // ignore registration errors (e.g., unsupported or blocked contexts)
     });
+
+    // Ask the active service worker to warm all offline book assets.
+    // This improves reliability on mobile where very large install-time caching
+    // can be interrupted.
+    navigator.serviceWorker.ready
+      .then((registration) => {
+        const postWarmup = () => {
+          const target = registration.active || navigator.serviceWorker.controller;
+          target?.postMessage({ type: 'WARM_OFFLINE_CACHE' });
+        };
+
+        postWarmup();
+        window.addEventListener('online', postWarmup);
+      })
+      .catch(() => {
+        // no-op
+      });
   });
 }
 

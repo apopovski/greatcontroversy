@@ -1,7 +1,7 @@
 {
   "id": "/",
-  "name": "The Great Controversy Reader",
-  "short_name": "GC Reader",
+  "name": "The Great Controversy",
+  "short_name": "Great Controversy",
   "start_url": "/",
   "scope": "/",
   "lang": "en",
@@ -10,7 +10,7 @@
   "orientation": "any",
   "background_color": "#f7f7f7",
   "theme_color": "#23235a",
-  "description": "Read The Great Controversy in multiple languages with offline support, search, bookmarks, and installable app experience.",
+  "description": "The Great Controversy in multiple languages with offline support, search, bookmarks, and installable app experience.",
   "categories": ["books", "education", "reference"],
   "prefer_related_applications": false,
   "icons": [

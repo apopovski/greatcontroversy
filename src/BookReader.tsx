@@ -13,8 +13,6 @@ type BeforeInstallPromptEvent = Event & {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
 };
 
-const IOS_INSTALL_HINT_DISMISSED_KEY = 'reader-ios-install-hint-dismissed';
-
 type BookContentProps = {
   loading: boolean;
   isDesktop: boolean;
@@ -1183,7 +1181,6 @@ export default function BookReader() {
   const [copyToastPos, setCopyToastPos] = useState({ top: 0, left: 0 });
   const [installPromptEvent, setInstallPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
   const [isAppInstalled, setIsAppInstalled] = useState(false);
-  const [showIosInstallHint, setShowIosInstallHint] = useState(false);
   const [bookmark, setBookmark] = useState<ReaderBookmark | null>(() => {
     try {
       const raw = localStorage.getItem('reader-bookmark');
@@ -1815,12 +1812,6 @@ export default function BookReader() {
       const standaloneIOS = (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
       const installed = Boolean(standaloneMedia?.matches || standaloneIOS);
       setIsAppInstalled(installed);
-
-      const ua = navigator.userAgent || '';
-      const isIOS = /iPad|iPhone|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-      const isSafari = /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS|YaBrowser/i.test(ua);
-      const dismissed = localStorage.getItem(IOS_INSTALL_HINT_DISMISSED_KEY) === '1';
-      setShowIosInstallHint(Boolean(isIOS && isSafari && !installed && !dismissed));
     };
 
     const onBeforeInstallPrompt = (event: Event) => {
@@ -1831,7 +1822,6 @@ export default function BookReader() {
     const onAppInstalled = () => {
       setIsAppInstalled(true);
       setInstallPromptEvent(null);
-      setShowIosInstallHint(false);
     };
 
     checkInstalled();
@@ -1855,15 +1845,6 @@ export default function BookReader() {
     } finally {
       setInstallPromptEvent(null);
       setShowMoreMenu(false);
-    }
-  };
-
-  const dismissIosInstallHint = () => {
-    setShowIosInstallHint(false);
-    try {
-      localStorage.setItem(IOS_INSTALL_HINT_DISMISSED_KEY, '1');
-    } catch {
-      // no-op
     }
   };
 
@@ -2555,6 +2536,43 @@ export default function BookReader() {
   // Derive a readable book title from language mapping/folder name.
   // This uses BOOK_TITLE_OVERRIDES (e.g. Chinese) when available.
   const displayTitle = getBookTitleFromFolder(lang);
+
+  useEffect(() => {
+    const localizedTitle = displayTitle || 'The Great Controversy';
+    const fallbackDescription =
+      'The Great Controversy in multiple languages with offline support, search, and bookmarks.';
+
+    document.title = localizedTitle;
+    document.documentElement.setAttribute('lang', LANGUAGE_ABBREV[lang] || 'en');
+
+    const setMetaName = (name: string, content: string) => {
+      let meta = document.head.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null;
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('name', name);
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', content);
+    };
+
+    const setMetaProperty = (property: string, content: string) => {
+      let meta = document.head.querySelector(`meta[property="${property}"]`) as HTMLMetaElement | null;
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('property', property);
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', content);
+    };
+
+    setMetaName('description', fallbackDescription);
+    setMetaProperty('og:title', localizedTitle);
+    setMetaProperty('og:description', fallbackDescription);
+    setMetaName('twitter:title', localizedTitle);
+    setMetaName('twitter:description', fallbackDescription);
+    setMetaName('apple-mobile-web-app-title', localizedTitle);
+  }, [displayTitle, lang]);
+
   const contentsLabel = lang === CHINESE_FOLDER ? '目录' : 'Contents';
   const tableOfContentsLabel = lang === CHINESE_FOLDER ? '目录' : 'Table of contents';
   const noContentsLabel = lang === CHINESE_FOLDER ? '暂无目录' : 'No contents';
@@ -2847,18 +2865,6 @@ export default function BookReader() {
         </div>
       </header>
 
-      {showIosInstallHint && (
-        <div className="reader-ios-install-hint" role="status" aria-live="polite">
-          <div className="reader-ios-install-hint-text">
-            <MdShare size={18} />
-            <span>Install on iPhone/iPad: tap <strong>Share</strong> then <strong>Add to Home Screen</strong>.</span>
-          </div>
-          <button className="reader-ios-install-hint-close" onClick={dismissIosInstallHint} aria-label="Dismiss install hint">
-            <MdClose size={18} />
-          </button>
-        </div>
-      )}
-
       {showShareMenu && (
         <div
           ref={shareMenuRef}
@@ -2892,27 +2898,6 @@ export default function BookReader() {
           style={morePanelStyle || undefined}
           onClick={(e) => e.stopPropagation()}
         >
-          <button
-            onClick={() => {
-              const btn = moreBtnRef.current;
-              if (btn) {
-                const r = btn.getBoundingClientRect();
-                const panelW = 360;
-                const maxAllowed = Math.max(120, window.innerWidth - 32);
-                const w = Math.min(panelW, maxAllowed);
-                let left = r.left;
-                if (left + w + 16 > window.innerWidth) left = Math.max(12, window.innerWidth - w - 16);
-                if (left < 12) left = 12;
-                setChaptersPanelStyle({ position: 'fixed', top: r.bottom + 8, left, width: w, maxWidth: '92%', zIndex: 9999 });
-              }
-              setShowChaptersMenu(true);
-              setShowMoreMenu(false);
-            }}
-            aria-label={contentsLabel}
-          >
-            <MdMenu size={20} />
-            <span>{contentsLabel}</span>
-          </button>
           {!isAppInstalled && installPromptEvent && (
             <button onClick={handleInstallApp} aria-label="Install app">
               <MdDownload size={20} />
@@ -2925,20 +2910,6 @@ export default function BookReader() {
               <span>App installed</span>
             </div>
           )}
-          <button
-            onClick={() => {
-              setShowSearch(true);
-              setShowMoreMenu(false);
-              setTimeout(() => {
-                const el = document.querySelector('.reader-search-input') as HTMLInputElement | null;
-                el?.focus();
-              }, 120);
-            }}
-            aria-label="Search"
-          >
-            <MdSearch size={20} />
-            <span>Search</span>
-          </button>
           <button
             onClick={() => {
               handleBookmark();

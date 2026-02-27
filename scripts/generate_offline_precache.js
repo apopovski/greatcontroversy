@@ -9,6 +9,7 @@ const outPath = path.join(publicDir, 'offline-precache.json');
 
 // Keep this focused on reading content + app shell resources.
 const INCLUDE_PREFIXES = [
+  '/data/',
   '/book-content/html/',
   '/book-content/txt/',
   '/book-content/htmlz/',
