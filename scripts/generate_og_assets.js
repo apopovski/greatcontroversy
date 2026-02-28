@@ -12,6 +12,7 @@ const BASE_IMAGE = process.env.OG_BASE_IMAGE
 const WIDTH = 1200;
 const HEIGHT = 630;
 const TITLE_SPLIT_DASH = /\s+[—–-]\s+/;
+const TITLE_VERTICAL_OFFSET = 34;
 
 function escapeXml(input) {
   return String(input || '')
@@ -79,12 +80,42 @@ function getFontSize(lines) {
   return Math.max(42, Math.min(78, size));
 }
 
+function estimateLineWidthPx(line, fontSize) {
+  const text = String(line || '');
+  const cjkChars = (text.match(/[\u3400-\u9fff]/gu) || []).length;
+  const latinChars = (text.match(/[A-Za-z\u00C0-\u024F]/g) || []).length;
+  const arabicChars = (text.match(/[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/gu) || []).length;
+  const cyrillicChars = (text.match(/[\u0400-\u04FF]/gu) || []).length;
+  const spaces = (text.match(/\s/g) || []).length;
+
+  const fallbackChars = Math.max(0, text.length - cjkChars - latinChars - arabicChars - cyrillicChars - spaces);
+
+  const emWidth =
+    cjkChars * 0.98 +
+    latinChars * 0.57 +
+    arabicChars * 0.72 +
+    cyrillicChars * 0.62 +
+    spaces * 0.32 +
+    fallbackChars * 0.62;
+
+  return Math.round(emWidth * fontSize);
+}
+
 function createTextOverlaySvg(title) {
   const lines = splitTitleLines(title);
   const fontSize = getFontSize(lines);
   const lineHeight = Math.round(fontSize * 1.24);
   const blockHeight = lineHeight * lines.length;
-  const startY = Math.round((HEIGHT - blockHeight) / 2 + fontSize * 0.86);
+  const startY = Math.round((HEIGHT - blockHeight) / 2 + fontSize * 0.86 + TITLE_VERTICAL_OFFSET);
+  const maxLineWidth = lines.reduce((m, l) => Math.max(m, estimateLineWidthPx(l, fontSize)), 0);
+
+  const panelPaddingX = Math.round(Math.max(44, fontSize * 0.95));
+  const panelPaddingY = Math.round(Math.max(26, fontSize * 0.52));
+  const panelWidth = Math.min(1020, Math.max(360, maxLineWidth + panelPaddingX * 2));
+  const panelHeight = Math.min(420, Math.max(120, blockHeight + panelPaddingY * 2));
+  const panelX = Math.round((WIDTH - panelWidth) / 2);
+  const panelY = Math.round((HEIGHT - panelHeight) / 2 + TITLE_VERTICAL_OFFSET);
+  const panelRadius = Math.round(Math.min(36, Math.max(18, fontSize * 0.38)));
 
   const tspans = lines
     .map((line, i) => `<tspan x="600" dy="${i === 0 ? 0 : lineHeight}">${escapeXml(line)}</tspan>`)
@@ -96,7 +127,21 @@ function createTextOverlaySvg(title) {
     <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
       <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#ffffff" flood-opacity="0.9" />
     </filter>
+    <filter id="panelShadow" x="-20%" y="-30%" width="140%" height="180%">
+      <feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#000000" flood-opacity="0.18" />
+    </filter>
   </defs>
+  <rect
+    x="${panelX}"
+    y="${panelY}"
+    width="${panelWidth}"
+    height="${panelHeight}"
+    rx="${panelRadius}"
+    ry="${panelRadius}"
+    fill="#ffffff"
+    fill-opacity="0.88"
+    filter="url(#panelShadow)"
+  />
   <text
     x="600"
     y="${startY}"

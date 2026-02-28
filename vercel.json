@@ -6,6 +6,28 @@
   "framework": "vite",
   "rewrites": [
     {
+      "source": "/rs",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|Facebot|Twitterbot|WhatsApp|Slackbot|Discordbot|LinkedInBot|TelegramBot|SkypeUriPreview|Googlebot).*"
+        }
+      ],
+      "destination": "/og/sr.html"
+    },
+    {
+      "source": "/rs/",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|Facebot|Twitterbot|WhatsApp|Slackbot|Discordbot|LinkedInBot|TelegramBot|SkypeUriPreview|Googlebot).*"
+        }
+      ],
+      "destination": "/og/sr.html"
+    },
+    {
       "source": "/:lang(en|es|de|it|da|no|pt|sm|et|ro|hr|bg|sk|cs|uk|ru|pl|ar|am|zh|sr|fa|af|hi|bn|id)",
       "has": [
         {

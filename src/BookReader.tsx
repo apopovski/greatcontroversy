@@ -222,8 +222,27 @@ const LANGUAGE_ABBREV: Record<string, string> = {
 };
 
 const BOOK_TITLE_OVERRIDES: Record<string, string> = {
+  'The Great Controversy - Ellen G. White 2': 'The Great Controversy',
+  'El Conflicto de los Siglos - Ellen G. White': 'El Conflicto de los Siglos',
+  'Der grosse Kampf - Ellen G. White': 'Der große Kampf',
+  'Il gran conflitto - Ellen G. White': 'Il gran conflitto',
+  'MOD EN BEDRE FREMTID - Ellen G. White': 'Mod en bedre fremtid',
+  'Mot historiens klimaks - Ellen G. White': 'Mot historiens klimaks',
+  'O Grande Conflito - Ellen G. White': 'O Grande Conflito',
+  'O Le Finauga Tele - Ellen G. White': 'O Le Finauga Tele',
+  'Suur Voitlus - Ellen G. White': 'Suur Võitlus',
+  'Tragedia veacurilor - Ellen G. White': 'Tragedia veacurilor',
+  'VELIKA BORBA IZMEDU KRISTA I SOTONE - Ellen G. White': 'Velika borba između Krista i Sotone',
+  'VIeLIKATA BORBA MIeZhDU KhRISTA i SATANA - Ellen G. White': 'Великата борба между Христос и Сатана',
+  'Velke drama veku - Ellen G. White': 'Veľké drama vekov',
+  'Velky spor vekov - Ellen G. White': 'Velký spor věků',
+  "Vielika borot'ba - Ellen G. White": 'Велика боротьба',
+  "Vielikaia bor'ba - Ellen G. White": 'Великая борьба',
+  'Wielki boj - Ellen G. White': 'Wielki bój',
+  "alSra` al`Zym - Ellen G. White": 'الصراع العظيم',
+  [AMHARIC_FOLDER]: 'ታላቁ ተጋድሎ',
   [CHINESE_FOLDER]: '善恶之争',
-  [SERBIAN_FOLDER]: 'Велика Борба Између Христа И Сотоне',
+  [SERBIAN_FOLDER]: 'Велика борба између Христа и Сотоне',
   [FARSI_FOLDER]: 'نبرد عظیم',
   [AFRIKAANS_FOLDER]: 'Die Groot Stryd',
   [HINDI_FOLDER]: 'महान संघर्ष',
@@ -412,6 +431,43 @@ const LANG_SLUG_TO_FOLDER: Record<string, string> = Object.fromEntries(
     ].filter(Boolean) as Array<[string, string]>;
   })
 );
+
+// Accept commonly used Serbian country-style slug alias.
+LANG_SLUG_TO_FOLDER.rs = SERBIAN_FOLDER;
+
+const LANG_ABBREV_TO_FOLDER: Record<string, string> = Object.fromEntries(
+  Object.entries(LANGUAGE_ABBREV).map(([folder, code]) => [String(code || '').toLowerCase(), folder])
+);
+
+function getInitialLanguageFolder() {
+  const path = (window.location.pathname || '/').trim();
+  const firstSeg = path.match(/^\/([^/]+)/)?.[1]?.toLowerCase();
+  if (firstSeg && LANG_SLUG_TO_FOLDER[firstSeg]) {
+    return LANG_SLUG_TO_FOLDER[firstSeg];
+  }
+
+  const preferred = (Array.isArray(navigator.languages) && navigator.languages.length
+    ? navigator.languages
+    : [navigator.language]
+  )
+    .map((v) => String(v || '').trim().toLowerCase())
+    .filter(Boolean);
+
+  for (const locale of preferred) {
+    const base = locale.split('-')[0];
+    const candidates = [locale, base];
+
+    // Norwegian browser locales are commonly nb/nn; map them to our no folder.
+    if (base === 'nb' || base === 'nn') candidates.push('no');
+
+    for (const code of candidates) {
+      const folder = LANG_ABBREV_TO_FOLDER[code];
+      if (folder) return folder;
+    }
+  }
+
+  return LANGUAGE_FOLDERS[0];
+}
 
 function getHighlightedHtml(html: string, q: string | null) {
   if (!q) return html || '';
@@ -1254,7 +1310,7 @@ export default function BookReader() {
   const [audioMinimized, setAudioMinimized] = useState(false);
 
   // --- MAIN APP STATE ---
-  const [lang, setLang] = useState(LANGUAGE_FOLDERS[0]);
+  const [lang, setLang] = useState(() => getInitialLanguageFolder());
   const [toc, setToc] = useState<TocEntry[]>([]);
   const [bookDoc, setBookDoc] = useState<Document | null>(null);
   const [chapterIds, setChapterIds] = useState<string[]>([]);
