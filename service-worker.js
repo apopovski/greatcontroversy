@@ -1,7 +1,8 @@
 // Offline support for app shell + runtime-cached book assets.
 // Kept intentionally dependency-free.
 
-const CACHE_NAME = 'book-reader-v5';
+const CACHE_NAME = 'book-reader-v7';
+const APP_SHELL_URL = '/index.html';
 const CORE_ASSETS = [
   '/',
   '/index.html',
@@ -200,18 +201,16 @@ self.addEventListener('fetch', (event) => {
   }
 
   // Navigations: network-first, fall back to cached app shell.
-  // Cache-first helps reopening while offline even after app restart.
+  // This avoids serving stale HTML after deploys (which can reference removed bundles).
   if (req.mode === 'navigate') {
     event.respondWith(
       (async () => {
-        const cached = await caches.match(req);
-        if (cached) return cached;
         try {
-          const res = await fetch(req);
-          event.waitUntil(putInCache(req, res.clone()));
+          const res = await fetch(req, { cache: 'no-store' });
+          event.waitUntil(putInCache(APP_SHELL_URL, res.clone()));
           return res;
         } catch {
-          return (await caches.match('/index.html')) || Response.error();
+          return (await caches.match(APP_SHELL_URL)) || (await caches.match('/')) || Response.error();
         }
       })()
     );
