@@ -3,6 +3,9 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import './index.css';
+import { initAnalytics } from './utils/analytics';
+
+initAnalytics();
 
 // Register the service worker only in production builds.
 // The file lives in `public/` so it is emitted at `/service-worker.js`.

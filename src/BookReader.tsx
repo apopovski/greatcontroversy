@@ -1,10 +1,11 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './BookReader.css';
-import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode, MdContentCopy, MdShare, MdClose, MdMoreVert, MdBookmarkBorder, MdBookmark, MdDownload, MdCheckCircle } from 'react-icons/md';
+import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode, MdContentCopy, MdShare, MdClose, MdMoreVert, MdBookmarkBorder, MdBookmark, MdDownload, MdCheckCircle, MdPrivacyTip } from 'react-icons/md';
 import { FaFacebookF, FaXTwitter, FaWhatsapp } from 'react-icons/fa6';
 import { IoMdMail } from 'react-icons/io';
 import { LANGUAGE_NAMES } from './utils/language';
+import { trackEvent, trackPageView, getAnalyticsConsentStatus, setAnalyticsConsent } from './utils/analytics';
 
 type TocEntry = { title: string; href: string };
 
@@ -392,6 +393,12 @@ function stripChapterPrefix(title: string) {
     .replace(/^\s*chapter\s+\d+\s*[-—–:]*\s*/i, '')
     .replace(/^\s*\d{1,3}\s*[—–:-]\s*/i, '')
     .trim();
+}
+
+function getChapterRoutePrefix(langKey: string) {
+  const localized = (LANGUAGE_CHAPTER_LABELS[langKey] || 'Chapter').trim();
+  // Keep route prefix localized; allow unicode slugs, fallback to ASCII "chapter".
+  return slugify(localized) || 'chapter';
 }
 
 const LANG_SLUG_TO_FOLDER: Record<string, string> = Object.fromEntries(
@@ -1280,6 +1287,7 @@ export default function BookReader() {
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [showCopyToast, setShowCopyToast] = useState(false);
   const [copyToastPos, setCopyToastPos] = useState({ top: 0, left: 0 });
+  const [analyticsConsentStatus, setAnalyticsConsentStatus] = useState<'granted' | 'denied' | 'unknown'>(() => getAnalyticsConsentStatus());
   const [installPromptEvent, setInstallPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
   const [isAppInstalled, setIsAppInstalled] = useState(false);
   const [bookmark, setBookmark] = useState<ReaderBookmark | null>(() => {
@@ -1933,6 +1941,16 @@ export default function BookReader() {
     };
   }, []);
 
+  useEffect(() => {
+    const onStorage = (ev: StorageEvent) => {
+      if (ev.key === 'gc_analytics_consent') {
+        setAnalyticsConsentStatus(getAnalyticsConsentStatus());
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
   const handleInstallApp = async () => {
     if (!installPromptEvent) return;
     try {
@@ -2384,17 +2402,28 @@ export default function BookReader() {
       if (window.location.pathname !== path) {
         window.history.replaceState({}, '', path);
       }
+      trackPageView(path);
       return;
     }
 
     const chapterTitle = toc[chapterIdx]?.title || '';
     const chapterNumber = getChapterNumber(chapterTitle) ?? (chapterIdx + 1);
+    const chapterRoutePrefix = getChapterRoutePrefix(lang);
     const strippedTitle = stripChapterPrefix(chapterTitle);
     const slug = slugifyAscii(strippedTitle || chapterTitle) || `chapter-${chapterNumber}`;
-    const path = `/${abbr}/chapter-${chapterNumber}/${slug}`;
+    const path = `/${abbr}/${encodeURIComponent(chapterRoutePrefix)}-${chapterNumber}/${slug}`;
     if (window.location.pathname !== path) {
       window.history.replaceState({}, '', path);
     }
+
+    trackPageView(path);
+    trackEvent('chapter_open', {
+      language: abbr,
+      language_name: LANGUAGE_NAMES[lang] || lang,
+      chapter_number: chapterNumber,
+      chapter_title: strippedTitle || chapterTitle || `Chapter ${chapterNumber}`,
+      path,
+    });
   }, [lang, chapterIdx, chapterIds.length, toc, showOpeningToc]);
 
   // Lazily extract and cache chapter HTML from the stored document
@@ -2716,8 +2745,9 @@ export default function BookReader() {
     LANGUAGE_FOLDERS.forEach((folder) => {
       const code = (LANGUAGE_ABBREV[folder] || '').toLowerCase();
       if (!code) return;
+      const chapterRoutePrefix = getChapterRoutePrefix(folder);
       const path = hasChapterView
-        ? `/${code}/chapter-${chapterNumber}/chapter-${chapterNumber}`
+        ? `/${code}/${encodeURIComponent(chapterRoutePrefix)}-${chapterNumber}/chapter-${chapterNumber}`
         : `/${code}`;
       const link = document.createElement('link');
       link.setAttribute('rel', 'alternate');
@@ -3150,6 +3180,18 @@ export default function BookReader() {
             {isDark ? <MdDarkMode size={20} /> : <MdLightMode size={20} />}
             <span>{isDark ? 'Light mode' : 'Dark mode'}</span>
           </button>
+          <button
+            onClick={() => {
+              const enable = analyticsConsentStatus !== 'granted';
+              setAnalyticsConsent(enable);
+              setAnalyticsConsentStatus(enable ? 'granted' : 'denied');
+              setShowMoreMenu(false);
+            }}
+            aria-label="Privacy settings"
+          >
+            <MdPrivacyTip size={20} />
+            <span>{analyticsConsentStatus === 'granted' ? 'Privacy: Analytics on' : 'Privacy: Analytics off'}</span>
+          </button>
           <button onClick={() => handleShareApp('facebook')} aria-label="Share on Facebook">
             <FaFacebookF size={16} />
             <span>Facebook</span>
@@ -3194,7 +3236,7 @@ export default function BookReader() {
                       setShowChaptersMenu(false);
                     }}
                   >
-                    {chapterNum && <span className="reader-toc-num">Chapter {chapterNum}</span>}
+                    {chapterNum && <span className="reader-toc-num">{(LANGUAGE_CHAPTER_LABELS[lang] || 'Chapter')} {chapterNum}</span>}
                     <span className="reader-toc-title">{titleOnly}</span>
                   </button>
                 </li>

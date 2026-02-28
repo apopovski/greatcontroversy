@@ -10,6 +10,7 @@ import { useShareQuote } from "./utils/useShareQuote";
 import { icons } from "./assets/icons";
 import BookReader from "./BookReader";
 import Splash from "./components/Splash";
+import { getAnalyticsConsentStatus, setAnalyticsConsent } from './utils/analytics';
 
 type ErrorBoundaryProps = { children: React.ReactNode };
 type ErrorBoundaryState = { hasError: boolean; error: unknown };
@@ -54,6 +55,7 @@ function App() {
   });
 
   const [dark] = useDarkMode();
+  const [consentStatus, setConsentStatus] = useState<'granted' | 'denied' | 'unknown'>(() => getAnalyticsConsentStatus());
 
   // Accent theme: allow ?accent=blue or localStorage.gc_splash_accent
   useEffect(() => {
@@ -86,6 +88,33 @@ function App() {
         />
       )}
       <BookReader />
+      {consentStatus === 'unknown' && (
+        <div className="analytics-consent-banner" role="dialog" aria-live="polite" aria-label="Cookie consent">
+          <div className="analytics-consent-text">
+            We use privacy-friendly analytics to understand traffic and improve reading experience.
+          </div>
+          <div className="analytics-consent-actions">
+            <button
+              className="analytics-consent-btn secondary"
+              onClick={() => {
+                setAnalyticsConsent(false);
+                setConsentStatus('denied');
+              }}
+            >
+              Decline
+            </button>
+            <button
+              className="analytics-consent-btn primary"
+              onClick={() => {
+                setAnalyticsConsent(true);
+                setConsentStatus('granted');
+              }}
+            >
+              Accept
+            </button>
+          </div>
+        </div>
+      )}
     </ErrorBoundary>
   );
 }

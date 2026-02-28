@@ -80,6 +80,65 @@ html, body, #root, .app-container, .reader-root, .reader-root * {
   }
 }
 
+.analytics-consent-banner {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 10020;
+  border: 1px solid var(--reader-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.analytics-consent-text {
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.analytics-consent-actions {
+  display: inline-flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.analytics-consent-btn {
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid var(--reader-border);
+}
+
+.analytics-consent-btn.primary {
+  background: #3f51b5;
+  color: #fff;
+}
+
+.analytics-consent-btn.secondary {
+  background: transparent;
+}
+
+@media (max-width: 640px) {
+  .analytics-consent-banner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .analytics-consent-actions {
+    width: 100%;
+  }
+
+  .analytics-consent-btn {
+    flex: 1;
+  }
+}
+
 @media (min-width: 801px) {
   .app-container {
     max-width: 900px;
