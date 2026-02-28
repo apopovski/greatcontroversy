@@ -4,16 +4,27 @@ declare global {
   interface Window {
     dataLayer?: any[];
     gtag?: (...args: any[]) => void;
+    plausible?: (eventName: string, options?: Record<string, any>) => void;
   }
 }
 
 const GA_MEASUREMENT_ID = (import.meta.env.VITE_GA_MEASUREMENT_ID || '').trim();
+const PLAUSIBLE_DOMAIN = (import.meta.env.VITE_PLAUSIBLE_DOMAIN || '').trim();
+const PLAUSIBLE_SCRIPT_SRC = (import.meta.env.VITE_PLAUSIBLE_SCRIPT_SRC || 'https://plausible.io/js/script.js').trim();
 const CONSENT_KEY = 'gc_analytics_consent';
 
 let initialized = false;
 let lastTrackedPath = '';
 
 type ConsentStatus = 'granted' | 'denied' | 'unknown';
+type AnalyticsProvider = 'plausible' | 'ga4' | 'none';
+
+function getAnalyticsProvider(): AnalyticsProvider {
+  // Prefer privacy-first provider when configured.
+  if (PLAUSIBLE_DOMAIN) return 'plausible';
+  if (GA_MEASUREMENT_ID) return 'ga4';
+  return 'none';
+}
 
 function ensureDataLayerAndGtag() {
   if (typeof window === 'undefined') return;
@@ -29,7 +40,22 @@ export function initAnalytics() {
     initialized = true;
 
     if (typeof window === 'undefined') return;
+    const provider = getAnalyticsProvider();
+    if (provider === 'none') return;
     if (getAnalyticsConsentStatus() !== 'granted') return;
+
+    if (provider === 'plausible') {
+      const existing = document.querySelector(`script[src*="${PLAUSIBLE_SCRIPT_SRC}"]`);
+      if (!existing) {
+        const s = document.createElement('script');
+        s.defer = true;
+        s.src = PLAUSIBLE_SCRIPT_SRC;
+        s.setAttribute('data-domain', PLAUSIBLE_DOMAIN);
+        document.head.appendChild(s);
+      }
+      return;
+    }
+
     if (!GA_MEASUREMENT_ID) return;
 
     ensureDataLayerAndGtag();
@@ -56,7 +82,17 @@ export function initAnalytics() {
 export function getAnalyticsConsentStatus(): ConsentStatus {
   try {
     if (typeof window === 'undefined') return 'unknown';
+    const provider = getAnalyticsProvider();
     const raw = window.localStorage.getItem(CONSENT_KEY);
+
+    // For Plausible (privacy-first), default to granted unless explicitly denied.
+    if (provider === 'plausible') {
+      if (raw === 'denied') return 'denied';
+      return 'granted';
+    }
+
+    if (provider === 'none') return 'denied';
+
     if (raw === 'granted' || raw === 'denied') return raw;
     return 'unknown';
   } catch {
@@ -85,6 +121,9 @@ export function trackPageView(path?: string, title?: string) {
     if (typeof window === 'undefined') return;
     if (getAnalyticsConsentStatus() !== 'granted') return;
 
+    const provider = getAnalyticsProvider();
+    if (provider === 'none') return;
+
     const normalizedPath =
       path ||
       `${window.location.pathname}${window.location.search}${window.location.hash}`;
@@ -94,13 +133,22 @@ export function trackPageView(path?: string, title?: string) {
     if (normalizedPath === lastTrackedPath) return;
     lastTrackedPath = normalizedPath;
 
+    const fullLocation = `${window.location.origin}${normalizedPath}`;
+
+    if (provider === 'plausible' && typeof window.plausible === 'function') {
+      window.plausible('pageview', {
+        u: fullLocation,
+      });
+      return;
+    }
+
     ensureDataLayerAndGtag();
 
     if (GA_MEASUREMENT_ID) {
       window.gtag!('event', 'page_view', {
         page_title: pageTitle,
         page_path: normalizedPath,
-        page_location: `${window.location.origin}${normalizedPath}`,
+        page_location: fullLocation,
         language: document.documentElement.lang || navigator.language || 'en',
       });
     } else if (window.dataLayer && Array.isArray(window.dataLayer)) {
@@ -119,9 +167,16 @@ export function trackEvent(name: string, payload?: AnalyticsPayload) {
   try {
     if (!name) return;
     if (getAnalyticsConsentStatus() !== 'granted') return;
+    const provider = getAnalyticsProvider();
+    if (provider === 'none') return;
     const safePayload = payload || {};
 
     if (typeof window !== 'undefined') {
+      if (provider === 'plausible' && typeof window.plausible === 'function') {
+        window.plausible(name, { props: safePayload });
+        return;
+      }
+
       ensureDataLayerAndGtag();
 
       if (GA_MEASUREMENT_ID) {
