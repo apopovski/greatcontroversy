@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import { book } from "./data/book";
 import { getDefaultLanguage, getAvailableLanguages } from "./utils/language";
 import { useTextSize } from "./utils/useTextSize";
@@ -86,6 +87,7 @@ function App() {
         />
       )}
       <BookReader />
+      <Analytics />
     </ErrorBoundary>
   );
 }
