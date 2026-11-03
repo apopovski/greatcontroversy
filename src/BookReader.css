@@ -1,29 +1,35 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;0,7..72,700;1,7..72,400;1,7..72,600&family=Source+Sans+3:wght@400;500;600;700&display=swap');
 
 /* Clean, consolidated reader stylesheet (search UI & fixes) */
 
 :root{
-  --reader-bg: #fff;
-  --reader-fg: #111;
+  --reader-bg: #f7f6f2;
+  --reader-fg: #1a1a1a;
   --reader-muted: #5f6b7a;
-  --reader-header: #fff;
-  --reader-border: #e6e6f0;
+  --reader-header: rgba(247, 246, 242, 0.92);
+  --reader-border: #e4e1d8;
   --reader-highlight: #fff59d;
-  --reader-modal-bg: #fff;
-  --reader-modal-fg: #111;
-  --reader-accent: #646cff;
+  --reader-modal-bg: #fffcf7;
+  --reader-modal-fg: #1a1a1a;
+  --reader-accent: #4a5568;
   --reader-header-offset: 8px; /* gap above top menu bar */
   --reader-title-height: 36px; /* height of the small title bar above the header */
+  --font-ui: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'Literata', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+  --font-display: 'Cinzel', 'Literata', Georgia, serif;
+  --reader-body-line-height: 1.62;
+  --reader-header-h: 56px;
 }
 html[data-theme='dark']{
-  --reader-bg: #0f1112;
-  --reader-fg: #ffffff;
-  --reader-muted: #ffffff;
-  --reader-header: #181a1b;
-  --reader-border: #2b2b2b;
-  --reader-highlight: rgba(255,224,102,0.12);
-  --reader-modal-bg: #23272a;
-  --reader-modal-fg: #ffffff;
+  --reader-bg: #12141a;
+  --reader-fg: #ece8e1;
+  --reader-muted: #a8a29a;
+  --reader-header: rgba(18, 20, 26, 0.94);
+  --reader-border: #2a2d36;
+  --reader-highlight: rgba(255,224,102,0.14);
+  --reader-modal-bg: #1c1f27;
+  --reader-modal-fg: #ece8e1;
+  --reader-accent: #c4b5a0;
 }
 
 /* RTL (Right-to-Left) support for Arabic and other RTL languages */
@@ -103,12 +109,46 @@ html[dir='rtl'] .reader-timeline-card {
 }
 
 *{box-sizing:border-box}
-html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--reader-bg);color:var(--reader-fg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial}
+html,body,#root,.reader-root{
+  height:100%;
+  margin:0;
+  padding:0;
+  background:var(--reader-bg);
+  color:var(--reader-fg);
+  font-family:var(--font-ui);
+}
 
-/* Header (fixed overlay) */
-.reader-header-bar{position:fixed;top:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:center;background:var(--reader-header);border-bottom:1px solid var(--reader-border);z-index:1200;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+/* Header (fixed overlay) — hides on scroll down for immersive reading */
+.reader-header-bar{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:var(--reader-header-h);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--reader-header);
+  border-bottom:1px solid var(--reader-border);
+  z-index:1200;
+  box-shadow:0 6px 18px rgba(0,0,0,0.06);
+  backdrop-filter:blur(12px) saturate(1.05);
+  -webkit-backdrop-filter:blur(12px) saturate(1.05);
+  transform:translateY(0);
+  transition:transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease;
+  will-change:transform;
+}
+.reader-header-bar.is-hidden{
+  transform:translateY(-110%);
+  box-shadow:none;
+  pointer-events:none;
+}
+.reader-header-bar.is-pinned{
+  transform:translateY(0);
+  pointer-events:auto;
+}
 .reader-header-bar-inner{width:100%;max-width:1200px;padding:0 12px;display:flex;align-items:center;margin:0 auto}
-.reader-header-controls{display:flex;align-items:center;width:100%;gap:12px}
+.reader-header-controls{display:flex;align-items:center;width:100%;gap:12px;font-family:var(--font-ui)}
 .reader-title-above-nav{padding:8px 16px 0;text-align:center;font-weight:700}
 
 
@@ -321,7 +361,7 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
 }
 
 /* Layout */
-.reader-wrapper{margin:0 auto;padding:12px;padding-top:calc(56px + 12px); max-width:1200px}
+.reader-wrapper{margin:0 auto;padding:12px;padding-top:calc(var(--reader-header-h) + 12px); max-width:1200px}
 
 /* Title bar above the fixed header */
 .reader-title-above-nav{top:0;left:0;right:0;height:var(--reader-title-fixedheight);display:flex;align-items:center;justify-content:center;background:var(--reader-header);border-bottom:1px solid var(--reader-border);z-index:1220;font-weight:700;padding:0 12px}
@@ -468,17 +508,15 @@ html[data-theme='dark'] .reader-opening-toc-inline * {
   float: left;
   /* Force block layout for predictable vertical alignment with the first line */
   display: block;
-  /* Historic/ornamental serif feel */
-  font-family: 'Goudy Bookletter 1911', 'Georgia', 'Times New Roman', serif;
+  font-family: var(--font-display);
   font-weight: 700;
   /* Use CSS variables so the dropcap height always equals exactly 3 body text lines.
      --reader-body-line-height controls paragraph line-height (in em units), and
      --dropcap-line-height controls the dropcap's internal line-height. The font-size
      is calculated so (font-size * dropcap-line-height) == (3 * 1em * reader-body-line-height)
   */
-  --reader-body-line-height: 1.35; /* default body line-height (in em) */
   --dropcap-line-height: 0.72; /* visual compactness inside the dropcap */
-  --dropcap-scale: 1.06; /* small scale-up for slightly larger ornamental cap */
+  --dropcap-scale: 1.04; /* small scale-up for slightly larger ornamental cap */
   font-size: calc(3 * var(--reader-body-line-height) / var(--dropcap-line-height) * var(--dropcap-scale) * 1em);
   line-height: var(--dropcap-line-height);
   /* ensure the top of the dropcap aligns with the first line of text */
@@ -488,16 +526,13 @@ html[data-theme='dark'] .reader-opening-toc-inline * {
   /* small nudge to vertically align the ornamental cap with the text's first line */
   --dropcap-nudge: 0.05em;
   transform: translateY(var(--dropcap-nudge));
-  margin-right: 0.18ch;
+  margin-right: 0.22ch;
   padding-top: 0;
-  color: #000 !important;
-  /* slight inner glow / antique look */
-  text-shadow: 0 1px 0 rgba(255,255,255,0.35), 0 2px 6px rgba(0,0,0,0.08);
-  /* subtle background ribbon to make the letter feel 'set' into the page */
-  background: linear-gradient(180deg, rgba(100,110,255,0.06), rgba(100,110,255,0.02));
-  border-radius: 4px;
-  padding: 0 0.00em;
-  /* ensure consistent vertical placement in different browsers */
+  color: inherit !important;
+  background: none;
+  border-radius: 0;
+  padding: 0;
+  text-shadow: none;
 }
 
 html[data-theme='dark'] .dropcap {
@@ -511,7 +546,16 @@ span.dropcap {
 
 /* Responsive tweak: keep proportions for narrow screens */
 @media (max-width: 640px) {
-  .dropcap { --reader-body-line-height: 1.25; --dropcap-line-height: 0.78; --dropcap-scale: 1.04; font-size: calc(3 * var(--reader-body-line-height) / var(--dropcap-line-height) * var(--dropcap-scale) * 1em); margin-right: 0.12ch; --dropcap-nudge: 0.04em; transform: translateY(var(--dropcap-nudge)); margin-left: 0; padding-left: 0; }
+  .dropcap {
+    --dropcap-line-height: 0.78;
+    --dropcap-scale: 1.03;
+    font-size: calc(3 * var(--reader-body-line-height) / var(--dropcap-line-height) * var(--dropcap-scale) * 1em);
+    margin-right: 0.12ch;
+    --dropcap-nudge: 0.04em;
+    transform: translateY(var(--dropcap-nudge));
+    margin-left: 0;
+    padding-left: 0;
+  }
 }
 
 /* Apply the body line-height to the rendered chapter paragraphs so the calculation is accurate */
@@ -952,6 +996,51 @@ span.dropcap {
 /* Content area */
 .reader-content{padding:1.5em 0.5em 2.5em 0.5em;min-height:100vh;margin-left:auto;margin-right:auto;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;position:relative;top:0;background:var(--reader-bg)}
 
+.reader-book-html{
+  font-family:var(--font-body);
+  font-optical-sizing:auto;
+  font-weight:400;
+  letter-spacing:0.005em;
+  max-width:42rem;
+  margin-left:auto;
+  margin-right:auto;
+  width:100%;
+  color:var(--reader-fg);
+}
+.reader-book-html p{
+  margin:0 0 0.95em;
+  hyphens:auto;
+  -webkit-hyphens:auto;
+}
+.reader-book-html blockquote{
+  margin:1.1em 0 1.1em 0.6em;
+  padding-left:0.9em;
+  border-left:2px solid color-mix(in srgb, var(--reader-border) 90%, var(--reader-fg));
+  opacity:0.96;
+  font-style:italic;
+}
+
+/* Script-aware stacks (system fallbacks keep offline weight low) */
+.reader-root[data-script='arabic'] .reader-book-html,
+.reader-root[data-script='hebrew'] .reader-book-html{
+  font-family:'Noto Naskh Arabic','Noto Serif Hebrew',var(--font-body);
+  line-height:1.75;
+  letter-spacing:0;
+}
+.reader-root[data-script='cjk'] .reader-book-html{
+  font-family:'Source Han Serif','Noto Serif CJK','Songti SC','Hiragino Mincho ProN','Yu Mincho',serif;
+  line-height:1.85;
+  letter-spacing:0.02em;
+}
+.reader-root[data-script='indic'] .reader-book-html{
+  font-family:'Noto Serif Devanagari','Noto Serif Malayalam','Noto Serif Bengali',var(--font-body);
+  line-height:1.8;
+}
+.reader-root[data-script='myanmar'] .reader-book-html{
+  font-family:'Noto Sans Myanmar','Myanmar Text',var(--font-body);
+  line-height:1.9;
+}
+
 /* Chapter heading: small number above the visible title */
 .chapter-heading{
   display:block;
@@ -995,10 +1084,35 @@ span.dropcap {
 /* Style for restored inline chapter headings created by transformChapterHeading.
   Keep the overall heading bold, but render the leading "Chapter N" label
   with normal weight so it doesn't appear bold. */
-.reader-book-html .chapterhead { font-weight: 700; margin: 0; }
-.reader-book-html .chapterhead .chapter-num-inline { font-weight: 400; opacity: 0.95; margin-right: 0.06em; }
-.reader-book-html .chapterhead .chapter-sep-inline { font-weight: 400; opacity: 0.95; }
-.reader-book-html .chapterhead .chapter-title-inline { font-weight: 700; }
+.reader-book-html .chapterhead {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.45rem, 2.4vw, 1.85rem);
+  line-height: 1.22;
+  letter-spacing: 0.01em;
+  margin: 0 0 1.1em;
+  padding-bottom: 0.55em;
+  border-bottom: 1px solid color-mix(in srgb, var(--reader-border) 80%, transparent);
+}
+.reader-book-html .chapterhead .chapter-num-inline {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.62em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.72;
+  margin-right: 0.35em;
+  vertical-align: middle;
+}
+.reader-book-html .chapterhead .chapter-sep-inline {
+  font-family: var(--font-ui);
+  font-weight: 400;
+  opacity: 0.45;
+  margin-right: 0.28em;
+}
+.reader-book-html .chapterhead .chapter-title-inline {
+  font-weight: 700;
+}
 
 .reader-audio-section{
   position: fixed;

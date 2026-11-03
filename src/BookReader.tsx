@@ -3055,6 +3055,16 @@ function parseSgawKarenBook(raw: string) {
 
 export default function BookReader() {
   const FORCE_MINIMIZED_PLAYER = true;
+
+  const getReaderScriptFamily = (folder: string) => {
+    const code = (LANGUAGE_ABBREV[folder] || '').toLowerCase();
+    if (code === 'ar' || code === 'fa' || code === 'prs' || code === 'ur') return 'arabic';
+    if (code === 'he') return 'hebrew';
+    if (code === 'zh' || code === 'ja' || code === 'ko' || code === 'cn' || code === 'kr') return 'cjk';
+    if (code === 'hi' || code === 'bn' || code === 'ml') return 'indic';
+    if (code === 'ksw') return 'myanmar';
+    return 'latin';
+  };
   type ReaderBookmark = { lang: string; chapterIdx: number; ts: number };
   type SearchResult = {
     idx: number;
@@ -3120,6 +3130,7 @@ export default function BookReader() {
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [headerHidden, setHeaderHidden] = useState(false);
   const [chapterReadPercent, setChapterReadPercent] = useState(0);
   const [showCopyToast, setShowCopyToast] = useState(false);
   const [copyToastPos, setCopyToastPos] = useState({ top: 0, left: 0 });
@@ -3263,7 +3274,37 @@ export default function BookReader() {
     return () => window.removeEventListener('scroll', onScroll);
   }, [audioUserExpanded, FORCE_MINIMIZED_PLAYER]);
 
-  // --- Minimized audio bar and auto-next logic ---
+  // Immersive chrome: hide header while scrolling down; reveal on scroll up / near top.
+  useEffect(() => {
+    let lastY = window.scrollY || 0;
+    let ticking = false;
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        const y = window.scrollY || 0;
+        const delta = y - lastY;
+        const nearTop = y < 48;
+        if (nearTop || delta < -8) {
+          setHeaderHidden(false);
+        } else if (delta > 10 && y > 80) {
+          setHeaderHidden(true);
+        }
+        lastY = y;
+        ticking = false;
+      });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (showOpeningToc || showSearch || showLangMenu || showMoreMenu) {
+      setHeaderHidden(false);
+    }
+  }, [showOpeningToc, showSearch, showLangMenu, showMoreMenu]);
 
   const clearTempHighlights = () => {
     const contentEl = contentRef.current;
@@ -5145,10 +5186,15 @@ export default function BookReader() {
     });
   };
 
+  const headerPinned = showOpeningToc || showSearch || showLangMenu || showMoreMenu;
+  const readerScript = getReaderScriptFamily(lang);
+
   return (
-    <div className="reader-root">
+    <div className="reader-root" data-script={readerScript}>
       {/* Language title removed — header icons now indicate language */}
-      <header className="reader-header-bar">
+      <header
+        className={`reader-header-bar${headerHidden && !headerPinned ? ' is-hidden' : ''}${headerPinned ? ' is-pinned' : ''}`}
+      >
         <div className="reader-header-bar-inner" style={{ width: isDesktop ? `${pageWidth}px` : '100%' }}>
           <div className="reader-header-controls">
             {/* Localized book title on the left */}
