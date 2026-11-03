@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "lang": "fa",
+  "chapterIdx": 31,
+  "title": "30—دشمن یبین انسان و شیطان",
+  "duration": 947.377,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/fa/gc/GC-30%20-%20%D8%AF%D8%B4%D9%85%D9%86%DB%8C%20%D8%A8%DB%8C%D9%86%20%D8%A7%D9%86%D8%B3%D8%A7%D9%86%20%D9%88%20%D8%B4%DB%8C%D8%B7%D8%A7%D9%86.mp3",
+  "cues": [
+    {
+      "id": "gc-p-32-1",
+      "start": 37.895,
+      "end": 69.237,
+      "chars": 340
+    },
+    {
+      "id": "gc-p-32-2",
+      "start": 69.237,
+      "end": 125.193,
+      "chars": 607
+    },
+    {
+      "id": "gc-p-32-3",
+      "start": 125.193,
+      "end": 173.589,
+      "chars": 525
+    },
+    {
+      "id": "gc-p-32-4",
+      "start": 173.589,
+      "end": 206.038,
+      "chars": 352
+    },
+    {
+      "id": "gc-p-32-5",
+      "start": 206.038,
+      "end": 255.725,
+      "chars": 539
+    },
+    {
+      "id": "gc-p-32-6",
+      "start": 255.725,
+      "end": 307.071,
+      "chars": 557
+    },
+    {
+      "id": "gc-p-32-7",
+      "start": 307.071,
+      "end": 355.006,
+      "chars": 520
+    },
+    {
+      "id": "gc-p-32-8",
+      "start": 355.006,
+      "end": 412.344,
+      "chars": 622
+    },
+    {
+      "id": "gc-p-32-9",
+      "start": 412.344,
+      "end": 507.846,
+      "chars": 1036
+    },
+    {
+      "id": "gc-p-32-10",
+      "start": 507.846,
+      "end": 548.407,
+      "chars": 440
+    },
+    {
+      "id": "gc-p-32-11",
+      "start": 548.407,
+      "end": 633.861,
+      "chars": 927
+    },
+    {
+      "id": "gc-p-32-12",
+      "start": 633.861,
+      "end": 675.528,
+      "chars": 452
+    },
+    {
+      "id": "gc-p-32-13",
+      "start": 675.528,
+      "end": 769.094,
+      "chars": 1015
+    },
+    {
+      "id": "gc-p-32-14",
+      "start": 769.094,
+      "end": 794.076,
+      "chars": 271
+    },
+    {
+      "id": "gc-p-32-15",
+      "start": 794.076,
+      "end": 844.132,
+      "chars": 543
+    },
+    {
+      "id": "gc-p-32-16",
+      "start": 844.132,
+      "end": 897.045,
+      "chars": 574
+    },
+    {
+      "id": "gc-p-32-17",
+      "start": 897.045,
+      "end": 947.377,
+      "chars": 546
+    }
+  ]
+}

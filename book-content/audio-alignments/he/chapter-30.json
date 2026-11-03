@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 30,
+  "title": "פרק כ״ט — מקור הרוע",
+  "duration": 2123.293,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-29%20-%20%D7%9E%D7%A7%D7%95%D7%A8%20%D7%94%D7%A8%D7%95%D7%A2.mp3",
+  "cues": [
+    {
+      "id": "gc-p-31-1",
+      "start": 84.932,
+      "end": 393.376,
+      "chars": 2769
+    },
+    {
+      "id": "gc-p-31-2",
+      "start": 393.376,
+      "end": 730.002,
+      "chars": 3022
+    },
+    {
+      "id": "gc-p-31-3",
+      "start": 730.002,
+      "end": 1132.016,
+      "chars": 3609
+    },
+    {
+      "id": "gc-p-31-4",
+      "start": 1132.016,
+      "end": 1189.717,
+      "chars": 518
+    },
+    {
+      "id": "gc-p-31-5",
+      "start": 1189.717,
+      "end": 1217.676,
+      "chars": 251
+    },
+    {
+      "id": "gc-p-31-6",
+      "start": 1217.676,
+      "end": 2123.293,
+      "chars": 8130
+    },
+    {
+      "id": "gc-p-31-7",
+      "start": 2123.293,
+      "end": 2123.293,
+      "chars": 5
+    }
+  ]
+}

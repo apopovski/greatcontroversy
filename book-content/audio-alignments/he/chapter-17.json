@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 17,
+  "title": "פרק ט״ז — האבות הצליינים",
+  "duration": 1520.883,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-16%20-%20%D7%94%D7%90%D7%91%D7%95%D7%AA%20%D7%94%D7%A6%D7%9C%D7%99%D7%99%D7%A0%D7%99%D7%9D.mp3",
+  "cues": [
+    {
+      "id": "gc-p-18-1",
+      "start": 60.835,
+      "end": 516.397,
+      "chars": 4655
+    },
+    {
+      "id": "gc-p-18-2",
+      "start": 516.397,
+      "end": 692.75,
+      "chars": 1802
+    },
+    {
+      "id": "gc-p-18-3",
+      "start": 692.75,
+      "end": 786.7,
+      "chars": 960
+    },
+    {
+      "id": "gc-p-18-4",
+      "start": 786.7,
+      "end": 1003.373,
+      "chars": 2214
+    },
+    {
+      "id": "gc-p-18-5",
+      "start": 1003.373,
+      "end": 1520.883,
+      "chars": 5288
+    },
+    {
+      "id": "gc-p-18-6",
+      "start": 1520.883,
+      "end": 1520.883,
+      "chars": 5
+    }
+  ]
+}

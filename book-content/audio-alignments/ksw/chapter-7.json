@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "lang": "ksw",
+  "chapterIdx": 7,
+  "title": "အဆၢဒိၣ် (၈) — လူသၢၣ်ပှၤဒီဒၣ်တၢ်လၢတၢ်မ့ၢ်တၢ်တီ",
+  "duration": 2924.6,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/ksw/gc/GCsk-08%20-%20%E1%80%9C%E1%80%B0%E1%80%9E%E1%81%A2%E1%81%A3%E1%80%BA%E1%80%95%E1%80%BE%E1%81%A4%E1%80%92%E1%80%AE%E1%80%92%E1%81%A3%E1%80%BA%E1%80%90%E1%81%A2%E1%80%BA%E1%80%9C%E1%81%A2%E1%80%90%E1%81%A2%E1%80%BA%E1%80%99%E1%80%B7%E1%81%A2%E1%80%BA%E1%80%90%E1%81%A2%E1%80%BA%E1%80%90%E1%80%AE.mp3",
+  "cues": [
+    {
+      "id": "gc-p-8-1",
+      "start": 116.984,
+      "end": 661.026,
+      "chars": 610
+    },
+    {
+      "id": "gc-p-8-2",
+      "start": 661.026,
+      "end": 989.236,
+      "chars": 368
+    },
+    {
+      "id": "gc-p-8-3",
+      "start": 989.236,
+      "end": 1592.142,
+      "chars": 676
+    },
+    {
+      "id": "gc-p-8-4",
+      "start": 1592.142,
+      "end": 1970.296,
+      "chars": 424
+    },
+    {
+      "id": "gc-p-8-5",
+      "start": 1970.296,
+      "end": 2476.88,
+      "chars": 568
+    },
+    {
+      "id": "gc-p-8-6",
+      "start": 2476.88,
+      "end": 2924.6,
+      "chars": 502
+    }
+  ]
+}

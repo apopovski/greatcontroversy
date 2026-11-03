@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "lang": "ksw",
+  "chapterIdx": 15,
+  "title": "အဆၢဒိၣ် (၁၆) — ဖံဖုလၢပျၢၤတဖၣ်အတၢ်စူၢ်တၢ်နာ်",
+  "duration": 997.297,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/ksw/gc/GCsk-16%20-%20%E1%80%96%E1%80%B6%E1%80%96%E1%80%AF%E1%80%9C%E1%81%A2%E1%80%95%E1%80%BB%E1%81%A2%E1%81%A4%E1%80%90%E1%80%96%E1%81%A3%E1%80%BA%E1%80%A1%E1%80%90%E1%81%A2%E1%80%BA%E1%80%85%E1%80%B0%E1%81%A2%E1%80%BA%E1%80%90%E1%81%A2%E1%80%BA%E1%80%94%E1%80%AC%E1%80%BA.mp3",
+  "cues": [
+    {
+      "id": "gc-p-16-1",
+      "start": 39.892,
+      "end": 312.45,
+      "chars": 474
+    },
+    {
+      "id": "gc-p-16-2",
+      "start": 312.45,
+      "end": 548.783,
+      "chars": 411
+    },
+    {
+      "id": "gc-p-16-3",
+      "start": 548.783,
+      "end": 770.165,
+      "chars": 385
+    },
+    {
+      "id": "gc-p-16-4",
+      "start": 770.165,
+      "end": 997.297,
+      "chars": 395
+    }
+  ]
+}

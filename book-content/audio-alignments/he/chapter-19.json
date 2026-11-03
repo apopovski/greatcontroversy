@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 19,
+  "title": "פרק י״ח — מתקן דת אמריקנ",
+  "duration": 4421.363,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-18%20-%20%D7%9E%D7%AA%D7%A7%D7%9F%20%D7%93%D7%AA%20%D7%90%D7%9E%D7%A8%D7%99%D7%A7%D7%A0.mp3",
+  "cues": [
+    {
+      "id": "gc-p-20-1",
+      "start": 176.855,
+      "end": 527.985,
+      "chars": 3052
+    },
+    {
+      "id": "gc-p-20-2",
+      "start": 527.985,
+      "end": 725.869,
+      "chars": 1720
+    },
+    {
+      "id": "gc-p-20-3",
+      "start": 725.869,
+      "end": 1175.596,
+      "chars": 3909
+    },
+    {
+      "id": "gc-p-20-4",
+      "start": 1175.596,
+      "end": 1351.506,
+      "chars": 1529
+    },
+    {
+      "id": "gc-p-20-5",
+      "start": 1351.506,
+      "end": 1426.403,
+      "chars": 651
+    },
+    {
+      "id": "gc-p-20-6",
+      "start": 1426.403,
+      "end": 3073.332,
+      "chars": 14315
+    },
+    {
+      "id": "gc-p-20-7",
+      "start": 3073.332,
+      "end": 3364.752,
+      "chars": 2533
+    },
+    {
+      "id": "gc-p-20-8",
+      "start": 3364.752,
+      "end": 3406.745,
+      "chars": 365
+    },
+    {
+      "id": "gc-p-20-9",
+      "start": 3406.745,
+      "end": 3644.551,
+      "chars": 2067
+    },
+    {
+      "id": "gc-p-20-10",
+      "start": 3644.551,
+      "end": 4421.363,
+      "chars": 6752
+    },
+    {
+      "id": "gc-p-20-11",
+      "start": 4421.363,
+      "end": 4421.363,
+      "chars": 5
+    }
+  ]
+}

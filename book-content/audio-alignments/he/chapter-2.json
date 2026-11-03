@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 2,
+  "title": "פרק א — חורבן ירושלים",
+  "duration": 2674.999,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-01%20-%20%D7%97%D7%95%D7%A8%D7%91%D7%9F%20%D7%99%D7%A8%D7%95%D7%A9%D7%9C%D7%99%D7%9D.mp3",
+  "cues": [
+    {
+      "id": "gc-p-3-1",
+      "start": 107,
+      "end": 540.563,
+      "chars": 5170
+    },
+    {
+      "id": "gc-p-3-2",
+      "start": 540.563,
+      "end": 736.546,
+      "chars": 2337
+    },
+    {
+      "id": "gc-p-3-3",
+      "start": 736.546,
+      "end": 762.795,
+      "chars": 313
+    },
+    {
+      "id": "gc-p-3-4",
+      "start": 762.795,
+      "end": 1415.403,
+      "chars": 7782
+    },
+    {
+      "id": "gc-p-3-5",
+      "start": 1415.403,
+      "end": 2635.416,
+      "chars": 14548
+    },
+    {
+      "id": "gc-p-3-6",
+      "start": 2635.416,
+      "end": 2674.999,
+      "chars": 472
+    },
+    {
+      "id": "gc-p-3-7",
+      "start": 2674.999,
+      "end": 2674.999,
+      "chars": 5
+    }
+  ]
+}

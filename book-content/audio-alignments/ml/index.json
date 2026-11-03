@@ -1,0 +1,264 @@
+{
+  "version": 1,
+  "lang": "ml",
+  "chapters": [
+    {
+      "chapterIdx": 1,
+      "file": "chapter-1.json",
+      "cues": 24,
+      "duration": 1082.808
+    },
+    {
+      "chapterIdx": 2,
+      "file": "chapter-2.json",
+      "cues": 50,
+      "duration": 2800.343
+    },
+    {
+      "chapterIdx": 3,
+      "file": "chapter-3.json",
+      "cues": 24,
+      "duration": 2800.343
+    },
+    {
+      "chapterIdx": 4,
+      "file": "chapter-4.json",
+      "cues": 36,
+      "duration": 1833.513
+    },
+    {
+      "chapterIdx": 5,
+      "file": "chapter-5.json",
+      "cues": 58,
+      "duration": 2335.304
+    },
+    {
+      "chapterIdx": 6,
+      "file": "chapter-6.json",
+      "cues": 50,
+      "duration": 2335.304
+    },
+    {
+      "chapterIdx": 7,
+      "file": "chapter-7.json",
+      "cues": 69,
+      "duration": 3438.342
+    },
+    {
+      "chapterIdx": 8,
+      "file": "chapter-8.json",
+      "cues": 73,
+      "duration": 3825.079
+    },
+    {
+      "chapterIdx": 9,
+      "file": "chapter-9.json",
+      "cues": 77,
+      "duration": 3667.562
+    },
+    {
+      "chapterIdx": 10,
+      "file": "chapter-10.json",
+      "cues": 39,
+      "duration": 2055.012
+    },
+    {
+      "chapterIdx": 11,
+      "file": "chapter-11.json",
+      "cues": 40,
+      "duration": 1719.867
+    },
+    {
+      "chapterIdx": 12,
+      "file": "chapter-12.json",
+      "cues": 43,
+      "duration": 1911.006
+    },
+    {
+      "chapterIdx": 13,
+      "file": "chapter-13.json",
+      "cues": 72,
+      "duration": 3496.247
+    },
+    {
+      "chapterIdx": 14,
+      "file": "chapter-14.json",
+      "cues": 22,
+      "duration": 1003.28
+    },
+    {
+      "chapterIdx": 15,
+      "file": "chapter-15.json",
+      "cues": 59,
+      "duration": 1003.28
+    },
+    {
+      "chapterIdx": 16,
+      "file": "chapter-16.json",
+      "cues": 62,
+      "duration": 3357.014
+    },
+    {
+      "chapterIdx": 17,
+      "file": "chapter-17.json",
+      "cues": 27,
+      "duration": 1449.801
+    },
+    {
+      "chapterIdx": 18,
+      "file": "chapter-18.json",
+      "cues": 53,
+      "duration": 2508.21
+    },
+    {
+      "chapterIdx": 19,
+      "file": "chapter-19.json",
+      "cues": 68,
+      "duration": 3555.821
+    },
+    {
+      "chapterIdx": 20,
+      "file": "chapter-20.json",
+      "cues": 30,
+      "duration": 1598.815
+    },
+    {
+      "chapterIdx": 21,
+      "file": "chapter-21.json",
+      "cues": 50,
+      "duration": 2771.052
+    },
+    {
+      "chapterIdx": 22,
+      "file": "chapter-22.json",
+      "cues": 44,
+      "duration": 2073.531
+    },
+    {
+      "chapterIdx": 23,
+      "file": "chapter-23.json",
+      "cues": 43,
+      "duration": 2468.355
+    },
+    {
+      "chapterIdx": 24,
+      "file": "chapter-24.json",
+      "cues": 41,
+      "duration": 2005.089
+    },
+    {
+      "chapterIdx": 25,
+      "file": "chapter-25.json",
+      "cues": 23,
+      "duration": 1377.159
+    },
+    {
+      "chapterIdx": 26,
+      "file": "chapter-26.json",
+      "cues": 47,
+      "duration": 2653.573
+    },
+    {
+      "chapterIdx": 27,
+      "file": "chapter-27.json",
+      "cues": 27,
+      "duration": 1419.492
+    },
+    {
+      "chapterIdx": 28,
+      "file": "chapter-28.json",
+      "cues": 51,
+      "duration": 2697.445
+    },
+    {
+      "chapterIdx": 29,
+      "file": "chapter-29.json",
+      "cues": 36,
+      "duration": 1777.59
+    },
+    {
+      "chapterIdx": 30,
+      "file": "chapter-30.json",
+      "cues": 33,
+      "duration": 1724.197
+    },
+    {
+      "chapterIdx": 31,
+      "file": "chapter-31.json",
+      "cues": 20,
+      "duration": 860.422
+    },
+    {
+      "chapterIdx": 32,
+      "file": "chapter-32.json",
+      "cues": 19,
+      "duration": 1052.212
+    },
+    {
+      "chapterIdx": 33,
+      "file": "chapter-33.json",
+      "cues": 38,
+      "duration": 1830.878
+    },
+    {
+      "chapterIdx": 34,
+      "file": "chapter-34.json",
+      "cues": 57,
+      "duration": 2906.555
+    },
+    {
+      "chapterIdx": 35,
+      "file": "chapter-35.json",
+      "cues": 29,
+      "duration": 1652.233
+    },
+    {
+      "chapterIdx": 36,
+      "file": "chapter-36.json",
+      "cues": 56,
+      "duration": 2922.466
+    },
+    {
+      "chapterIdx": 37,
+      "file": "chapter-37.json",
+      "cues": 26,
+      "duration": 1610.943
+    },
+    {
+      "chapterIdx": 38,
+      "file": "chapter-38.json",
+      "cues": 27,
+      "duration": 1411.275
+    },
+    {
+      "chapterIdx": 39,
+      "file": "chapter-39.json",
+      "cues": 25,
+      "duration": 1209.704
+    },
+    {
+      "chapterIdx": 40,
+      "file": "chapter-40.json",
+      "cues": 56,
+      "duration": 3148.765
+    },
+    {
+      "chapterIdx": 41,
+      "file": "chapter-41.json",
+      "cues": 51,
+      "duration": 2517.235
+    },
+    {
+      "chapterIdx": 42,
+      "file": "chapter-42.json",
+      "cues": 29,
+      "duration": 1221.441
+    },
+    {
+      "chapterIdx": 43,
+      "file": "chapter-43.json",
+      "cues": 49,
+      "duration": 2279.537
+    }
+  ]
+}

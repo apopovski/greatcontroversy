@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 6,
+  "title": "פרק ה — ג’ון ויקליף",
+  "duration": 1952.713,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-05%20-%20%D7%92%E2%80%99%D7%95%D7%9F%20%D7%95%D7%99%D7%A7%D7%9C%D7%99%D7%A3.mp3",
+  "cues": [
+    {
+      "id": "gc-p-7-1",
+      "start": 78.109,
+      "end": 1952.713,
+      "chars": 25856
+    },
+    {
+      "id": "gc-p-7-2",
+      "start": 1952.713,
+      "end": 1952.713,
+      "chars": 5
+    }
+  ]
+}

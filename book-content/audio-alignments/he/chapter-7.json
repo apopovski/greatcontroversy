@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 7,
+  "title": "פרק ו — הס וג’רום",
+  "duration": 2548.619,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-06%20-%20%D7%94%D7%A1%20%D7%95%D7%92%E2%80%99%D7%A8%D7%95%D7%9D.mp3",
+  "cues": [
+    {
+      "id": "gc-p-8-1",
+      "start": 101.945,
+      "end": 2548.619,
+      "chars": 33632
+    },
+    {
+      "id": "gc-p-8-2",
+      "start": 2548.619,
+      "end": 2548.619,
+      "chars": 5
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 28,
+  "title": "פרק כ״ז — תחיות רוחניות בעידן המודרני",
+  "duration": 3247.786,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-27%20-%20%D7%AA%D7%97%D7%99%D7%95%D7%AA%20%D7%A8%D7%95%D7%97%D7%A0%D7%99%D7%95%D7%AA%20%D7%91%D7%A2%D7%99%D7%93%D7%9F%20%D7%94%D7%9E%D7%95%D7%93%D7%A8%D7%A0%D7%99.mp3",
+  "cues": [
+    {
+      "id": "gc-p-29-1",
+      "start": 129.911,
+      "end": 308.059,
+      "chars": 1519
+    },
+    {
+      "id": "gc-p-29-2",
+      "start": 308.059,
+      "end": 385.932,
+      "chars": 664
+    },
+    {
+      "id": "gc-p-29-3",
+      "start": 385.932,
+      "end": 1837.5,
+      "chars": 12377
+    },
+    {
+      "id": "gc-p-29-4",
+      "start": 1837.5,
+      "end": 2303.804,
+      "chars": 3976
+    },
+    {
+      "id": "gc-p-29-5",
+      "start": 2303.804,
+      "end": 3247.786,
+      "chars": 8049
+    },
+    {
+      "id": "gc-p-29-6",
+      "start": 3247.786,
+      "end": 3247.786,
+      "chars": 5
+    }
+  ]
+}

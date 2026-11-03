@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 12,
+  "title": "פרק י״א — מחאת הנסיכים",
+  "duration": 2394.339,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-11%20-%20%D7%9E%D7%97%D7%90%D7%AA%20%D7%94%D7%A0%D7%A1%D7%99%D7%9B%D7%99%D7%9D.mp3",
+  "cues": [
+    {
+      "id": "gc-p-13-1",
+      "start": 95.774,
+      "end": 536.633,
+      "chars": 4050
+    },
+    {
+      "id": "gc-p-13-2",
+      "start": 536.633,
+      "end": 827.383,
+      "chars": 2671
+    },
+    {
+      "id": "gc-p-13-3",
+      "start": 827.383,
+      "end": 1168.314,
+      "chars": 3132
+    },
+    {
+      "id": "gc-p-13-4",
+      "start": 1168.314,
+      "end": 1341.719,
+      "chars": 1593
+    },
+    {
+      "id": "gc-p-13-5",
+      "start": 1341.719,
+      "end": 1551.372,
+      "chars": 1926
+    },
+    {
+      "id": "gc-p-13-6",
+      "start": 1551.372,
+      "end": 1786.388,
+      "chars": 2159
+    },
+    {
+      "id": "gc-p-13-7",
+      "start": 1786.388,
+      "end": 1991.252,
+      "chars": 1882
+    },
+    {
+      "id": "gc-p-13-8",
+      "start": 1991.252,
+      "end": 2102.828,
+      "chars": 1025
+    },
+    {
+      "id": "gc-p-13-9",
+      "start": 2102.828,
+      "end": 2152.574,
+      "chars": 457
+    },
+    {
+      "id": "gc-p-13-10",
+      "start": 2152.574,
+      "end": 2394.339,
+      "chars": 2221
+    },
+    {
+      "id": "gc-p-13-11",
+      "start": 2394.339,
+      "end": 2394.339,
+      "chars": 5
+    }
+  ]
+}

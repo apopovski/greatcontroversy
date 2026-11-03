@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 26,
+  "title": "פרק כ״ה — תורת ה׳ הנצחית",
+  "duration": 2944.948,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-25%20-%20%D7%AA%D7%95%D7%A8%D7%AA%20%D7%94%D7%B3%20%D7%94%D7%A0%D7%A6%D7%97%D7%99%D7%AA.mp3",
+  "cues": [
+    {
+      "id": "gc-p-27-1",
+      "start": 117.798,
+      "end": 220.149,
+      "chars": 905
+    },
+    {
+      "id": "gc-p-27-2",
+      "start": 220.149,
+      "end": 1801.331,
+      "chars": 13981
+    },
+    {
+      "id": "gc-p-27-3",
+      "start": 1801.331,
+      "end": 1947.111,
+      "chars": 1289
+    },
+    {
+      "id": "gc-p-27-4",
+      "start": 1947.111,
+      "end": 2311.39,
+      "chars": 3221
+    },
+    {
+      "id": "gc-p-27-5",
+      "start": 2311.39,
+      "end": 2692.181,
+      "chars": 3367
+    },
+    {
+      "id": "gc-p-27-6",
+      "start": 2692.181,
+      "end": 2843.276,
+      "chars": 1336
+    },
+    {
+      "id": "gc-p-27-7",
+      "start": 2843.276,
+      "end": 2944.948,
+      "chars": 899
+    },
+    {
+      "id": "gc-p-27-8",
+      "start": 2944.948,
+      "end": 2944.948,
+      "chars": 5
+    }
+  ]
+}

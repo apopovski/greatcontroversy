@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 42,
+  "title": "פרק מ״א — חורבן התבל",
+  "duration": 1317.389,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-41%20-%20%D7%97%D7%95%D7%A8%D7%91%D7%9F%20%D7%94%D7%AA%D7%91%D7%9C.mp3",
+  "cues": [
+    {
+      "id": "gc-p-43-1",
+      "start": 52.696,
+      "end": 118.697,
+      "chars": 711
+    },
+    {
+      "id": "gc-p-43-2",
+      "start": 118.697,
+      "end": 152.95,
+      "chars": 369
+    },
+    {
+      "id": "gc-p-43-3",
+      "start": 152.95,
+      "end": 347.147,
+      "chars": 2092
+    },
+    {
+      "id": "gc-p-43-4",
+      "start": 347.147,
+      "end": 446.288,
+      "chars": 1068
+    },
+    {
+      "id": "gc-p-43-5",
+      "start": 446.288,
+      "end": 451.765,
+      "chars": 59
+    },
+    {
+      "id": "gc-p-43-6",
+      "start": 451.765,
+      "end": 496.694,
+      "chars": 484
+    },
+    {
+      "id": "gc-p-43-7",
+      "start": 496.694,
+      "end": 1151.505,
+      "chars": 7054
+    },
+    {
+      "id": "gc-p-43-8",
+      "start": 1151.505,
+      "end": 1245.726,
+      "chars": 1015
+    },
+    {
+      "id": "gc-p-43-9",
+      "start": 1245.726,
+      "end": 1279.886,
+      "chars": 368
+    },
+    {
+      "id": "gc-p-43-10",
+      "start": 1279.886,
+      "end": 1317.389,
+      "chars": 404
+    },
+    {
+      "id": "gc-p-43-11",
+      "start": 1317.389,
+      "end": 1317.389,
+      "chars": 5
+    }
+  ]
+}

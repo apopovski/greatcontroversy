@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 5,
+  "title": "פרק ד — הוולדנסים",
+  "duration": 2038.891,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-04%20-%20%D7%94%D7%95%D7%95%D7%9C%D7%93%D7%A0%D7%A1%D7%99%D7%9D.mp3",
+  "cues": [
+    {
+      "id": "gc-p-6-1",
+      "start": 81.556,
+      "end": 1602.445,
+      "chars": 20964
+    },
+    {
+      "id": "gc-p-6-2",
+      "start": 1602.445,
+      "end": 2038.891,
+      "chars": 6016
+    },
+    {
+      "id": "gc-p-6-3",
+      "start": 2038.891,
+      "end": 2038.891,
+      "chars": 5
+    }
+  ]
+}

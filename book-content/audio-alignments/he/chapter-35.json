@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 35,
+  "title": "פרק ל״ד — תורת הספיריטואליזם",
+  "duration": 1948.978,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-34%20-%20%D7%AA%D7%95%D7%A8%D7%AA%20%D7%94%D7%A1%D7%A4%D7%99%D7%A8%D7%99%D7%98%D7%95%D7%90%D7%9C%D7%99%D7%96%D7%9D.mp3",
+  "cues": [
+    {
+      "id": "gc-p-36-1",
+      "start": 77.959,
+      "end": 97.347,
+      "chars": 184
+    },
+    {
+      "id": "gc-p-36-2",
+      "start": 97.347,
+      "end": 186.172,
+      "chars": 843
+    },
+    {
+      "id": "gc-p-36-3",
+      "start": 186.172,
+      "end": 331.896,
+      "chars": 1383
+    },
+    {
+      "id": "gc-p-36-4",
+      "start": 331.896,
+      "end": 358.554,
+      "chars": 253
+    },
+    {
+      "id": "gc-p-36-5",
+      "start": 358.554,
+      "end": 464.976,
+      "chars": 1010
+    },
+    {
+      "id": "gc-p-36-6",
+      "start": 464.976,
+      "end": 1405.068,
+      "chars": 8922
+    },
+    {
+      "id": "gc-p-36-7",
+      "start": 1405.068,
+      "end": 1604.214,
+      "chars": 1890
+    },
+    {
+      "id": "gc-p-36-8",
+      "start": 1604.214,
+      "end": 1831.492,
+      "chars": 2157
+    },
+    {
+      "id": "gc-p-36-9",
+      "start": 1831.492,
+      "end": 1948.978,
+      "chars": 1115
+    },
+    {
+      "id": "gc-p-36-10",
+      "start": 1948.978,
+      "end": 1948.978,
+      "chars": 5
+    }
+  ]
+}

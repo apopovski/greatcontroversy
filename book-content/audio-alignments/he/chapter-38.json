@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 38,
+  "title": "פרק ל״ז — כתבי הקודש כמעוז",
+  "duration": 1786.757,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-37%20-%20%D7%9B%D7%AA%D7%91%D7%99%20%D7%94%D7%A7%D7%95%D7%93%D7%A9%20%D7%9B%D7%9E%D7%A2%D7%95%D7%96.mp3",
+  "cues": [
+    {
+      "id": "gc-p-39-1",
+      "start": 71.47,
+      "end": 82.396,
+      "chars": 99
+    },
+    {
+      "id": "gc-p-39-2",
+      "start": 82.396,
+      "end": 680.313,
+      "chars": 5418
+    },
+    {
+      "id": "gc-p-39-3",
+      "start": 680.313,
+      "end": 1090.291,
+      "chars": 3715
+    },
+    {
+      "id": "gc-p-39-4",
+      "start": 1090.291,
+      "end": 1142.159,
+      "chars": 470
+    },
+    {
+      "id": "gc-p-39-5",
+      "start": 1142.159,
+      "end": 1221.837,
+      "chars": 722
+    },
+    {
+      "id": "gc-p-39-6",
+      "start": 1221.837,
+      "end": 1255.386,
+      "chars": 304
+    },
+    {
+      "id": "gc-p-39-7",
+      "start": 1255.386,
+      "end": 1316.634,
+      "chars": 555
+    },
+    {
+      "id": "gc-p-39-8",
+      "start": 1316.634,
+      "end": 1786.757,
+      "chars": 4260
+    },
+    {
+      "id": "gc-p-39-9",
+      "start": 1786.757,
+      "end": 1786.757,
+      "chars": 5
+    }
+  ]
+}
