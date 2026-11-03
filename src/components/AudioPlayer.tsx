@@ -244,7 +244,11 @@ const AUDIO_SOURCE_CANDIDATES: Record<string, AudioSourceCandidate> = {
     sourcePageUrl: 'https://ellenwhiteaudio.org/cn/%e5%96%84%e6%81%b6%e4%b9%8b%e4%ba%89/',
   },
   'Japanese - Ellen G. White': { languageCodes: ['ja'], bookCodes: ['gc'] },
-  'Korean - Ellen G. White': { languageCodes: ['kr', 'ko'], bookCodes: ['gc'] },
+  'Korean - Ellen G. White': {
+    languageCodes: ['kr', 'ko'],
+    bookCodes: ['gc'],
+    sourcePageUrl: 'https://ellenwhiteaudio.org/kr/%EA%B0%81-%EC%8B%9C%EB%8C%80%EC%9D%98-%EB%8C%80%EC%9F%81%ED%88%AC/',
+  },
   'Serbian - Ellen G. White': {
     languageCodes: ['sr', 'rs'],
     bookCodes: ['gc', 'vb'],
@@ -285,6 +289,7 @@ const MANIFEST_AUDIO_LANGUAGE_CODES = new Set<string>([
   'ru',
   'sl',
   'sk',
+  'kr',
 ]);
 
 export const AUDIO_AVAILABLE_LANGUAGE_FOLDERS = new Set<string>(

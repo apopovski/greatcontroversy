@@ -570,8 +570,19 @@ span.dropcap {
 /* Header controls layout helpers */
 .reader-header-bar-inner{box-sizing:border-box;width:100%;max-width:1200px;margin:0 auto;padding-left:12px;padding-right:12px}
 
-/* Make header title clearly clickable */
-.reader-header-title{cursor:pointer}
+/* Make header title clearly clickable. Keep on one line so CJK titles
+   (e.g. Korean 각 시대의 대쟁투) don't wrap into a vertical character column
+   when the flex header is crowded. */
+.reader-header-title{
+  cursor:pointer;
+  flex:0 1 auto;
+  min-width:0;
+  max-width:min(42%, 16rem);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  line-height:1.2;
+}
 
 /* Desktop layout: place the book title to the left of menu items and ensure
    the header content is centered above the main content area. */
@@ -636,7 +647,7 @@ span.dropcap {
   .reader-header-bar-inner { display:flex; flex-direction:column; gap:6px; padding-left:0.5rem; padding-right:0.5rem; align-items:stretch; }
 
   /* Title row */
-  .reader-header-title { display:block; width:100%; text-align:left; padding:0 4px; font-size:0.98rem; flex: 0 0 100%; order: -1; margin-right:auto; }
+  .reader-header-title { display:block; width:100%; max-width:100%; text-align:left; padding:0 4px; font-size:0.98rem; flex: 0 0 100%; order: -1; margin-right:auto; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
   /* Controls row: title on its own row, icons right-aligned below */
   .reader-header-controls { display:flex; flex-wrap:nowrap; align-items:center; gap:3px; flex:1; min-width:0; width:100%; justify-content:flex-end; overflow-x:hidden; }
@@ -717,11 +728,15 @@ span.dropcap {
     flex: 0 0 100% !important;
     -webkit-flex: 0 0 100% !important;
     width: 100% !important;
+    max-width: 100% !important;
     display: block !important;
     text-align: left !important;
     padding-left: 4px !important;
     padding-right: 8px !important;
     color: var(--reader-fg) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
   .reader-header-controls { flex-wrap: wrap !important; }
 }
