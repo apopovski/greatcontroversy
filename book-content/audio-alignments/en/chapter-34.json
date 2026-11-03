@@ -1,0 +1,174 @@
+{
+  "version": 1,
+  "lang": "en",
+  "chapterIdx": 34,
+  "title": "Can Our Dead Speak to Us",
+  "duration": 1708.179,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/en/gc/GC-34%20-%20Can%20Our%20Dead%20Speak%20to%20Us.mp3",
+  "cues": [
+    {
+      "id": "gc-p-35-1",
+      "start": 68.327,
+      "end": 127.86,
+      "chars": 825
+    },
+    {
+      "id": "gc-p-35-2",
+      "start": 127.86,
+      "end": 205.288,
+      "chars": 1073
+    },
+    {
+      "id": "gc-p-35-3",
+      "start": 205.288,
+      "end": 232.348,
+      "chars": 375
+    },
+    {
+      "id": "gc-p-35-4",
+      "start": 232.348,
+      "end": 328.683,
+      "chars": 1335
+    },
+    {
+      "id": "gc-p-35-5",
+      "start": 328.683,
+      "end": 385.834,
+      "chars": 792
+    },
+    {
+      "id": "gc-p-35-6",
+      "start": 385.834,
+      "end": 456.263,
+      "chars": 976
+    },
+    {
+      "id": "gc-p-35-7",
+      "start": 456.263,
+      "end": 556.206,
+      "chars": 1385
+    },
+    {
+      "id": "gc-p-35-8",
+      "start": 556.206,
+      "end": 616.171,
+      "chars": 831
+    },
+    {
+      "id": "gc-p-35-9",
+      "start": 616.171,
+      "end": 644.242,
+      "chars": 389
+    },
+    {
+      "id": "gc-p-35-10",
+      "start": 644.242,
+      "end": 685.157,
+      "chars": 567
+    },
+    {
+      "id": "gc-p-35-11",
+      "start": 685.157,
+      "end": 792.676,
+      "chars": 1490
+    },
+    {
+      "id": "gc-p-35-12",
+      "start": 792.676,
+      "end": 828.829,
+      "chars": 501
+    },
+    {
+      "id": "gc-p-35-13",
+      "start": 828.829,
+      "end": 909.144,
+      "chars": 1113
+    },
+    {
+      "id": "gc-p-35-14",
+      "start": 909.144,
+      "end": 970.048,
+      "chars": 844
+    },
+    {
+      "id": "gc-p-35-15",
+      "start": 970.048,
+      "end": 1061.836,
+      "chars": 1272
+    },
+    {
+      "id": "gc-p-35-16",
+      "start": 1061.836,
+      "end": 1085.793,
+      "chars": 332
+    },
+    {
+      "id": "gc-p-35-17",
+      "start": 1085.793,
+      "end": 1152.181,
+      "chars": 920
+    },
+    {
+      "id": "gc-p-35-18",
+      "start": 1152.181,
+      "end": 1204.426,
+      "chars": 724
+    },
+    {
+      "id": "gc-p-35-19",
+      "start": 1204.426,
+      "end": 1238.485,
+      "chars": 472
+    },
+    {
+      "id": "gc-p-35-20",
+      "start": 1238.485,
+      "end": 1314.687,
+      "chars": 1056
+    },
+    {
+      "id": "gc-p-35-21",
+      "start": 1314.687,
+      "end": 1360.726,
+      "chars": 638
+    },
+    {
+      "id": "gc-p-35-22",
+      "start": 1360.726,
+      "end": 1388.796,
+      "chars": 389
+    },
+    {
+      "id": "gc-p-35-23",
+      "start": 1388.796,
+      "end": 1454.679,
+      "chars": 913
+    },
+    {
+      "id": "gc-p-35-24",
+      "start": 1454.679,
+      "end": 1525.324,
+      "chars": 979
+    },
+    {
+      "id": "gc-p-35-25",
+      "start": 1525.324,
+      "end": 1603.691,
+      "chars": 1086
+    },
+    {
+      "id": "gc-p-35-26",
+      "start": 1603.691,
+      "end": 1679.387,
+      "chars": 1049
+    },
+    {
+      "id": "gc-p-35-27",
+      "start": 1679.387,
+      "end": 1708.179,
+      "chars": 399
+    }
+  ]
+}

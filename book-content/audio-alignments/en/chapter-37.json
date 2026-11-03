@@ -1,0 +1,174 @@
+{
+  "version": 1,
+  "lang": "en",
+  "chapterIdx": 37,
+  "title": "The Scriptures a Safeguard",
+  "duration": 1451.486,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/en/gc/GC-37%20-%20The%20Scriptures%20a%20Safeguard.mp3",
+  "cues": [
+    {
+      "id": "gc-p-38-1",
+      "start": 58.059,
+      "end": 125.732,
+      "chars": 926
+    },
+    {
+      "id": "gc-p-38-2",
+      "start": 125.732,
+      "end": 179.592,
+      "chars": 737
+    },
+    {
+      "id": "gc-p-38-3",
+      "start": 179.592,
+      "end": 259.031,
+      "chars": 1087
+    },
+    {
+      "id": "gc-p-38-4",
+      "start": 259.031,
+      "end": 323.123,
+      "chars": 877
+    },
+    {
+      "id": "gc-p-38-5",
+      "start": 323.123,
+      "end": 363.755,
+      "chars": 556
+    },
+    {
+      "id": "gc-p-38-6",
+      "start": 363.755,
+      "end": 389.48,
+      "chars": 352
+    },
+    {
+      "id": "gc-p-38-7",
+      "start": 389.48,
+      "end": 461.756,
+      "chars": 989
+    },
+    {
+      "id": "gc-p-38-8",
+      "start": 461.756,
+      "end": 491.208,
+      "chars": 403
+    },
+    {
+      "id": "gc-p-38-9",
+      "start": 491.208,
+      "end": 526.14,
+      "chars": 478
+    },
+    {
+      "id": "gc-p-38-10",
+      "start": 526.14,
+      "end": 574.081,
+      "chars": 656
+    },
+    {
+      "id": "gc-p-38-11",
+      "start": 574.081,
+      "end": 667.259,
+      "chars": 1275
+    },
+    {
+      "id": "gc-p-38-12",
+      "start": 667.259,
+      "end": 703.726,
+      "chars": 499
+    },
+    {
+      "id": "gc-p-38-13",
+      "start": 703.726,
+      "end": 735.078,
+      "chars": 429
+    },
+    {
+      "id": "gc-p-38-14",
+      "start": 735.078,
+      "end": 771.764,
+      "chars": 502
+    },
+    {
+      "id": "gc-p-38-15",
+      "start": 771.764,
+      "end": 844.041,
+      "chars": 989
+    },
+    {
+      "id": "gc-p-38-16",
+      "start": 844.041,
+      "end": 872.615,
+      "chars": 391
+    },
+    {
+      "id": "gc-p-38-17",
+      "start": 872.615,
+      "end": 937.949,
+      "chars": 894
+    },
+    {
+      "id": "gc-p-38-18",
+      "start": 937.949,
+      "end": 996.487,
+      "chars": 801
+    },
+    {
+      "id": "gc-p-38-19",
+      "start": 996.487,
+      "end": 1033.319,
+      "chars": 504
+    },
+    {
+      "id": "gc-p-38-20",
+      "start": 1033.319,
+      "end": 1111.004,
+      "chars": 1063
+    },
+    {
+      "id": "gc-p-38-21",
+      "start": 1111.004,
+      "end": 1146.667,
+      "chars": 488
+    },
+    {
+      "id": "gc-p-38-22",
+      "start": 1146.667,
+      "end": 1230.052,
+      "chars": 1141
+    },
+    {
+      "id": "gc-p-38-23",
+      "start": 1230.052,
+      "end": 1293.194,
+      "chars": 864
+    },
+    {
+      "id": "gc-p-38-24",
+      "start": 1293.194,
+      "end": 1363.059,
+      "chars": 956
+    },
+    {
+      "id": "gc-p-38-25",
+      "start": 1363.059,
+      "end": 1416.48,
+      "chars": 731
+    },
+    {
+      "id": "gc-p-38-26",
+      "start": 1416.48,
+      "end": 1427.662,
+      "chars": 153
+    },
+    {
+      "id": "gc-p-38-27",
+      "start": 1427.662,
+      "end": 1451.486,
+      "chars": 326
+    }
+  ]
+}

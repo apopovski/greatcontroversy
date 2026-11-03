@@ -1,0 +1,162 @@
+{
+  "version": 1,
+  "lang": "en",
+  "chapterIdx": 0,
+  "title": "Introduction",
+  "duration": 1140.974,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/en/gc/GC-00b%20-%20Introduction.mp3",
+  "cues": [
+    {
+      "id": "gc-p-1-1",
+      "start": 45.639,
+      "end": 82.267,
+      "chars": 531
+    },
+    {
+      "id": "gc-p-1-2",
+      "start": 82.267,
+      "end": 120.206,
+      "chars": 550
+    },
+    {
+      "id": "gc-p-1-3",
+      "start": 120.206,
+      "end": 158.008,
+      "chars": 548
+    },
+    {
+      "id": "gc-p-1-4",
+      "start": 158.008,
+      "end": 189.876,
+      "chars": 462
+    },
+    {
+      "id": "gc-p-1-5",
+      "start": 189.876,
+      "end": 234.989,
+      "chars": 654
+    },
+    {
+      "id": "gc-p-1-6",
+      "start": 234.989,
+      "end": 278.723,
+      "chars": 634
+    },
+    {
+      "id": "gc-p-1-7",
+      "start": 278.723,
+      "end": 316.11,
+      "chars": 542
+    },
+    {
+      "id": "gc-p-1-8",
+      "start": 316.11,
+      "end": 351.083,
+      "chars": 507
+    },
+    {
+      "id": "gc-p-1-9",
+      "start": 351.083,
+      "end": 380.951,
+      "chars": 433
+    },
+    {
+      "id": "gc-p-1-10",
+      "start": 380.951,
+      "end": 416.89,
+      "chars": 521
+    },
+    {
+      "id": "gc-p-1-11",
+      "start": 416.89,
+      "end": 473.523,
+      "chars": 821
+    },
+    {
+      "id": "gc-p-1-12",
+      "start": 473.523,
+      "end": 527.12,
+      "chars": 777
+    },
+    {
+      "id": "gc-p-1-13",
+      "start": 527.12,
+      "end": 594.514,
+      "chars": 977
+    },
+    {
+      "id": "gc-p-1-14",
+      "start": 594.514,
+      "end": 634.522,
+      "chars": 580
+    },
+    {
+      "id": "gc-p-1-15",
+      "start": 634.522,
+      "end": 661.218,
+      "chars": 387
+    },
+    {
+      "id": "gc-p-1-16",
+      "start": 661.218,
+      "end": 687.982,
+      "chars": 388
+    },
+    {
+      "id": "gc-p-1-17",
+      "start": 687.982,
+      "end": 786.416,
+      "chars": 1427
+    },
+    {
+      "id": "gc-p-1-18",
+      "start": 786.416,
+      "end": 874.642,
+      "chars": 1279
+    },
+    {
+      "id": "gc-p-1-19",
+      "start": 874.642,
+      "end": 903.89,
+      "chars": 424
+    },
+    {
+      "id": "gc-p-1-20",
+      "start": 903.89,
+      "end": 956.452,
+      "chars": 762
+    },
+    {
+      "id": "gc-p-1-21",
+      "start": 956.452,
+      "end": 977.56,
+      "chars": 306
+    },
+    {
+      "id": "gc-p-1-22",
+      "start": 977.56,
+      "end": 1049.507,
+      "chars": 1043
+    },
+    {
+      "id": "gc-p-1-23",
+      "start": 1049.507,
+      "end": 1089.377,
+      "chars": 578
+    },
+    {
+      "id": "gc-p-1-24",
+      "start": 1089.377,
+      "end": 1138.629,
+      "chars": 714
+    },
+    {
+      "id": "gc-p-1-25",
+      "start": 1138.629,
+      "end": 1140.974,
+      "chars": 34
+    }
+  ]
+}

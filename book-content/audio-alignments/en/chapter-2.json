@@ -1,0 +1,156 @@
+{
+  "version": 1,
+  "lang": "en",
+  "chapterIdx": 2,
+  "title": "Persecution in the First Centuries",
+  "duration": 1388.559,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/en/gc/GC-02%20-%20Persecution%20in%20the%20First%20Centuries.mp3",
+  "cues": [
+    {
+      "id": "gc-p-3-1",
+      "start": 55.542,
+      "end": 118.413,
+      "chars": 899
+    },
+    {
+      "id": "gc-p-3-2",
+      "start": 118.413,
+      "end": 171.563,
+      "chars": 760
+    },
+    {
+      "id": "gc-p-3-3",
+      "start": 171.563,
+      "end": 232.686,
+      "chars": 874
+    },
+    {
+      "id": "gc-p-3-4",
+      "start": 232.686,
+      "end": 291.64,
+      "chars": 843
+    },
+    {
+      "id": "gc-p-3-5",
+      "start": 291.64,
+      "end": 328.496,
+      "chars": 527
+    },
+    {
+      "id": "gc-p-3-6",
+      "start": 328.496,
+      "end": 384.933,
+      "chars": 807
+    },
+    {
+      "id": "gc-p-3-7",
+      "start": 384.933,
+      "end": 448.363,
+      "chars": 907
+    },
+    {
+      "id": "gc-p-3-8",
+      "start": 448.363,
+      "end": 488.645,
+      "chars": 576
+    },
+    {
+      "id": "gc-p-3-9",
+      "start": 488.645,
+      "end": 509.276,
+      "chars": 295
+    },
+    {
+      "id": "gc-p-3-10",
+      "start": 509.276,
+      "end": 555.013,
+      "chars": 654
+    },
+    {
+      "id": "gc-p-3-11",
+      "start": 555.013,
+      "end": 598.442,
+      "chars": 621
+    },
+    {
+      "id": "gc-p-3-12",
+      "start": 598.442,
+      "end": 656.208,
+      "chars": 826
+    },
+    {
+      "id": "gc-p-3-13",
+      "start": 656.208,
+      "end": 773.837,
+      "chars": 1682
+    },
+    {
+      "id": "gc-p-3-14",
+      "start": 773.837,
+      "end": 846.219,
+      "chars": 1035
+    },
+    {
+      "id": "gc-p-3-15",
+      "start": 846.219,
+      "end": 900.208,
+      "chars": 772
+    },
+    {
+      "id": "gc-p-3-16",
+      "start": 900.208,
+      "end": 924.335,
+      "chars": 345
+    },
+    {
+      "id": "gc-p-3-17",
+      "start": 924.335,
+      "end": 974.828,
+      "chars": 722
+    },
+    {
+      "id": "gc-p-3-18",
+      "start": 974.828,
+      "end": 1017.278,
+      "chars": 607
+    },
+    {
+      "id": "gc-p-3-19",
+      "start": 1017.278,
+      "end": 1077.282,
+      "chars": 858
+    },
+    {
+      "id": "gc-p-3-20",
+      "start": 1077.282,
+      "end": 1172.322,
+      "chars": 1359
+    },
+    {
+      "id": "gc-p-3-21",
+      "start": 1172.322,
+      "end": 1254.425,
+      "chars": 1174
+    },
+    {
+      "id": "gc-p-3-22",
+      "start": 1254.425,
+      "end": 1288.623,
+      "chars": 489
+    },
+    {
+      "id": "gc-p-3-23",
+      "start": 1288.623,
+      "end": 1320.932,
+      "chars": 462
+    },
+    {
+      "id": "gc-p-3-24",
+      "start": 1320.932,
+      "end": 1388.559,
+      "chars": 967
+    }
+  ]
+}

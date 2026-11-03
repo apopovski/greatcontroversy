@@ -1,0 +1,180 @@
+{
+  "version": 1,
+  "lang": "en",
+  "chapterIdx": 41,
+  "title": "Desolation of the Earth",
+  "duration": 1310.181,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/en/gc/GC-41%20-%20Desolation%20of%20the%20Earth.mp3",
+  "cues": [
+    {
+      "id": "gc-p-42-1",
+      "start": 52.407,
+      "end": 104.252,
+      "chars": 733
+    },
+    {
+      "id": "gc-p-42-2",
+      "start": 104.252,
+      "end": 132.402,
+      "chars": 398
+    },
+    {
+      "id": "gc-p-42-3",
+      "start": 132.402,
+      "end": 145.911,
+      "chars": 191
+    },
+    {
+      "id": "gc-p-42-4",
+      "start": 145.911,
+      "end": 233.544,
+      "chars": 1239
+    },
+    {
+      "id": "gc-p-42-5",
+      "start": 233.544,
+      "end": 253.136,
+      "chars": 277
+    },
+    {
+      "id": "gc-p-42-6",
+      "start": 253.136,
+      "end": 270.394,
+      "chars": 244
+    },
+    {
+      "id": "gc-p-42-7",
+      "start": 270.394,
+      "end": 306.607,
+      "chars": 512
+    },
+    {
+      "id": "gc-p-42-8",
+      "start": 306.607,
+      "end": 331.716,
+      "chars": 355
+    },
+    {
+      "id": "gc-p-42-9",
+      "start": 331.716,
+      "end": 361.988,
+      "chars": 428
+    },
+    {
+      "id": "gc-p-42-10",
+      "start": 361.988,
+      "end": 421.895,
+      "chars": 847
+    },
+    {
+      "id": "gc-p-42-11",
+      "start": 421.895,
+      "end": 483.571,
+      "chars": 872
+    },
+    {
+      "id": "gc-p-42-12",
+      "start": 483.571,
+      "end": 536.406,
+      "chars": 747
+    },
+    {
+      "id": "gc-p-42-13",
+      "start": 536.406,
+      "end": 588.604,
+      "chars": 738
+    },
+    {
+      "id": "gc-p-42-14",
+      "start": 588.604,
+      "end": 666.193,
+      "chars": 1097
+    },
+    {
+      "id": "gc-p-42-15",
+      "start": 666.193,
+      "end": 718.886,
+      "chars": 745
+    },
+    {
+      "id": "gc-p-42-16",
+      "start": 718.886,
+      "end": 742.015,
+      "chars": 327
+    },
+    {
+      "id": "gc-p-42-17",
+      "start": 742.015,
+      "end": 811.966,
+      "chars": 989
+    },
+    {
+      "id": "gc-p-42-18",
+      "start": 811.966,
+      "end": 866.427,
+      "chars": 770
+    },
+    {
+      "id": "gc-p-42-19",
+      "start": 866.427,
+      "end": 939.914,
+      "chars": 1039
+    },
+    {
+      "id": "gc-p-42-20",
+      "start": 939.914,
+      "end": 967.994,
+      "chars": 397
+    },
+    {
+      "id": "gc-p-42-21",
+      "start": 967.994,
+      "end": 1017.928,
+      "chars": 706
+    },
+    {
+      "id": "gc-p-42-22",
+      "start": 1017.928,
+      "end": 1045.018,
+      "chars": 383
+    },
+    {
+      "id": "gc-p-42-23",
+      "start": 1045.018,
+      "end": 1076.492,
+      "chars": 445
+    },
+    {
+      "id": "gc-p-42-24",
+      "start": 1076.492,
+      "end": 1117.869,
+      "chars": 585
+    },
+    {
+      "id": "gc-p-42-25",
+      "start": 1117.869,
+      "end": 1161.367,
+      "chars": 615
+    },
+    {
+      "id": "gc-p-42-26",
+      "start": 1161.367,
+      "end": 1246.029,
+      "chars": 1197
+    },
+    {
+      "id": "gc-p-42-27",
+      "start": 1246.029,
+      "end": 1269.158,
+      "chars": 327
+    },
+    {
+      "id": "gc-p-42-28",
+      "start": 1269.158,
+      "end": 1310.181,
+      "chars": 580
+    }
+  ]
+}
