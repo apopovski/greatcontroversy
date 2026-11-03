@@ -243,43 +243,16 @@ const CONTACT_WHATSAPP_LABELS: Record<string, string> = {
   [GREEK_FOLDER]: 'Επικοινωνία στο WhatsApp',
 };
 
-const DESKTOP_WIDTH_MIN = 640;
-const DESKTOP_WIDTH_MAX = 820;
-const DESKTOP_WIDTH_RECOMMENDED_MIN = 680;
-const DESKTOP_WIDTH_RECOMMENDED_MAX = 760;
+const DESKTOP_COLUMN_MIN = 680;
+const DESKTOP_COLUMN_MAX = 760;
 
 function getRecommendedDesktopWidth(viewportWidth: number) {
   const target = Math.round(viewportWidth * 0.67);
+  const maxForViewport = Math.max(320, viewportWidth - 48);
   return Math.max(
-    DESKTOP_WIDTH_RECOMMENDED_MIN,
-    Math.min(DESKTOP_WIDTH_RECOMMENDED_MAX, target)
+    Math.min(DESKTOP_COLUMN_MIN, maxForViewport),
+    Math.min(DESKTOP_COLUMN_MAX, target, maxForViewport)
   );
-}
-
-type DesktopWidthPreset = 'small' | 'medium' | 'wide';
-
-function getDesktopWidthPresets(viewportWidth: number, limit: number) {
-  const boundedLimit = Math.max(DESKTOP_WIDTH_MIN, Math.min(DESKTOP_WIDTH_MAX, limit));
-  // Screen-size adaptive baseline:
-  // keep small around ~48% of viewport (within configured bounds),
-  // but always leave enough room for meaningful jumps to medium/wide.
-  const adaptiveSmall = Math.round(viewportWidth * 0.48);
-  const small = Math.max(
-    DESKTOP_WIDTH_MIN,
-    Math.min(Math.max(DESKTOP_WIDTH_MIN, boundedLimit - 120), adaptiveSmall)
-  );
-  const available = Math.max(0, boundedLimit - small);
-  // Keep increments in a 1 : 1.5 ratio:
-  // small -> medium = d, medium -> wide = 1.5d
-  // total available span = 2.5d => d = available / 2.5
-  const firstIncrement = available / 2.5;
-  const medium = Math.max(
-    small,
-    Math.min(boundedLimit, small + Math.round(firstIncrement))
-  );
-  const wide = boundedLimit;
-
-  return { small, medium, wide };
 }
 
 const LANGUAGE_FOLDERS = [
@@ -3139,23 +3112,9 @@ export default function BookReader() {
   const [loading, setLoading] = useState(true);
   const [externalChapterHydrating, setExternalChapterHydrating] = useState(false);
   const [, setChapterCacheVersion] = useState(0);
-  const [pageWidth, setPageWidth] = useState(() => {
-    const saved = localStorage.getItem('reader-page-width');
-    if (saved) {
-      const n = Number(saved);
-      if (!Number.isNaN(n)) {
-        return Math.max(DESKTOP_WIDTH_MIN, Math.min(DESKTOP_WIDTH_MAX, n));
-      }
-    }
-    return getRecommendedDesktopWidth(window.innerWidth || 1280);
-  });
-  const [desktopWidthLimit, setDesktopWidthLimit] = useState(() =>
-    Math.max(DESKTOP_WIDTH_MIN, Math.min(DESKTOP_WIDTH_MAX, (window.innerWidth || 1280) - 48))
+  const [pageWidth, setPageWidth] = useState(() =>
+    getRecommendedDesktopWidth(window.innerWidth || 1280)
   );
-  const [desktopWidthPreset, setDesktopWidthPreset] = useState<DesktopWidthPreset>(() => {
-    const saved = localStorage.getItem('reader-width-preset');
-    return saved === 'small' || saved === 'medium' || saved === 'wide' ? saved : 'small';
-  });
   const [textSize, setTextSize] = useState(() => {
     const v = localStorage.getItem('reader-text-size');
     return v ? Number(v) : 18;
@@ -3503,27 +3462,6 @@ export default function BookReader() {
   const [langPanelStyle, setLangPanelStyle] = useState<React.CSSProperties | null>(null);
   const [searchPanelStyle, setSearchPanelStyle] = useState<React.CSSProperties | null>(null);
   const [morePanelStyle, setMorePanelStyle] = useState<React.CSSProperties | null>(null);
-  const desktopWidthPresets = useMemo(
-    () => getDesktopWidthPresets(window.innerWidth || 1280, desktopWidthLimit),
-    [desktopWidthLimit]
-  );
-  const desktopPresetOrder: DesktopWidthPreset[] = ['small', 'medium', 'wide'];
-  const currentDesktopPresetIndex = Math.max(0, desktopPresetOrder.indexOf(desktopWidthPreset));
-  const canDecreaseDesktopWidth = currentDesktopPresetIndex > 0;
-  const canIncreaseDesktopWidth = currentDesktopPresetIndex < desktopPresetOrder.length - 1;
-  const widthIndicatorPercent =
-    desktopWidthPreset === 'small' ? 20 : desktopWidthPreset === 'medium' ? 52 : 100;
-
-  const changeDesktopWidthPreset = (direction: 'decrease' | 'increase') => {
-    setDesktopWidthPreset((prev) => {
-      const idx = Math.max(0, desktopPresetOrder.indexOf(prev));
-      const nextIdx = direction === 'decrease'
-        ? Math.max(0, idx - 1)
-        : Math.min(desktopPresetOrder.length - 1, idx + 1);
-      return desktopPresetOrder[nextIdx];
-    });
-  };
-
   const getAnchoredPanelStyle = (btn: HTMLButtonElement | null, preferredWidth = 260): React.CSSProperties => {
     const viewportWidth = window.innerWidth;
     const margin = 12;
@@ -3566,28 +3504,12 @@ export default function BookReader() {
 
   useEffect(() => {
     const updateDesktopWidth = () => {
-      const limit = Math.max(
-        DESKTOP_WIDTH_MIN,
-        Math.min(DESKTOP_WIDTH_MAX, window.innerWidth - 48)
-      );
-      setDesktopWidthLimit(limit);
-      const presets = getDesktopWidthPresets(window.innerWidth || 1280, limit);
-      setPageWidth(presets[desktopWidthPreset]);
+      setPageWidth(getRecommendedDesktopWidth(window.innerWidth || 1280));
     };
-
     updateDesktopWidth();
     window.addEventListener('resize', updateDesktopWidth);
     return () => window.removeEventListener('resize', updateDesktopWidth);
-  }, [desktopWidthPreset]);
-
-  useEffect(() => {
-    localStorage.setItem('reader-width-preset', desktopWidthPreset);
-    setPageWidth(desktopWidthPresets[desktopWidthPreset]);
-  }, [desktopWidthPreset, desktopWidthPresets]);
-
-  useEffect(() => {
-    localStorage.setItem('reader-page-width', String(pageWidth));
-  }, [pageWidth]);
+  }, []);
 
   useEffect(() => {
     if (showOpeningToc || loading) {
@@ -5620,43 +5542,6 @@ export default function BookReader() {
                   >
                     {isDark ? <MdDarkMode size={22} /> : <MdLightMode size={22} />}
                   </button>
-
-                  <div className="reader-width-control" role="group" aria-label="Adjust content width">
-                    <button
-                      className="reader-width-arrow-btn"
-                      aria-label="Decrease content width"
-                      title="Decrease content width"
-                      onClick={() => changeDesktopWidthPreset('decrease')}
-                      disabled={!canDecreaseDesktopWidth}
-                    >
-                      ←
-                    </button>
-                    <div
-                      className="reader-width-indicator"
-                      aria-label={`Content width ${desktopWidthPreset}`}
-                      title={`Content width ${desktopWidthPreset}`}
-                    >
-                      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <line x1="3" y1="11" x2="19" y2="11" stroke="currentColor" strokeWidth="1.5" opacity="0.35" />
-                        <polyline points="5,9 3,11 5,13" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                        <polyline points="17,9 19,11 17,13" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                      <span
-                        className="reader-width-indicator-active"
-                        style={{ width: `${widthIndicatorPercent}%` }}
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <button
-                      className="reader-width-arrow-btn"
-                      aria-label="Increase content width"
-                      title="Increase content width"
-                      onClick={() => changeDesktopWidthPreset('increase')}
-                      disabled={!canIncreaseDesktopWidth}
-                    >
-                      →
-                    </button>
-                  </div>
                 </>
               )}
 
