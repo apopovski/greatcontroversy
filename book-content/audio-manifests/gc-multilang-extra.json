@@ -864,5 +864,179 @@
       "chapterIdx": 42,
       "url": "https://ellenwhiteaudio.org/audio/sk/gc/VSV-42%20-%20V%c3%ad%c5%a5azstvo%20l%c3%a1sky%20(AI).mp3"
     }
+  ],
+  "kr": [
+    {
+      "chapterIdx": 0,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-00%EC%9E%A5%20-%20%EC%A0%80%EC%9E%90%EC%9D%98%20%EC%84%9C%EB%AC%B8.mp3"
+    },
+    {
+      "chapterIdx": 1,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-01%EC%9E%A5%20-%20%EC%98%88%EB%A3%A8%EC%82%B4%EB%A0%98%EC%9D%98%20%EB%A9%B8%EB%A7%9D.mp3"
+    },
+    {
+      "chapterIdx": 2,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-02%EC%9E%A5%20-%20%EC%A0%9C1%EC%84%B8%EA%B8%B0%EC%9D%98%20%ED%95%8D%EB%B0%95.mp3"
+    },
+    {
+      "chapterIdx": 3,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-03%EC%9E%A5%20-%20%EC%98%81%EC%A0%81%20%EC%95%94%ED%9D%91%EC%8B%9C%EB%8C%80.mp3"
+    },
+    {
+      "chapterIdx": 4,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-04%EC%9E%A5%20-%20%EC%99%88%EB%8D%B4%EC%8A%A4.mp3"
+    },
+    {
+      "chapterIdx": 5,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-05%EC%9E%A5%20-%20%EC%A1%B4%20%EC%9C%84%ED%81%B4%EB%A6%AC%ED%94%84.mp3"
+    },
+    {
+      "chapterIdx": 6,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-06%EC%9E%A5%20-%20%ED%9B%84%EC%8A%A4%EC%99%80%20%EC%A0%9C%EB%A1%AC.mp3"
+    },
+    {
+      "chapterIdx": 7,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-07%EC%9E%A5%20-%20%EA%B0%9C%ED%98%81%EC%9D%98%20%ED%81%B0%20%EB%B3%84%EC%9D%B4%20%EB%82%98%ED%83%80%EB%82%A8.mp3"
+    },
+    {
+      "chapterIdx": 8,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-08%EC%9E%A5%20-%20%EC%9D%98%ED%9A%8C%20%EC%95%9E%EC%97%90%20%EC%84%A0%20%EB%A3%A8%ED%84%B0.mp3"
+    },
+    {
+      "chapterIdx": 9,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-09%EC%9E%A5%20-%20%EC%8A%A4%EC%9C%84%EC%8A%A4%EC%97%90%EC%84%9C%EC%9D%98%20%EA%B0%9C%ED%98%81%20%EC%9A%B4%EB%8F%99.mp3"
+    },
+    {
+      "chapterIdx": 10,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-10%EC%9E%A5%20-%20%EB%8F%85%EC%9D%BC%EC%97%90%EC%84%9C%EC%9D%98%20%EA%B0%9C%ED%98%81%20%EC%9A%B4%EB%8F%99%EC%9D%98%20%EB%B0%9C%EC%A0%84.mp3"
+    },
+    {
+      "chapterIdx": 11,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-11%EC%9E%A5%20-%20%EC%A0%9C%ED%9B%84%EB%93%A4%EC%9D%98%20%ED%95%AD%EC%9D%98.mp3"
+    },
+    {
+      "chapterIdx": 12,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-12%EC%9E%A5%20-%20%ED%94%84%EB%9E%91%EC%8A%A4%EC%97%90%EC%84%9C%EC%9D%98%20%EC%A2%85%EA%B5%90%EA%B0%9C%ED%98%81.mp3"
+    },
+    {
+      "chapterIdx": 13,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-13%EC%9E%A5%20-%20%EB%84%A4%EB%8D%9C%EB%9E%80%EB%93%9C%EC%99%80%20%EC%8A%A4%EC%B9%B8%EB%94%94%EB%82%98%EB%B9%84%EC%95%84%EC%9D%98%20%EA%B0%9C%ED%98%81%20%EC%82%AC%EC%97%85.mp3"
+    },
+    {
+      "chapterIdx": 14,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-14%EC%9E%A5%20-%20%ED%9B%84%EA%B8%B0%20%EC%98%81%EA%B5%AD%EC%9D%98%20%EA%B0%9C%ED%98%81%EC%9E%90%EB%93%A4.mp3"
+    },
+    {
+      "chapterIdx": 15,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-15%EC%9E%A5%20-%20%EC%84%B1%EA%B2%BD%EA%B3%BC%20%ED%94%84%EB%9E%91%EC%8A%A4%20%ED%98%81%EB%AA%85.mp3"
+    },
+    {
+      "chapterIdx": 16,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-16%EC%9E%A5%20-%20%EC%B2%AD%EA%B5%90%EB%8F%84%EC%99%80%20%EC%8B%A0%EA%B5%90%EC%9D%98%20%EC%9E%90%EC%9C%A0.mp3"
+    },
+    {
+      "chapterIdx": 17,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-17%EC%9E%A5%20-%20%EC%97%AC%EB%AA%85%EC%9D%84%20%EC%95%8C%EB%A6%AC%EB%8A%94%20%EC%82%AC%EC%9E%90%20%28%E4%BD%BF%E8%80%85%29.mp3"
+    },
+    {
+      "chapterIdx": 18,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-18%EC%9E%A5%20-%20%EA%B7%BC%EB%8C%80%EC%9D%98%20%EC%A2%85%EA%B5%90%20%EA%B0%9C%ED%98%81%EC%9E%90.mp3"
+    },
+    {
+      "chapterIdx": 19,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-19%EC%9E%A5%20-%20%EC%95%94%ED%9D%91%EC%9D%84%20%EB%9A%AB%EA%B3%A0%20%EB%B9%84%EC%B9%98%EB%8A%94%20%EB%B9%9B.mp3"
+    },
+    {
+      "chapterIdx": 20,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-20%EC%9E%A5%20-%20%EC%A2%85%EA%B5%90%EC%A0%81%20%EB%8C%80%EA%B0%81%EC%84%B1.mp3"
+    },
+    {
+      "chapterIdx": 21,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-21%EC%9E%A5%20-%20%EA%B2%BD%EA%B3%A0%EC%9D%98%20%EA%B1%B0%EC%A0%88.mp3"
+    },
+    {
+      "chapterIdx": 22,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-22%EC%9E%A5%20-%20%EC%84%B1%EC%B7%A8%EB%90%9C%20%EC%98%88%EC%96%B8%EB%93%A4.mp3"
+    },
+    {
+      "chapterIdx": 23,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-23%EC%9E%A5%20-%20%ED%95%98%EB%82%98%EB%8B%98%EC%9D%98%20%EC%84%B1%EC%86%8C.mp3"
+    },
+    {
+      "chapterIdx": 24,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-24%EC%9E%A5%20-%20%EC%A7%80%EC%84%B1%EC%86%8C%EC%97%90%EC%84%9C%EC%9D%98%20%EB%B4%89%EC%82%AC.mp3"
+    },
+    {
+      "chapterIdx": 25,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-25%EC%9E%A5%20-%20%ED%95%98%EB%82%98%EB%8B%98%EC%9D%98%20%EC%9C%A8%EB%B2%95%EC%9D%98%20%EB%B6%88%EB%B3%80%EC%84%B1.mp3"
+    },
+    {
+      "chapterIdx": 26,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-26%EC%9E%A5%20-%20%EC%95%88%EC%8B%9D%EC%9D%BC%20%ED%9A%8C%EB%B3%B5%20%EC%9A%B4%EB%8F%99.mp3"
+    },
+    {
+      "chapterIdx": 27,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-27%EC%9E%A5%20-%20%EC%8B%A0%EC%95%99%20%EB%B6%80%ED%9D%A5%EA%B3%BC%20%EC%B0%B8%EB%90%9C%20%ED%9A%8C%EA%B0%9C.mp3"
+    },
+    {
+      "chapterIdx": 28,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-28%EC%9E%A5%20-%20%ED%95%98%EB%8A%98%EC%97%90%EC%84%9C%20%ED%96%89%ED%95%98%EB%8A%94%20%EC%A1%B0%EC%82%AC%20%EC%8B%AC%ED%8C%90.mp3"
+    },
+    {
+      "chapterIdx": 29,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-29%EC%9E%A5%20-%20%EC%A3%84%EC%95%85%EC%9D%98%20%EC%8B%9C%EC%9E%91.mp3"
+    },
+    {
+      "chapterIdx": 30,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-30%EC%9E%A5%20-%20%EC%9D%B8%EB%A5%98%EC%99%80%20%EC%82%AC%EB%8B%A8%20%EC%82%AC%EC%9D%B4%EC%9D%98%20%EC%A0%81%EC%9D%98%20%28%E6%95%B5%E6%84%8F%29.mp3"
+    },
+    {
+      "chapterIdx": 31,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-31%EC%9E%A5%20-%20%EC%95%85%EB%A0%B9%EC%9D%98%20%EC%A0%95%EC%B2%B4.mp3"
+    },
+    {
+      "chapterIdx": 32,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-32%EC%9E%A5%20-%20%EC%82%AC%EB%8B%A8%EC%9D%98%20%ED%95%A8%EC%A0%95.mp3"
+    },
+    {
+      "chapterIdx": 33,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-33%EC%9E%A5%20-%20%EC%B5%9C%EC%B4%88%EC%9D%98%20%ED%81%B0%20%EA%B8%B0%EB%A7%8C.mp3"
+    },
+    {
+      "chapterIdx": 34,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-34%EC%9E%A5%20-%20%EC%A3%BD%EC%9D%80%20%EC%82%AC%EB%9E%8C%EB%93%A4%EC%9D%B4%20%EC%9A%B0%EB%A6%AC%EC%99%80%20%EA%B5%90%ED%86%B5%ED%95%A0%20%EC%88%98%20%EC%9E%88%EB%8A%94%EA%B0%80%3F.mp3"
+    },
+    {
+      "chapterIdx": 35,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-35%EC%9E%A5%20-%20%EC%9C%84%ED%98%91%EB%8B%B9%ED%95%98%EA%B3%A0%20%EC%9E%88%EB%8A%94%20%EC%96%91%EC%8B%AC%EC%9D%98%20%EC%9E%90%EC%9C%A0.mp3"
+    },
+    {
+      "chapterIdx": 36,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-36%EC%9E%A5%20-%20%EC%A0%88%EB%B0%95%ED%95%9C%20%EC%B5%9C%ED%9B%84%EC%9D%98%20%EC%9C%84%EA%B8%B0.mp3"
+    },
+    {
+      "chapterIdx": 37,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-37%EC%9E%A5%20-%20%EB%AF%BF%EC%9D%8C%EC%9D%98%20%EA%B8%B0%EC%A4%80%EC%9D%B4%20%EB%90%98%EB%8A%94%20%EC%84%B1%EA%B2%BD.mp3"
+    },
+    {
+      "chapterIdx": 38,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-38%EC%9E%A5%20-%20%EC%B5%9C%ED%9B%84%EC%9D%98%20%EA%B2%BD%EA%B3%A0.mp3"
+    },
+    {
+      "chapterIdx": 39,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-39%EC%9E%A5%20-%20%ED%99%98%EB%82%9C%EC%9D%98%20%EB%95%8C.mp3"
+    },
+    {
+      "chapterIdx": 40,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-40%EC%9E%A5%20-%20%ED%95%98%EB%82%98%EB%8B%98%EC%9D%98%20%EB%B0%B1%EC%84%B1%EC%9D%98%20%EA%B5%AC%EC%9B%90.mp3"
+    },
+    {
+      "chapterIdx": 41,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-41%EC%9E%A5%20-%20%EC%A7%80%EC%83%81%EC%9D%98%20%ED%99%A9%ED%8F%90.mp3"
+    },
+    {
+      "chapterIdx": 42,
+      "url": "https://ellenwhiteaudio.org/audio/kr/gc/GC-42%EC%9E%A5%20-%20%EB%8C%80%EC%9F%81%ED%88%AC%EC%9D%98%20%EC%A2%85%EB%A7%89.mp3"
+    }
   ]
 }
