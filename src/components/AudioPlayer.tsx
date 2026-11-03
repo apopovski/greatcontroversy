@@ -130,6 +130,12 @@ const PLAYER_META_TOGGLE_LABELS: Record<string, Pick<PlayerLabels, 'hidePlayer' 
   sl: { hidePlayer: 'Skrij predvajalnik', continuePlay: 'Nadaljuj predvajanje' },
 };
 
+export type AudioTimePayload = {
+  time: number;
+  duration: number;
+  playing: boolean;
+};
+
 type Props = {
   lang: string;
   chapterIdx: number;
@@ -141,6 +147,7 @@ type Props = {
   minimized?: boolean;
   autoPlayRequest?: number;
   onPlayingChange?: (playing: boolean) => void;
+  onTimeChange?: (payload: AudioTimePayload) => void;
   onExpand?: () => void;
   onMinimize?: () => void;
   onHide?: () => void;
@@ -472,13 +479,14 @@ function fmtTime(s: number) {
 
 const SPEED_STEPS = [0.75, 1, 1.25, 1.5, 2];
 
-export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChapter, onPrevChapter, canNextChapter = true, canPrevChapter = true, minimized, autoPlayRequest = 0, onPlayingChange, onExpand, onMinimize, onHide, continuePlay = false, onToggleContinuePlay, containerWidth }: Props) {
+export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChapter, onPrevChapter, canNextChapter = true, canPrevChapter = true, minimized, autoPlayRequest = 0, onPlayingChange, onTimeChange, onExpand, onMinimize, onHide, continuePlay = false, onToggleContinuePlay, containerWidth }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const isDev = import.meta.env.DEV;
   const [src, setSrc] = useState<string | null>(null);
   const [playing, setPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [time, setTime] = useState(0);
+  const lastTimeNotifyRef = useRef(0);
   const [speed, setSpeed] = useState<number>(() => Number(localStorage.getItem('audio-speed') || '1'));
   const [volume, setVolume] = useState<number>(() => Number(localStorage.getItem('audio-volume') || '1'));
   const [audioLang, setAudioLang] = useState<string | null>(null);
@@ -817,19 +825,38 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
   useEffect(() => {
     const a = audioRef.current;
     if (!a) return;
+
+    const emitTime = (force = false) => {
+      const nextTime = a.currentTime || 0;
+      const nextDuration = a.duration || 0;
+      const isPlaying = !a.paused && !a.ended;
+      setTime(nextTime);
+      if (nextDuration > 0) setDuration(nextDuration);
+      const now = performance.now();
+      if (!force && now - lastTimeNotifyRef.current < 200) return;
+      lastTimeNotifyRef.current = now;
+      onTimeChange?.({ time: nextTime, duration: nextDuration, playing: isPlaying });
+    };
+
     const onPlay = () => {
       setPlaying(true);
       onPlayingChange?.(true);
+      emitTime(true);
     };
     const onPause = () => {
       setPlaying(false);
       onPlayingChange?.(false);
+      emitTime(true);
     };
-    const onTime = () => setTime(a.currentTime || 0);
-    const onMeta = () => setDuration(a.duration || 0);
+    const onTime = () => emitTime(false);
+    const onMeta = () => {
+      setDuration(a.duration || 0);
+      emitTime(true);
+    };
     const onEnd = () => {
       setPlaying(false);
       onPlayingChange?.(false);
+      emitTime(true);
       if (continuePlay && onNextChapter) onNextChapter(true);
     };
     const onError = (e: ErrorEvent) => { console.error('[AudioPlayer] Event: error', e); };
@@ -848,7 +875,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
       a.removeEventListener('ended', onEnd);
       a.removeEventListener('error', onError);
     };
-  }, [src, onNextChapter, onPlayingChange, continuePlay]);
+  }, [src, onNextChapter, onPlayingChange, onTimeChange, continuePlay]);
 
   // resume saved position per lang+chapter
   useEffect(() => {

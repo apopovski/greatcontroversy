@@ -1012,6 +1012,18 @@ span.dropcap {
   hyphens:auto;
   -webkit-hyphens:auto;
 }
+
+/* Approximate audio↔text follow highlight (Slice C) */
+.reader-book-html .audio-sync-active{
+  position:relative;
+  border-radius:6px;
+  background:color-mix(in srgb, var(--reader-accent) 10%, transparent);
+  box-shadow:inset 3px 0 0 var(--reader-accent);
+  transition:background 180ms ease, box-shadow 180ms ease;
+}
+html[data-theme='dark'] .reader-book-html .audio-sync-active{
+  background:color-mix(in srgb, var(--reader-accent) 16%, transparent);
+}
 .reader-book-html blockquote{
   margin:1.1em 0 1.1em 0.6em;
   padding-left:0.9em;

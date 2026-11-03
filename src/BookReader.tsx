@@ -1,10 +1,10 @@
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import './BookReader.css';
 import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode, MdContentCopy, MdShare, MdClose, MdMoreVert, MdBookmarkBorder, MdBookmark, MdDownload, MdCheckCircle, MdPrivacyTip, MdHeadphones, MdPlayArrow, MdFavorite } from 'react-icons/md';
 import { FaFacebookF, FaXTwitter, FaWhatsapp } from 'react-icons/fa6';
 import { IoMdMail } from 'react-icons/io';
-import AudioPlayer, { AUDIO_AVAILABLE_LANGUAGE_FOLDERS } from './components/AudioPlayer';
+import AudioPlayer, { AUDIO_AVAILABLE_LANGUAGE_FOLDERS, type AudioTimePayload } from './components/AudioPlayer';
 import { LANGUAGE_NAMES } from './utils/language';
 import { trackEvent, trackPageView, getAnalyticsConsentStatus, setAnalyticsConsent } from './utils/analytics';
 
@@ -3055,6 +3055,22 @@ function parseSgawKarenBook(raw: string) {
 
 export default function BookReader() {
   const FORCE_MINIMIZED_PLAYER = true;
+  const ENGLISH_FOLDER = 'The Great Controversy - Ellen G. White 2';
+  const AUDIO_SYNC_INTRO_RATIO = 0.04;
+  const AUDIO_SYNC_MIN_CHARS = 24;
+  const AUDIO_SYNC_FOLLOW_COOLDOWN_MS = 2600;
+
+  const isApproxAudioSyncEnabled = (folder: string) => {
+    try {
+      const flag = (localStorage.getItem('reader-audio-sync') || '').trim();
+      if (flag === '0' || flag === 'off' || flag === 'false') return false;
+      if (flag === '1' || flag === 'on' || flag === 'true') return true;
+    } catch {
+      // ignore
+    }
+    // Default: English only until cue-based sync lands for other languages.
+    return folder === ENGLISH_FOLDER;
+  };
 
   const getReaderScriptFamily = (folder: string) => {
     const code = (LANGUAGE_ABBREV[folder] || '').toLowerCase();
@@ -3089,6 +3105,11 @@ export default function BookReader() {
   const [audioUserExpanded, setAudioUserExpanded] = useState(false);
   const [audioAutoPlayRequest, setAudioAutoPlayRequest] = useState(0);
   const [audioPlaying, setAudioPlaying] = useState(false);
+  const [audioSyncTime, setAudioSyncTime] = useState(0);
+  const [audioSyncDuration, setAudioSyncDuration] = useState(0);
+  const audioSyncActiveIdRef = useRef<string | null>(null);
+  const audioSyncUserScrollUntilRef = useRef(0);
+  const audioSyncFollowEnabledRef = useRef(true);
   const [audioHidden, setAudioHidden] = useState(false);
   const [audioContinuePlay, setAudioContinuePlay] = useState(false);
 
@@ -3305,6 +3326,35 @@ export default function BookReader() {
       setHeaderHidden(false);
     }
   }, [showOpeningToc, showSearch, showLangMenu, showMoreMenu]);
+
+  const handleAudioTimeChange = useCallback((payload: AudioTimePayload) => {
+    setAudioSyncTime(payload.time);
+    setAudioSyncDuration(payload.duration);
+  }, []);
+
+  const clearAudioSyncHighlight = useCallback(() => {
+    const root = contentRef.current;
+    if (!root) {
+      audioSyncActiveIdRef.current = null;
+      return;
+    }
+    root.querySelectorAll('.audio-sync-active').forEach((el) => el.classList.remove('audio-sync-active'));
+    audioSyncActiveIdRef.current = null;
+  }, []);
+
+  // Pause auto-follow briefly when the reader scrolls manually.
+  useEffect(() => {
+    const markUserScroll = () => {
+      audioSyncUserScrollUntilRef.current = Date.now() + AUDIO_SYNC_FOLLOW_COOLDOWN_MS;
+      audioSyncFollowEnabledRef.current = false;
+    };
+    window.addEventListener('wheel', markUserScroll, { passive: true });
+    window.addEventListener('touchmove', markUserScroll, { passive: true });
+    return () => {
+      window.removeEventListener('wheel', markUserScroll);
+      window.removeEventListener('touchmove', markUserScroll);
+    };
+  }, []);
 
   const clearTempHighlights = () => {
     const contentEl = contentRef.current;
@@ -4912,6 +4962,82 @@ export default function BookReader() {
     [htmlWithParagraphIds, lang, chapterIdx, toc]
   );
 
+  // Approximate paragraph sync from chapter audio progress (English by default).
+  useEffect(() => {
+    if (!isApproxAudioSyncEnabled(lang) || showOpeningToc) {
+      clearAudioSyncHighlight();
+      return;
+    }
+    if (chapterIdx !== audioChapterIdx) {
+      clearAudioSyncHighlight();
+      return;
+    }
+    if (!audioPlaying && audioSyncTime <= 0.25) {
+      clearAudioSyncHighlight();
+      return;
+    }
+    const root = contentRef.current;
+    if (!root || !(audioSyncDuration > 0)) return;
+
+    const blocks = Array.from(root.querySelectorAll('p, blockquote')) as HTMLElement[];
+    const weighted = blocks
+      .map((el) => {
+        const text = (el.textContent || '').replace(/\s+/g, ' ').trim();
+        return { el, text, weight: text.length };
+      })
+      .filter((item) => item.weight >= AUDIO_SYNC_MIN_CHARS);
+
+    if (!weighted.length) {
+      clearAudioSyncHighlight();
+      return;
+    }
+
+    const totalWeight = weighted.reduce((sum, item) => sum + item.weight, 0) || 1;
+    const rawProgress = Math.min(1, Math.max(0, audioSyncTime / audioSyncDuration));
+    const intro = AUDIO_SYNC_INTRO_RATIO;
+    const progress =
+      rawProgress <= intro ? 0 : Math.min(1, (rawProgress - intro) / Math.max(0.0001, 1 - intro));
+
+    let acc = 0;
+    let target = weighted[0].el;
+    for (const item of weighted) {
+      acc += item.weight / totalWeight;
+      target = item.el;
+      if (progress <= acc) break;
+    }
+
+    const nextId = target.id || null;
+    if (nextId !== audioSyncActiveIdRef.current) {
+      root.querySelectorAll('.audio-sync-active').forEach((el) => el.classList.remove('audio-sync-active'));
+      target.classList.add('audio-sync-active');
+      audioSyncActiveIdRef.current = nextId;
+
+      const followAllowed =
+        audioPlaying &&
+        (Date.now() >= audioSyncUserScrollUntilRef.current || audioSyncFollowEnabledRef.current);
+      if (followAllowed) {
+        audioSyncFollowEnabledRef.current = true;
+        try {
+          target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        } catch {
+          target.scrollIntoView(true);
+        }
+      }
+    } else if (!target.classList.contains('audio-sync-active')) {
+      target.classList.add('audio-sync-active');
+    }
+  }, [
+    lang,
+    showOpeningToc,
+    chapterIdx,
+    audioChapterIdx,
+    audioPlaying,
+    audioSyncTime,
+    audioSyncDuration,
+    displayedHtml,
+    clearAudioSyncHighlight,
+  ]);
+
   // If URL has a paragraph hash, try to scroll it into view
   useEffect(() => {
     const hash = (window.location.hash || '').replace(/^#/, '');
@@ -5629,6 +5755,7 @@ export default function BookReader() {
           minimized={FORCE_MINIMIZED_PLAYER ? true : audioMinimized}
           autoPlayRequest={audioAutoPlayRequest}
           onPlayingChange={setAudioPlaying}
+          onTimeChange={handleAudioTimeChange}
           continuePlay={audioContinuePlay}
           onToggleContinuePlay={() => setAudioContinuePlay((v) => !v)}
           onExpand={() => {
