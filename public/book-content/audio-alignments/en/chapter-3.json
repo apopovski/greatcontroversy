@@ -1,0 +1,216 @@
+{
+  "version": 1,
+  "lang": "en",
+  "chapterIdx": 3,
+  "title": "An Era of Spiritual Darkness",
+  "duration": 1656.528,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/en/gc/GC-03%20-%20An%20Era%20of%20Spiritual%20Darkness.mp3",
+  "cues": [
+    {
+      "id": "gc-p-4-1",
+      "start": 66.261,
+      "end": 113.7,
+      "chars": 716
+    },
+    {
+      "id": "gc-p-4-2",
+      "start": 113.7,
+      "end": 192.611,
+      "chars": 1191
+    },
+    {
+      "id": "gc-p-4-3",
+      "start": 192.611,
+      "end": 214.74,
+      "chars": 334
+    },
+    {
+      "id": "gc-p-4-4",
+      "start": 214.74,
+      "end": 258.8,
+      "chars": 665
+    },
+    {
+      "id": "gc-p-4-5",
+      "start": 258.8,
+      "end": 295.505,
+      "chars": 554
+    },
+    {
+      "id": "gc-p-4-6",
+      "start": 295.505,
+      "end": 325.85,
+      "chars": 458
+    },
+    {
+      "id": "gc-p-4-7",
+      "start": 325.85,
+      "end": 346.125,
+      "chars": 306
+    },
+    {
+      "id": "gc-p-4-8",
+      "start": 346.125,
+      "end": 415.958,
+      "chars": 1054
+    },
+    {
+      "id": "gc-p-4-9",
+      "start": 415.958,
+      "end": 464.391,
+      "chars": 731
+    },
+    {
+      "id": "gc-p-4-10",
+      "start": 464.391,
+      "end": 531.177,
+      "chars": 1008
+    },
+    {
+      "id": "gc-p-4-11",
+      "start": 531.177,
+      "end": 567.153,
+      "chars": 543
+    },
+    {
+      "id": "gc-p-4-12",
+      "start": 567.153,
+      "end": 624.133,
+      "chars": 860
+    },
+    {
+      "id": "gc-p-4-13",
+      "start": 624.133,
+      "end": 675.084,
+      "chars": 769
+    },
+    {
+      "id": "gc-p-4-14",
+      "start": 675.084,
+      "end": 730.208,
+      "chars": 832
+    },
+    {
+      "id": "gc-p-4-15",
+      "start": 730.208,
+      "end": 763.932,
+      "chars": 509
+    },
+    {
+      "id": "gc-p-4-16",
+      "start": 763.932,
+      "end": 852.649,
+      "chars": 1339
+    },
+    {
+      "id": "gc-p-4-17",
+      "start": 852.649,
+      "end": 934.01,
+      "chars": 1228
+    },
+    {
+      "id": "gc-p-4-18",
+      "start": 934.01,
+      "end": 960.38,
+      "chars": 398
+    },
+    {
+      "id": "gc-p-4-19",
+      "start": 960.38,
+      "end": 990.394,
+      "chars": 453
+    },
+    {
+      "id": "gc-p-4-20",
+      "start": 990.394,
+      "end": 1037.502,
+      "chars": 711
+    },
+    {
+      "id": "gc-p-4-21",
+      "start": 1037.502,
+      "end": 1101.041,
+      "chars": 959
+    },
+    {
+      "id": "gc-p-4-22",
+      "start": 1101.041,
+      "end": 1122.971,
+      "chars": 331
+    },
+    {
+      "id": "gc-p-4-23",
+      "start": 1122.971,
+      "end": 1156.232,
+      "chars": 502
+    },
+    {
+      "id": "gc-p-4-24",
+      "start": 1156.232,
+      "end": 1193.997,
+      "chars": 570
+    },
+    {
+      "id": "gc-p-4-25",
+      "start": 1193.997,
+      "end": 1275.028,
+      "chars": 1223
+    },
+    {
+      "id": "gc-p-4-26",
+      "start": 1275.028,
+      "end": 1298.416,
+      "chars": 353
+    },
+    {
+      "id": "gc-p-4-27",
+      "start": 1298.416,
+      "end": 1356.257,
+      "chars": 873
+    },
+    {
+      "id": "gc-p-4-28",
+      "start": 1356.257,
+      "end": 1385.741,
+      "chars": 445
+    },
+    {
+      "id": "gc-p-4-29",
+      "start": 1385.741,
+      "end": 1440.468,
+      "chars": 826
+    },
+    {
+      "id": "gc-p-4-30",
+      "start": 1440.468,
+      "end": 1485.323,
+      "chars": 677
+    },
+    {
+      "id": "gc-p-4-31",
+      "start": 1485.323,
+      "end": 1525.01,
+      "chars": 599
+    },
+    {
+      "id": "gc-p-4-32",
+      "start": 1525.01,
+      "end": 1556.15,
+      "chars": 470
+    },
+    {
+      "id": "gc-p-4-33",
+      "start": 1556.15,
+      "end": 1617.834,
+      "chars": 931
+    },
+    {
+      "id": "gc-p-4-34",
+      "start": 1617.834,
+      "end": 1656.528,
+      "chars": 584
+    }
+  ]
+}

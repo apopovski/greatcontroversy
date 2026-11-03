@@ -148,6 +148,7 @@ type Props = {
   autoPlayRequest?: number;
   onPlayingChange?: (playing: boolean) => void;
   onTimeChange?: (payload: AudioTimePayload) => void;
+  seekRequest?: { token: number; time: number } | null;
   onExpand?: () => void;
   onMinimize?: () => void;
   onHide?: () => void;
@@ -479,7 +480,7 @@ function fmtTime(s: number) {
 
 const SPEED_STEPS = [0.75, 1, 1.25, 1.5, 2];
 
-export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChapter, onPrevChapter, canNextChapter = true, canPrevChapter = true, minimized, autoPlayRequest = 0, onPlayingChange, onTimeChange, onExpand, onMinimize, onHide, continuePlay = false, onToggleContinuePlay, containerWidth }: Props) {
+export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChapter, onPrevChapter, canNextChapter = true, canPrevChapter = true, minimized, autoPlayRequest = 0, onPlayingChange, onTimeChange, seekRequest = null, onExpand, onMinimize, onHide, continuePlay = false, onToggleContinuePlay, containerWidth }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const isDev = import.meta.env.DEV;
   const [src, setSrc] = useState<string | null>(null);
@@ -969,6 +970,20 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
     if (!a) return; 
     a.currentTime = p;
   };
+
+  // External seek requests from reader (tap-to-seek / cue jumps).
+  useEffect(() => {
+    if (!seekRequest || !Number.isFinite(seekRequest.time)) return;
+    seekTo(Math.max(0, seekRequest.time));
+    try {
+      const a = audioRef.current;
+      if (a && a.paused) {
+        a.play().catch(() => null);
+      }
+    } catch {
+      // ignore
+    }
+  }, [seekRequest?.token]);
 
   const seekRelative = (deltaSeconds: number) => {
     const a = audioRef.current;

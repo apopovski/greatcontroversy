@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "lang": "en",
+  "chapterIdx": 24,
+  "title": "In the Holy of Holies",
+  "duration": 1268.551,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/en/gc/GC-24%20-%20In%20the%20Holy%20of%20Holies.mp3",
+  "cues": [
+    {
+      "id": "gc-p-25-1",
+      "start": 50.742,
+      "end": 141.359,
+      "chars": 1380
+    },
+    {
+      "id": "gc-p-25-2",
+      "start": 141.359,
+      "end": 203.017,
+      "chars": 939
+    },
+    {
+      "id": "gc-p-25-3",
+      "start": 203.017,
+      "end": 231.647,
+      "chars": 436
+    },
+    {
+      "id": "gc-p-25-4",
+      "start": 231.647,
+      "end": 264.151,
+      "chars": 495
+    },
+    {
+      "id": "gc-p-25-5",
+      "start": 264.151,
+      "end": 289.563,
+      "chars": 387
+    },
+    {
+      "id": "gc-p-25-6",
+      "start": 289.563,
+      "end": 357.657,
+      "chars": 1037
+    },
+    {
+      "id": "gc-p-25-7",
+      "start": 357.657,
+      "end": 393.247,
+      "chars": 542
+    },
+    {
+      "id": "gc-p-25-8",
+      "start": 393.247,
+      "end": 446.697,
+      "chars": 814
+    },
+    {
+      "id": "gc-p-25-9",
+      "start": 446.697,
+      "end": 477.1,
+      "chars": 463
+    },
+    {
+      "id": "gc-p-25-10",
+      "start": 477.1,
+      "end": 602.847,
+      "chars": 1915
+    },
+    {
+      "id": "gc-p-25-11",
+      "start": 602.847,
+      "end": 652.555,
+      "chars": 757
+    },
+    {
+      "id": "gc-p-25-12",
+      "start": 652.555,
+      "end": 701.278,
+      "chars": 742
+    },
+    {
+      "id": "gc-p-25-13",
+      "start": 701.278,
+      "end": 751.577,
+      "chars": 766
+    },
+    {
+      "id": "gc-p-25-14",
+      "start": 751.577,
+      "end": 783.621,
+      "chars": 488
+    },
+    {
+      "id": "gc-p-25-15",
+      "start": 783.621,
+      "end": 851.846,
+      "chars": 1039
+    },
+    {
+      "id": "gc-p-25-16",
+      "start": 851.846,
+      "end": 932.482,
+      "chars": 1228
+    },
+    {
+      "id": "gc-p-25-17",
+      "start": 932.482,
+      "end": 973.784,
+      "chars": 629
+    },
+    {
+      "id": "gc-p-25-18",
+      "start": 973.784,
+      "end": 998.737,
+      "chars": 380
+    },
+    {
+      "id": "gc-p-25-19",
+      "start": 998.737,
+      "end": 1071.427,
+      "chars": 1107
+    },
+    {
+      "id": "gc-p-25-20",
+      "start": 1071.427,
+      "end": 1112.599,
+      "chars": 627
+    },
+    {
+      "id": "gc-p-25-21",
+      "start": 1112.599,
+      "end": 1188.441,
+      "chars": 1155
+    },
+    {
+      "id": "gc-p-25-22",
+      "start": 1188.441,
+      "end": 1204.922,
+      "chars": 251
+    },
+    {
+      "id": "gc-p-25-23",
+      "start": 1204.922,
+      "end": 1268.551,
+      "chars": 969
+    }
+  ]
+}

@@ -3107,9 +3107,12 @@ export default function BookReader() {
   const [audioPlaying, setAudioPlaying] = useState(false);
   const [audioSyncTime, setAudioSyncTime] = useState(0);
   const [audioSyncDuration, setAudioSyncDuration] = useState(0);
+  const [audioSeekRequest, setAudioSeekRequest] = useState<{ token: number; time: number } | null>(null);
+  const [audioCues, setAudioCues] = useState<Array<{ id: string; start: number; end: number }> | null>(null);
   const audioSyncActiveIdRef = useRef<string | null>(null);
   const audioSyncUserScrollUntilRef = useRef(0);
   const audioSyncFollowEnabledRef = useRef(true);
+  const audioCuesRef = useRef<Array<{ id: string; start: number; end: number }> | null>(null);
   const [audioHidden, setAudioHidden] = useState(false);
   const [audioContinuePlay, setAudioContinuePlay] = useState(false);
 
@@ -3341,6 +3344,48 @@ export default function BookReader() {
     root.querySelectorAll('.audio-sync-active').forEach((el) => el.classList.remove('audio-sync-active'));
     audioSyncActiveIdRef.current = null;
   }, []);
+
+  const requestAudioSeek = useCallback((time: number) => {
+    setAudioSeekRequest({ token: Date.now(), time: Math.max(0, time) });
+  }, []);
+
+  // Load per-chapter cue files when available (English Slice D).
+  useEffect(() => {
+    let cancelled = false;
+    audioCuesRef.current = null;
+    setAudioCues(null);
+
+    if (!isApproxAudioSyncEnabled(lang)) return;
+    const code = (LANGUAGE_ABBREV[lang] || '').toLowerCase();
+    if (code !== 'en') return;
+
+    const chapterIdxForCues = audioChapterIdx;
+    const url = `/book-content/audio-alignments/en/chapter-${chapterIdxForCues}.json`;
+    fetch(url)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (cancelled || !data || !Array.isArray(data.cues)) return;
+        const cues = data.cues
+          .map((c: any) => ({
+            id: String(c.id || ''),
+            start: Number(c.start),
+            end: Number(c.end),
+          }))
+          .filter((c: { id: string; start: number; end: number }) => c.id && Number.isFinite(c.start) && Number.isFinite(c.end));
+        audioCuesRef.current = cues;
+        setAudioCues(cues);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          audioCuesRef.current = null;
+          setAudioCues(null);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [lang, audioChapterIdx]);
 
   // Pause auto-follow briefly when the reader scrolls manually.
   useEffect(() => {
@@ -4962,7 +5007,7 @@ export default function BookReader() {
     [htmlWithParagraphIds, lang, chapterIdx, toc]
   );
 
-  // Approximate paragraph sync from chapter audio progress (English by default).
+  // Paragraph sync: prefer cue files, else approximate by text weight (English by default).
   useEffect(() => {
     if (!isApproxAudioSyncEnabled(lang) || showOpeningToc) {
       clearAudioSyncHighlight();
@@ -4977,34 +5022,52 @@ export default function BookReader() {
       return;
     }
     const root = contentRef.current;
-    if (!root || !(audioSyncDuration > 0)) return;
+    if (!root) return;
 
-    const blocks = Array.from(root.querySelectorAll('p, blockquote')) as HTMLElement[];
-    const weighted = blocks
-      .map((el) => {
-        const text = (el.textContent || '').replace(/\s+/g, ' ').trim();
-        return { el, text, weight: text.length };
-      })
-      .filter((item) => item.weight >= AUDIO_SYNC_MIN_CHARS);
+    let target: HTMLElement | null = null;
 
-    if (!weighted.length) {
-      clearAudioSyncHighlight();
-      return;
+    if (audioCues?.length) {
+      const t = audioSyncTime;
+      const cue =
+        audioCues.find((c) => t >= c.start && t < c.end) ||
+        [...audioCues].reverse().find((c) => t >= c.start) ||
+        audioCues[0];
+      if (cue?.id) {
+        target = root.querySelector(`#${CSS.escape(cue.id)}`) as HTMLElement | null;
+      }
     }
 
-    const totalWeight = weighted.reduce((sum, item) => sum + item.weight, 0) || 1;
-    const rawProgress = Math.min(1, Math.max(0, audioSyncTime / audioSyncDuration));
-    const intro = AUDIO_SYNC_INTRO_RATIO;
-    const progress =
-      rawProgress <= intro ? 0 : Math.min(1, (rawProgress - intro) / Math.max(0.0001, 1 - intro));
+    if (!target) {
+      if (!(audioSyncDuration > 0)) return;
+      const blocks = Array.from(root.querySelectorAll('p, blockquote')) as HTMLElement[];
+      const weighted = blocks
+        .map((el) => {
+          const text = (el.textContent || '').replace(/\s+/g, ' ').trim();
+          return { el, text, weight: text.length };
+        })
+        .filter((item) => item.weight >= AUDIO_SYNC_MIN_CHARS);
 
-    let acc = 0;
-    let target = weighted[0].el;
-    for (const item of weighted) {
-      acc += item.weight / totalWeight;
-      target = item.el;
-      if (progress <= acc) break;
+      if (!weighted.length) {
+        clearAudioSyncHighlight();
+        return;
+      }
+
+      const totalWeight = weighted.reduce((sum, item) => sum + item.weight, 0) || 1;
+      const rawProgress = Math.min(1, Math.max(0, audioSyncTime / audioSyncDuration));
+      const intro = AUDIO_SYNC_INTRO_RATIO;
+      const progress =
+        rawProgress <= intro ? 0 : Math.min(1, (rawProgress - intro) / Math.max(0.0001, 1 - intro));
+
+      let acc = 0;
+      target = weighted[0].el;
+      for (const item of weighted) {
+        acc += item.weight / totalWeight;
+        target = item.el;
+        if (progress <= acc) break;
+      }
     }
+
+    if (!target) return;
 
     const nextId = target.id || null;
     if (nextId !== audioSyncActiveIdRef.current) {
@@ -5034,8 +5097,74 @@ export default function BookReader() {
     audioPlaying,
     audioSyncTime,
     audioSyncDuration,
+    audioCues,
     displayedHtml,
     clearAudioSyncHighlight,
+  ]);
+
+  // Visual affordance for tap-to-seek when sync is active.
+  useEffect(() => {
+    const root = contentRef.current;
+    if (!root) return;
+    const enabled = isApproxAudioSyncEnabled(lang) && !showOpeningToc && chapterIdx === audioChapterIdx;
+    root.classList.toggle('audio-sync-enabled', enabled);
+  }, [lang, showOpeningToc, chapterIdx, audioChapterIdx, displayedHtml]);
+
+  // Tap a paragraph to seek audio (cues preferred, else proportional estimate).
+  useEffect(() => {
+    const root = contentRef.current;
+    if (!root) return;
+    if (!isApproxAudioSyncEnabled(lang) || showOpeningToc) return;
+
+    const onClick = (ev: MouseEvent) => {
+      const target = ev.target as Element | null;
+      if (!target) return;
+      if (target.closest('a, button, input, textarea')) return;
+      const block = target.closest('p, blockquote') as HTMLElement | null;
+      if (!block || !root.contains(block)) return;
+      if (chapterIdx !== audioChapterIdx) return;
+
+      const cues = audioCuesRef.current;
+      if (cues?.length && block.id) {
+        const cue = cues.find((c) => c.id === block.id);
+        if (cue) {
+          requestAudioSeek(cue.start + 0.05);
+          return;
+        }
+      }
+
+      if (!(audioSyncDuration > 0)) return;
+      const blocks = Array.from(root.querySelectorAll('p, blockquote')) as HTMLElement[];
+      const weighted = blocks
+        .map((el) => {
+          const text = (el.textContent || '').replace(/\s+/g, ' ').trim();
+          return {
+            el,
+            weight: text.length >= AUDIO_SYNC_MIN_CHARS ? text.length : 0,
+          };
+        })
+        .filter((item) => item.weight > 0);
+      const total = weighted.reduce((s, item) => s + item.weight, 0) || 1;
+      const idx = weighted.findIndex((item) => item.el === block);
+      if (idx < 0) return;
+      let before = 0;
+      for (let i = 0; i < idx; i++) before += weighted[i].weight;
+      const intro = AUDIO_SYNC_INTRO_RATIO;
+      const usable = Math.max(0.5, audioSyncDuration * (1 - intro));
+      const lead = audioSyncDuration * intro;
+      requestAudioSeek(lead + (before / total) * usable);
+    };
+
+    root.addEventListener('click', onClick);
+    return () => root.removeEventListener('click', onClick);
+  }, [
+    lang,
+    showOpeningToc,
+    chapterIdx,
+    audioChapterIdx,
+    audioSyncDuration,
+    displayedHtml,
+    requestAudioSeek,
   ]);
 
   // If URL has a paragraph hash, try to scroll it into view
@@ -5756,6 +5885,7 @@ export default function BookReader() {
           autoPlayRequest={audioAutoPlayRequest}
           onPlayingChange={setAudioPlaying}
           onTimeChange={handleAudioTimeChange}
+          seekRequest={audioSeekRequest}
           continuePlay={audioContinuePlay}
           onToggleContinuePlay={() => setAudioContinuePlay((v) => !v)}
           onExpand={() => {

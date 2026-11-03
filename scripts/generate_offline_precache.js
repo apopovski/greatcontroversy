@@ -15,6 +15,8 @@ const INCLUDE_PREFIXES = [
   '/book-content/htmlz/',
   '/book-content/ePub/',
   '/book-content/html-with-gc/',
+  '/book-content/audio-alignments/',
+  '/book-content/audio-manifests/',
 ];
 
 const INCLUDE_EXACT = [

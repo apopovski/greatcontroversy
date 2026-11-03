@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "lang": "en",
+  "chapterIdx": 31,
+  "title": "Agency of Evil Spirits",
+  "duration": 961.458,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/en/gc/GC-31%20-%20Agency%20of%20Evil%20Spirits.mp3",
+  "cues": [
+    {
+      "id": "gc-p-32-1",
+      "start": 38.458,
+      "end": 79.728,
+      "chars": 589
+    },
+    {
+      "id": "gc-p-32-2",
+      "start": 79.728,
+      "end": 109.157,
+      "chars": 420
+    },
+    {
+      "id": "gc-p-32-3",
+      "start": 109.157,
+      "end": 221.195,
+      "chars": 1599
+    },
+    {
+      "id": "gc-p-32-4",
+      "start": 221.195,
+      "end": 276.548,
+      "chars": 790
+    },
+    {
+      "id": "gc-p-32-5",
+      "start": 276.548,
+      "end": 335.335,
+      "chars": 839
+    },
+    {
+      "id": "gc-p-32-6",
+      "start": 335.335,
+      "end": 369.598,
+      "chars": 489
+    },
+    {
+      "id": "gc-p-32-7",
+      "start": 369.598,
+      "end": 412.409,
+      "chars": 611
+    },
+    {
+      "id": "gc-p-32-8",
+      "start": 412.409,
+      "end": 481.496,
+      "chars": 986
+    },
+    {
+      "id": "gc-p-32-9",
+      "start": 481.496,
+      "end": 503.287,
+      "chars": 311
+    },
+    {
+      "id": "gc-p-32-10",
+      "start": 503.287,
+      "end": 559.13,
+      "chars": 797
+    },
+    {
+      "id": "gc-p-32-11",
+      "start": 559.13,
+      "end": 611.121,
+      "chars": 742
+    },
+    {
+      "id": "gc-p-32-12",
+      "start": 611.121,
+      "end": 679.787,
+      "chars": 980
+    },
+    {
+      "id": "gc-p-32-13",
+      "start": 679.787,
+      "end": 746.211,
+      "chars": 948
+    },
+    {
+      "id": "gc-p-32-14",
+      "start": 746.211,
+      "end": 775.779,
+      "chars": 422
+    },
+    {
+      "id": "gc-p-32-15",
+      "start": 775.779,
+      "end": 820.342,
+      "chars": 636
+    },
+    {
+      "id": "gc-p-32-16",
+      "start": 820.342,
+      "end": 855.236,
+      "chars": 498
+    },
+    {
+      "id": "gc-p-32-17",
+      "start": 855.236,
+      "end": 894.124,
+      "chars": 555
+    },
+    {
+      "id": "gc-p-32-18",
+      "start": 894.124,
+      "end": 961.458,
+      "chars": 961
+    }
+  ]
+}

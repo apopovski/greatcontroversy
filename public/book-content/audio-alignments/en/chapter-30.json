@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "lang": "en",
+  "chapterIdx": 30,
+  "title": "Enmity Between Man and Satan",
+  "duration": 854.971,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/en/gc/GC-30%20-%20Enmity%20Between%20Man%20and%20Satan.mp3",
+  "cues": [
+    {
+      "id": "gc-p-31-1",
+      "start": 34.199,
+      "end": 61.65,
+      "chars": 387
+    },
+    {
+      "id": "gc-p-31-2",
+      "start": 61.65,
+      "end": 112.58,
+      "chars": 718
+    },
+    {
+      "id": "gc-p-31-3",
+      "start": 112.58,
+      "end": 156.417,
+      "chars": 618
+    },
+    {
+      "id": "gc-p-31-4",
+      "start": 156.417,
+      "end": 184.507,
+      "chars": 396
+    },
+    {
+      "id": "gc-p-31-5",
+      "start": 184.507,
+      "end": 224.301,
+      "chars": 561
+    },
+    {
+      "id": "gc-p-31-6",
+      "start": 224.301,
+      "end": 276.295,
+      "chars": 733
+    },
+    {
+      "id": "gc-p-31-7",
+      "start": 276.295,
+      "end": 316.94,
+      "chars": 573
+    },
+    {
+      "id": "gc-p-31-8",
+      "start": 316.94,
+      "end": 365.246,
+      "chars": 681
+    },
+    {
+      "id": "gc-p-31-9",
+      "start": 365.246,
+      "end": 459.8,
+      "chars": 1333
+    },
+    {
+      "id": "gc-p-31-10",
+      "start": 459.8,
+      "end": 498.033,
+      "chars": 539
+    },
+    {
+      "id": "gc-p-31-11",
+      "start": 498.033,
+      "end": 576.131,
+      "chars": 1101
+    },
+    {
+      "id": "gc-p-31-12",
+      "start": 576.131,
+      "end": 609.328,
+      "chars": 468
+    },
+    {
+      "id": "gc-p-31-13",
+      "start": 609.328,
+      "end": 694.874,
+      "chars": 1206
+    },
+    {
+      "id": "gc-p-31-14",
+      "start": 694.874,
+      "end": 721.686,
+      "chars": 378
+    },
+    {
+      "id": "gc-p-31-15",
+      "start": 721.686,
+      "end": 765.169,
+      "chars": 613
+    },
+    {
+      "id": "gc-p-31-16",
+      "start": 765.169,
+      "end": 812.694,
+      "chars": 670
+    },
+    {
+      "id": "gc-p-31-17",
+      "start": 812.694,
+      "end": 854.971,
+      "chars": 596
+    }
+  ]
+}

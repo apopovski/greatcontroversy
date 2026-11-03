@@ -1,0 +1,138 @@
+{
+  "version": 1,
+  "lang": "en",
+  "chapterIdx": 13,
+  "title": "The Netherlands and Scandinavia",
+  "duration": 1202.883,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/en/gc/GC-13%20-%20The%20Netherlands%20and%20Scandinavia.mp3",
+  "cues": [
+    {
+      "id": "gc-p-14-1",
+      "start": 48.115,
+      "end": 149.048,
+      "chars": 1372
+    },
+    {
+      "id": "gc-p-14-2",
+      "start": 149.048,
+      "end": 202.531,
+      "chars": 727
+    },
+    {
+      "id": "gc-p-14-3",
+      "start": 202.531,
+      "end": 223.571,
+      "chars": 286
+    },
+    {
+      "id": "gc-p-14-4",
+      "start": 223.571,
+      "end": 306.333,
+      "chars": 1125
+    },
+    {
+      "id": "gc-p-14-5",
+      "start": 306.333,
+      "end": 360.992,
+      "chars": 743
+    },
+    {
+      "id": "gc-p-14-6",
+      "start": 360.992,
+      "end": 413.666,
+      "chars": 716
+    },
+    {
+      "id": "gc-p-14-7",
+      "start": 413.666,
+      "end": 476.638,
+      "chars": 856
+    },
+    {
+      "id": "gc-p-14-8",
+      "start": 476.638,
+      "end": 517.026,
+      "chars": 549
+    },
+    {
+      "id": "gc-p-14-9",
+      "start": 517.026,
+      "end": 558.002,
+      "chars": 557
+    },
+    {
+      "id": "gc-p-14-10",
+      "start": 558.002,
+      "end": 590.445,
+      "chars": 441
+    },
+    {
+      "id": "gc-p-14-11",
+      "start": 590.445,
+      "end": 631.716,
+      "chars": 561
+    },
+    {
+      "id": "gc-p-14-12",
+      "start": 631.716,
+      "end": 687.332,
+      "chars": 756
+    },
+    {
+      "id": "gc-p-14-13",
+      "start": 687.332,
+      "end": 723.306,
+      "chars": 489
+    },
+    {
+      "id": "gc-p-14-14",
+      "start": 723.306,
+      "end": 768.402,
+      "chars": 613
+    },
+    {
+      "id": "gc-p-14-15",
+      "start": 768.402,
+      "end": 835.568,
+      "chars": 913
+    },
+    {
+      "id": "gc-p-14-16",
+      "start": 835.568,
+      "end": 899.497,
+      "chars": 869
+    },
+    {
+      "id": "gc-p-14-17",
+      "start": 899.497,
+      "end": 940.62,
+      "chars": 559
+    },
+    {
+      "id": "gc-p-14-18",
+      "start": 940.62,
+      "end": 1014.186,
+      "chars": 1000
+    },
+    {
+      "id": "gc-p-14-19",
+      "start": 1014.186,
+      "end": 1098.935,
+      "chars": 1152
+    },
+    {
+      "id": "gc-p-14-20",
+      "start": 1098.935,
+      "end": 1142.044,
+      "chars": 586
+    },
+    {
+      "id": "gc-p-14-21",
+      "start": 1142.044,
+      "end": 1202.883,
+      "chars": 827
+    }
+  ]
+}

@@ -1013,7 +1013,11 @@ span.dropcap {
   -webkit-hyphens:auto;
 }
 
-/* Approximate audio↔text follow highlight (Slice C) */
+/* Audio↔text follow highlight + tap-to-seek */
+.reader-book-html.audio-sync-enabled p,
+.reader-book-html.audio-sync-enabled blockquote{
+  cursor:pointer;
+}
 .reader-book-html .audio-sync-active{
   position:relative;
   border-radius:6px;

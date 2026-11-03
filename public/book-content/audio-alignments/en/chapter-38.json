@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "lang": "en",
+  "chapterIdx": 38,
+  "title": "The Final Warning",
+  "duration": 1432.224,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/en/gc/GC-38%20-%20The%20Final%20Warning.mp3",
+  "cues": [
+    {
+      "id": "gc-p-39-1",
+      "start": 57.289,
+      "end": 93.6,
+      "chars": 499
+    },
+    {
+      "id": "gc-p-39-2",
+      "start": 93.6,
+      "end": 180.193,
+      "chars": 1190
+    },
+    {
+      "id": "gc-p-39-3",
+      "start": 180.193,
+      "end": 241.099,
+      "chars": 837
+    },
+    {
+      "id": "gc-p-39-4",
+      "start": 241.099,
+      "end": 283.449,
+      "chars": 582
+    },
+    {
+      "id": "gc-p-39-5",
+      "start": 283.449,
+      "end": 320.488,
+      "chars": 509
+    },
+    {
+      "id": "gc-p-39-6",
+      "start": 320.488,
+      "end": 364.002,
+      "chars": 598
+    },
+    {
+      "id": "gc-p-39-7",
+      "start": 364.002,
+      "end": 417.996,
+      "chars": 742
+    },
+    {
+      "id": "gc-p-39-8",
+      "start": 417.996,
+      "end": 468.06,
+      "chars": 688
+    },
+    {
+      "id": "gc-p-39-9",
+      "start": 468.06,
+      "end": 534.569,
+      "chars": 914
+    },
+    {
+      "id": "gc-p-39-10",
+      "start": 534.569,
+      "end": 644.884,
+      "chars": 1516
+    },
+    {
+      "id": "gc-p-39-11",
+      "start": 644.884,
+      "end": 733.878,
+      "chars": 1223
+    },
+    {
+      "id": "gc-p-39-12",
+      "start": 733.878,
+      "end": 799.15,
+      "chars": 897
+    },
+    {
+      "id": "gc-p-39-13",
+      "start": 799.15,
+      "end": 859.401,
+      "chars": 828
+    },
+    {
+      "id": "gc-p-39-14",
+      "start": 859.401,
+      "end": 955.454,
+      "chars": 1320
+    },
+    {
+      "id": "gc-p-39-15",
+      "start": 955.454,
+      "end": 1027.93,
+      "chars": 996
+    },
+    {
+      "id": "gc-p-39-16",
+      "start": 1027.93,
+      "end": 1077.921,
+      "chars": 687
+    },
+    {
+      "id": "gc-p-39-17",
+      "start": 1077.921,
+      "end": 1116.706,
+      "chars": 533
+    },
+    {
+      "id": "gc-p-39-18",
+      "start": 1116.706,
+      "end": 1191.074,
+      "chars": 1022
+    },
+    {
+      "id": "gc-p-39-19",
+      "start": 1191.074,
+      "end": 1233.643,
+      "chars": 585
+    },
+    {
+      "id": "gc-p-39-20",
+      "start": 1233.643,
+      "end": 1298.26,
+      "chars": 888
+    },
+    {
+      "id": "gc-p-39-21",
+      "start": 1298.26,
+      "end": 1338.937,
+      "chars": 559
+    },
+    {
+      "id": "gc-p-39-22",
+      "start": 1338.937,
+      "end": 1375.684,
+      "chars": 505
+    },
+    {
+      "id": "gc-p-39-23",
+      "start": 1375.684,
+      "end": 1432.224,
+      "chars": 777
+    }
+  ]
+}
