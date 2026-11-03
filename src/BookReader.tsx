@@ -3119,7 +3119,6 @@ export default function BookReader() {
   const [isDesktop, setIsDesktop] = useState(true);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
-  const [showShareMenu, setShowShareMenu] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [chapterReadPercent, setChapterReadPercent] = useState(0);
   const [showCopyToast, setShowCopyToast] = useState(false);
@@ -3172,8 +3171,6 @@ export default function BookReader() {
   const langBtnRef = useRef<HTMLButtonElement | null>(null);
   const burgerBtnRef = useRef<HTMLButtonElement | null>(null);
   const searchBtnRef = useRef<HTMLButtonElement | null>(null);
-  const shareBtnRef = useRef<HTMLButtonElement | null>(null);
-  const shareMenuRef = useRef<HTMLDivElement | null>(null);
   const langMenuRef = useRef<HTMLDivElement | null>(null);
   const moreBtnRef = useRef<HTMLButtonElement | null>(null);
   const moreMenuRef = useRef<HTMLDivElement | null>(null);
@@ -3326,7 +3323,6 @@ export default function BookReader() {
 
   const [langPanelStyle, setLangPanelStyle] = useState<React.CSSProperties | null>(null);
   const [searchPanelStyle, setSearchPanelStyle] = useState<React.CSSProperties | null>(null);
-  const [sharePanelStyle, setSharePanelStyle] = useState<React.CSSProperties | null>(null);
   const [morePanelStyle, setMorePanelStyle] = useState<React.CSSProperties | null>(null);
   const desktopWidthPresets = useMemo(
     () => getDesktopWidthPresets(window.innerWidth || 1280, desktopWidthLimit),
@@ -3464,22 +3460,6 @@ export default function BookReader() {
       window.removeEventListener('resize', onScrollOrResize);
     };
   }, [chapterIdx, showOpeningToc, loading]);
-
-  useEffect(() => {
-    if (!showShareMenu) return;
-    const onDown = (ev: MouseEvent | TouchEvent) => {
-      const target = ev.target as Node | null;
-      if (target && shareMenuRef.current?.contains(target)) return;
-      if (target && shareBtnRef.current?.contains(target)) return;
-      setShowShareMenu(false);
-    };
-    document.addEventListener('mousedown', onDown);
-    document.addEventListener('touchstart', onDown);
-    return () => {
-      document.removeEventListener('mousedown', onDown);
-      document.removeEventListener('touchstart', onDown);
-    };
-  }, [showShareMenu]);
 
   useEffect(() => {
     if (!showLangMenu) return;
@@ -3986,7 +3966,6 @@ export default function BookReader() {
 
   const handleStripeDonate = () => {
     window.open(STRIPE_DONATE_URL, '_blank', 'noopener,noreferrer');
-    setShowShareMenu(false);
     setShowMoreMenu(false);
   };
 
@@ -5203,7 +5182,6 @@ export default function BookReader() {
               onClick={(e) => {
                 e.stopPropagation();
                 setShowSearch(false);
-                setShowShareMenu(false);
                 setShowLangMenu(false);
                 setShowMoreMenu(false);
                 setShowOpeningToc(true);
@@ -5218,53 +5196,8 @@ export default function BookReader() {
               <MdMenu size={28} />
             </button>
 
-            {/* Spacer to push utilities to the right */}
+            {/* Essentials visible; secondary actions live in the More menu */}
             <div className="reader-right-controls" style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
-              {/* Previous chapter button */}
-              <button
-                className="reader-prev-chapter"
-                aria-label="Previous chapter"
-                disabled={showOpeningToc || chapterIdx <= 0}
-                onClick={() => {
-                  if (showOpeningToc) return;
-                  if (chapterIdx > 0) {
-                    setChapterIdx(chapterIdx - 1);
-                    scrollToTop();
-                  }
-                }}
-              >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points={isRtl ? '9 6 15 12 9 18' : '15 18 9 12 15 6'} />
-                </svg>
-              </button>
-
-              {/* Next chapter button */}
-              <button
-                className="reader-next-chapter"
-                aria-label="Next chapter"
-                disabled={showOpeningToc || chapterIdx >= chapterIds.length - 1}
-                onClick={() => {
-                  if (showOpeningToc) return;
-                  if (chapterIdx < chapterIds.length - 1) {
-                    setChapterIdx(chapterIdx + 1);
-                    scrollToTop();
-                  }
-                }}
-              >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points={isRtl ? '15 18 9 12 15 6' : '9 6 15 12 9 18'} />
-                </svg>
-              </button>
-              {/* Content actions group */}
-              <button
-                className={`reader-bookmark-btn${isCurrentBookmarked ? ' active' : ''}`}
-                aria-label={showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark this chapter'}
-                title={showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark this chapter'}
-                onClick={handleBookmark}
-              >
-                {isCurrentBookmarked ? <MdBookmark size={18} /> : <MdBookmarkBorder size={18} />}
-              </button>
-
               <button
                 className="reader-search-icon"
                 ref={searchBtnRef}
@@ -5299,29 +5232,12 @@ export default function BookReader() {
               </button>
 
               <button
-                className="reader-share-icon"
-                ref={shareBtnRef}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const btn = shareBtnRef.current;
-                  if (btn) {
-                    const r = btn.getBoundingClientRect();
-                    setSharePanelStyle({ position: 'fixed', top: r.bottom + 8, left: r.left, minWidth: 220 });
-                  }
-                  setShowShareMenu((v) => !v);
-                }}
-                aria-label="Share"
+                className={`reader-bookmark-btn${isCurrentBookmarked ? ' active' : ''}`}
+                aria-label={showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark this chapter'}
+                title={showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark this chapter'}
+                onClick={handleBookmark}
               >
-                <MdShare size={22} />
-              </button>
-
-              <button
-                className="reader-whatsapp-icon"
-                onClick={isPolishContactLanguage ? openPolishQuestionsEmail : handleWhatsAppContact}
-                aria-label={isPolishContactLanguage ? contactQuestionsLabel : contactWhatsAppWithNumberLabel}
-                title={isPolishContactLanguage ? contactQuestionsLabel : contactWhatsAppWithNumberLabel}
-              >
-                {isPolishContactLanguage ? <IoMdMail size={22} /> : <FaWhatsapp size={22} />}
+                {isCurrentBookmarked ? <MdBookmark size={18} /> : <MdBookmarkBorder size={18} />}
               </button>
 
               <button
@@ -5334,7 +5250,72 @@ export default function BookReader() {
                 <span>Donate</span>
               </button>
 
-              {/* Mobile expand (More) menu */}
+              {isDesktop && (
+                <>
+                  <div className="reader-text-size-controls" style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 4 }}>
+                    <button
+                      className="reader-text-size-btn"
+                      aria-label="Decrease text size"
+                      onClick={decreaseTextSize}
+                    >
+                      A −
+                    </button>
+                    <button
+                      className="reader-text-size-btn"
+                      aria-label="Increase text size"
+                      onClick={increaseTextSize}
+                    >
+                      A +
+                    </button>
+                  </div>
+
+                  <button
+                    className="reader-darkmode-toggle"
+                    onClick={() => setIsDark((d) => !d)}
+                    aria-label="Toggle dark mode"
+                  >
+                    {isDark ? <MdDarkMode size={22} /> : <MdLightMode size={22} />}
+                  </button>
+
+                  <div className="reader-width-control" role="group" aria-label="Adjust content width">
+                    <button
+                      className="reader-width-arrow-btn"
+                      aria-label="Decrease content width"
+                      title="Decrease content width"
+                      onClick={() => changeDesktopWidthPreset('decrease')}
+                      disabled={!canDecreaseDesktopWidth}
+                    >
+                      ←
+                    </button>
+                    <div
+                      className="reader-width-indicator"
+                      aria-label={`Content width ${desktopWidthPreset}`}
+                      title={`Content width ${desktopWidthPreset}`}
+                    >
+                      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <line x1="3" y1="11" x2="19" y2="11" stroke="currentColor" strokeWidth="1.5" opacity="0.35" />
+                        <polyline points="5,9 3,11 5,13" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                        <polyline points="17,9 19,11 17,13" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      <span
+                        className="reader-width-indicator-active"
+                        style={{ width: `${widthIndicatorPercent}%` }}
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <button
+                      className="reader-width-arrow-btn"
+                      aria-label="Increase content width"
+                      title="Increase content width"
+                      onClick={() => changeDesktopWidthPreset('increase')}
+                      disabled={!canIncreaseDesktopWidth}
+                    >
+                      →
+                    </button>
+                  </div>
+                </>
+              )}
+
               <button
                 className="reader-more-icon"
                 ref={moreBtnRef}
@@ -5351,117 +5332,10 @@ export default function BookReader() {
               >
                 <MdMoreVert size={22} />
               </button>
-
-              {/* Appearance controls group */}
-              <div className="reader-text-size-controls" style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 4 }}>
-                <button
-                  className="reader-text-size-btn"
-                  aria-label="Decrease text size"
-                  onClick={decreaseTextSize}
-                >
-                  A −
-                </button>
-                <button
-                  className="reader-text-size-btn"
-                  aria-label="Increase text size"
-                  onClick={increaseTextSize}
-                >
-                  A +
-                </button>
-              </div>
-
-              <button
-                className="reader-darkmode-toggle"
-                onClick={() => setIsDark((d) => !d)}
-                aria-label="Toggle dark mode"
-              >
-                {isDark ? <MdDarkMode size={22} /> : <MdLightMode size={22} />}
-              </button>
-              {isDesktop && (
-                <div className="reader-width-control" role="group" aria-label="Adjust content width">
-                  <button
-                    className="reader-width-arrow-btn"
-                    aria-label="Decrease content width"
-                    title="Decrease content width"
-                    onClick={() => changeDesktopWidthPreset('decrease')}
-                    disabled={!canDecreaseDesktopWidth}
-                  >
-                    ←
-                  </button>
-                  <div
-                    className="reader-width-indicator"
-                    aria-label={`Content width ${desktopWidthPreset}`}
-                    title={`Content width ${desktopWidthPreset}`}
-                  >
-                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                      <line x1="3" y1="11" x2="19" y2="11" stroke="currentColor" strokeWidth="1.5" opacity="0.35" />
-                      <polyline points="5,9 3,11 5,13" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                      <polyline points="17,9 19,11 17,13" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <span
-                      className="reader-width-indicator-active"
-                      style={{ width: `${widthIndicatorPercent}%` }}
-                      aria-hidden="true"
-                    />
-                  </div>
-                  <button
-                    className="reader-width-arrow-btn"
-                    aria-label="Increase content width"
-                    title="Increase content width"
-                    onClick={() => changeDesktopWidthPreset('increase')}
-                    disabled={!canIncreaseDesktopWidth}
-                  >
-                    →
-                  </button>
-                </div>
-              )}
             </div>
           </div>
         </div>
       </header>
-
-      {showShareMenu && (
-        <div
-          ref={shareMenuRef}
-          className="reader-share-dropdown"
-          style={sharePanelStyle || undefined}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <button onClick={() => handleShareApp('facebook')} aria-label="Share on Facebook">
-            <FaFacebookF size={16} />
-            <span>Facebook</span>
-          </button>
-          <button onClick={() => handleShareApp('twitter')} aria-label="Share on X (Twitter)">
-            <FaXTwitter size={16} />
-            <span>X (Twitter)</span>
-          </button>
-          {isPolishContactLanguage ? (
-            <>
-              <button onClick={openPolishQuestionsEmail} aria-label={contactQuestionsLabel}>
-                <IoMdMail size={18} />
-                <span>{contactQuestionsLabel}</span>
-              </button>
-              <button onClick={openPolishPrintOrderEmail} aria-label={contactPrintOrderLabel}>
-                <IoMdMail size={18} />
-                <span>{contactPrintOrderLabel}</span>
-              </button>
-            </>
-          ) : (
-            <button onClick={handleWhatsAppContact} aria-label={contactWhatsAppLabel}>
-              <FaWhatsapp size={18} />
-              <span>{contactWhatsAppLabel}</span>
-            </button>
-          )}
-          <button onClick={() => handleShareApp('email')} aria-label="Share via Email">
-            <IoMdMail size={18} />
-            <span>Email</span>
-          </button>
-          <button onClick={handleStripeDonate} aria-label="Donate via Stripe">
-            <MdFavorite size={18} />
-            <span>Donate</span>
-          </button>
-        </div>
-      )}
 
       {showMoreMenu && (
         <div
@@ -5470,6 +5344,38 @@ export default function BookReader() {
           style={morePanelStyle || undefined}
           onClick={(e) => e.stopPropagation()}
         >
+          {!isDesktop && (
+            <>
+              <button
+                onClick={() => {
+                  decreaseTextSize();
+                }}
+                aria-label="Decrease text size"
+              >
+                <span>A −</span>
+                <span>Smaller text</span>
+              </button>
+              <button
+                onClick={() => {
+                  increaseTextSize();
+                }}
+                aria-label="Increase text size"
+              >
+                <span>A +</span>
+                <span>Larger text</span>
+              </button>
+              <button
+                onClick={() => {
+                  setIsDark((d) => !d);
+                  setShowMoreMenu(false);
+                }}
+                aria-label="Toggle dark mode"
+              >
+                {isDark ? <MdDarkMode size={20} /> : <MdLightMode size={20} />}
+                <span>{isDark ? 'Light mode' : 'Dark mode'}</span>
+              </button>
+            </>
+          )}
           {!isAppInstalled && installPromptEvent && (
             <button onClick={handleInstallApp} aria-label="Install app">
               <MdDownload size={20} />
@@ -5484,37 +5390,6 @@ export default function BookReader() {
           )}
           <button
             onClick={() => {
-              handleBookmark();
-              setShowMoreMenu(false);
-            }}
-            aria-label={showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark this chapter'}
-          >
-            {isCurrentBookmarked ? <MdBookmark size={20} /> : <MdBookmarkBorder size={20} />}
-            <span>{showOpeningToc && bookmark ? 'Go to bookmark' : isCurrentBookmarked ? 'Remove bookmark' : 'Bookmark'}</span>
-          </button>
-          <button
-            onClick={() => {
-              setLangPanelStyle(getAnchoredPanelStyle(moreBtnRef.current, 260));
-              setShowLangMenu(true);
-              setShowMoreMenu(false);
-            }}
-            aria-label="Language"
-          >
-            <MdTranslate size={20} />
-            <span>Language</span>
-          </button>
-          <button
-            onClick={() => {
-              setIsDark((d) => !d);
-              setShowMoreMenu(false);
-            }}
-            aria-label="Toggle dark mode"
-          >
-            {isDark ? <MdDarkMode size={20} /> : <MdLightMode size={20} />}
-            <span>{isDark ? 'Light mode' : 'Dark mode'}</span>
-          </button>
-          <button
-            onClick={() => {
               const enable = analyticsConsentStatus !== 'granted';
               setAnalyticsConsent(enable);
               setAnalyticsConsentStatus(enable ? 'granted' : 'denied');
@@ -5525,13 +5400,35 @@ export default function BookReader() {
             <MdPrivacyTip size={20} />
             <span>{analyticsConsentStatus === 'granted' ? 'Privacy: Analytics on' : 'Privacy: Analytics off'}</span>
           </button>
-          <button onClick={() => handleShareApp('facebook')} aria-label="Share on Facebook">
+          <button
+            onClick={() => {
+              handleShareApp('facebook');
+              setShowMoreMenu(false);
+            }}
+            aria-label="Share on Facebook"
+          >
             <FaFacebookF size={16} />
             <span>Facebook</span>
           </button>
-          <button onClick={() => handleShareApp('twitter')} aria-label="Share on X (Twitter)">
+          <button
+            onClick={() => {
+              handleShareApp('twitter');
+              setShowMoreMenu(false);
+            }}
+            aria-label="Share on X (Twitter)"
+          >
             <FaXTwitter size={16} />
             <span>X (Twitter)</span>
+          </button>
+          <button
+            onClick={() => {
+              handleShareApp('email');
+              setShowMoreMenu(false);
+            }}
+            aria-label="Share via Email"
+          >
+            <IoMdMail size={18} />
+            <span>Email</span>
           </button>
           {isPolishContactLanguage ? (
             <>
@@ -5545,19 +5442,15 @@ export default function BookReader() {
               </button>
             </>
           ) : (
-            <button onClick={handleWhatsAppContact} aria-label={contactWhatsAppLabel}>
+            <button
+              onClick={handleWhatsAppContact}
+              aria-label={contactWhatsAppWithNumberLabel}
+              title={contactWhatsAppWithNumberLabel}
+            >
               <FaWhatsapp size={18} />
               <span>{contactWhatsAppLabel}</span>
             </button>
           )}
-          <button onClick={() => handleShareApp('email')} aria-label="Share via Email">
-            <IoMdMail size={18} />
-            <span>Email</span>
-          </button>
-          <button onClick={handleStripeDonate} aria-label="Donate via Stripe">
-            <MdFavorite size={18} />
-            <span>Donate</span>
-          </button>
         </div>
       )}
 
