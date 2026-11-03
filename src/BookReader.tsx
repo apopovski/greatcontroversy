@@ -97,12 +97,20 @@ const SERBIAN_FOLDER = 'Serbian - Ellen G. White';
 const SERBIAN_SOURCE_PATH = '/book-content/txt/GC-Serbian.txt';
 const FARSI_FOLDER = 'Farsi - Ellen G. White';
 const FARSI_SOURCE_PATH = '/book-content/txt/GC-Farsi.txt';
+const DARI_FOLDER = 'Dari - Ellen G. White';
+const DARI_SOURCE_PATH = '/book-content/txt/GC-Dari.txt';
 const AFRIKAANS_FOLDER = 'Afrikaans - Ellen G. White';
 const AFRIKAANS_SOURCE_PATH = '/book-content/txt/GC-Afrikaans.txt';
 const HINDI_FOLDER = 'Hindi - Ellen G. White';
 const HINDI_SOURCE_PATH = '/book-content/txt/GC-Hindi.txt';
 const BENGALI_FOLDER = 'Bengali - Ellen G. White';
 const BENGALI_SOURCE_PATH = '/book-content/txt/GC-Bengali.txt';
+const MALAYALAM_FOLDER = 'Malayalam - Ellen G. White';
+const MALAYALAM_SOURCE_PATH = '/book-content/txt/GC-Malayalam.txt';
+const HEBREW_FOLDER = 'Hebrew - Ellen G. White';
+const HEBREW_SOURCE_PATH = '/book-content/txt/GC-Hebrew.txt';
+const TURKISH_FOLDER = 'Turkish - Ellen G. White';
+const TURKISH_SOURCE_PATH = '/book-content/txt/GC-Turkish.txt';
 const INDONESIAN_FOLDER = 'Indonesian - Ellen G. White';
 const INDONESIAN_SOURCE_PATH = '/book-content/txt/GC-Indonesian.txt';
 const MALAY_FOLDER = 'Kontroversi Besar - Ellen G. White';
@@ -110,6 +118,18 @@ const MALAY_SOURCE_PATH = '/book-content/txt/GC-Indonesian.txt';
 const DUTCH_FOLDER = 'De Grote Strijd - Ellen G. White';
 const URDU_FOLDER = 'Urdu - Ellen G. White';
 const URDU_SOURCE_PATH = '/book-content/txt/GC-Urdu.txt';
+const MALAGASY_FOLDER = 'Malagasy - Ellen G. White';
+const MALAGASY_SOURCE_PATH = '/book-content/txt/GC-Malagasy.txt';
+const MIZO_FOLDER = 'Mizo - Ellen G. White';
+const MIZO_SOURCE_PATH = '/book-content/txt/GC-Mizo.txt';
+const HAKHA_FOLDER = 'Hakha - Ellen G. White';
+const HAKHA_SOURCE_PATH = '/book-content/txt/GC-Hakha.txt';
+const ZOMI_FOLDER = 'Zomi - Ellen G. White';
+const ZOMI_SOURCE_PATH = '/book-content/txt/GC-Zomi.txt';
+const NDEBELE_FOLDER = 'Ndebele - Ellen G. White';
+const NDEBELE_SOURCE_PATH = '/book-content/txt/GC-Ndebele.txt';
+const SGAW_KAREN_FOLDER = "S'gaw Karen - Ellen G. White";
+const SGAW_KAREN_SOURCE_PATH = '/book-content/txt/GC-SgawKaren.txt';
 const FRENCH_FOLDER = 'French - Ellen G. White';
 const POLISH_FOLDER = 'Wielki boj - Ellen G. White';
 const ALBANIAN_FOLDER = 'Beteja e Madhe - Ellen G. White';
@@ -153,12 +173,22 @@ const DEVELOPER_BY_LABELS: Record<string, string> = {
   ja: '開発',
   sr: 'Развио',
   fa: 'توسعه توسط',
+  prs: 'توسعه توسط',
   af: 'Ontwikkel deur',
   hi: 'द्वारा विकसित',
   bn: 'ডেভেলপ করেছেন',
+  ml: 'വികസിപ്പിച്ചത്',
+  he: 'פותח על ידי',
+  tr: 'Geliştiren',
   id: 'Dikembangkan oleh',
   ms: 'Dibangunkan oleh',
   ur: 'تیار کردہ از',
+  mg: 'Novolavolain’i',
+  lus: 'Siamtu',
+  cnh: 'Serhmi',
+  zo: 'Bawlpa',
+  nd: 'Kwakhiwa ngu',
+  ksw: 'Developed by',
   fr: 'Développé par',
   sq: 'Zhvilluar nga',
   hu: 'Fejlesztette',
@@ -191,12 +221,22 @@ const CONTACT_WHATSAPP_LABELS: Record<string, string> = {
   [JAPANESE_FOLDER]: 'WhatsAppで連絡',
   [SERBIAN_FOLDER]: 'Kontaktirajte preko WhatsApp-а',
   [FARSI_FOLDER]: 'ارتباط از طریق واتساپ',
+  [DARI_FOLDER]: 'ارتباط از طریق واتساپ',
   [AFRIKAANS_FOLDER]: 'Kontak op WhatsApp',
   [HINDI_FOLDER]: 'WhatsApp पर संपर्क करें',
   [BENGALI_FOLDER]: 'WhatsApp-এ যোগাযোগ করুন',
+  [MALAYALAM_FOLDER]: 'WhatsApp-ൽ ബന്ധപ്പെടുക',
+  [HEBREW_FOLDER]: 'צור קשר ב-WhatsApp',
+  [TURKISH_FOLDER]: 'WhatsApp ile iletişim',
   [INDONESIAN_FOLDER]: 'Hubungi lewat WhatsApp',
   [MALAY_FOLDER]: 'Hubungi di WhatsApp',
   [URDU_FOLDER]: 'واٹس ایپ پر رابطہ کریں',
+  [MALAGASY_FOLDER]: 'Mifandraisa amin’ny WhatsApp',
+  [MIZO_FOLDER]: 'WhatsApp-ah contact rawh',
+  [HAKHA_FOLDER]: 'WhatsApp in biakhawh',
+  [ZOMI_FOLDER]: 'WhatsApp ah contact in',
+  [NDEBELE_FOLDER]: 'Xhumana ngeWhatsApp',
+  [SGAW_KAREN_FOLDER]: 'Contact on WhatsApp',
   [FRENCH_FOLDER]: 'Contact sur WhatsApp',
   [ALBANIAN_FOLDER]: 'Kontakto në WhatsApp',
   [HUNGARIAN_FOLDER]: 'Kapcsolat WhatsAppon',
@@ -268,12 +308,22 @@ const LANGUAGE_FOLDERS = [
   JAPANESE_FOLDER,
   SERBIAN_FOLDER,
   FARSI_FOLDER,
+  DARI_FOLDER,
   AFRIKAANS_FOLDER,
   HINDI_FOLDER,
   BENGALI_FOLDER,
+  MALAYALAM_FOLDER,
+  HEBREW_FOLDER,
+  TURKISH_FOLDER,
   INDONESIAN_FOLDER,
   MALAY_FOLDER,
   URDU_FOLDER,
+  MALAGASY_FOLDER,
+  MIZO_FOLDER,
+  HAKHA_FOLDER,
+  ZOMI_FOLDER,
+  NDEBELE_FOLDER,
+  SGAW_KAREN_FOLDER,
   FRENCH_FOLDER,
   ALBANIAN_FOLDER,
   HUNGARIAN_FOLDER,
@@ -306,12 +356,22 @@ const LANGUAGE_ABBREV: Record<string, string> = {
   [JAPANESE_FOLDER]: 'ja',
   [SERBIAN_FOLDER]: 'sr',
   [FARSI_FOLDER]: 'fa',
+  [DARI_FOLDER]: 'prs',
   [AFRIKAANS_FOLDER]: 'af',
   [HINDI_FOLDER]: 'hi',
   [BENGALI_FOLDER]: 'bn',
+  [MALAYALAM_FOLDER]: 'ml',
+  [HEBREW_FOLDER]: 'he',
+  [TURKISH_FOLDER]: 'tr',
   [INDONESIAN_FOLDER]: 'id',
   [MALAY_FOLDER]: 'ms',
   [URDU_FOLDER]: 'ur',
+  [MALAGASY_FOLDER]: 'mg',
+  [MIZO_FOLDER]: 'lus',
+  [HAKHA_FOLDER]: 'cnh',
+  [ZOMI_FOLDER]: 'zo',
+  [NDEBELE_FOLDER]: 'nd',
+  [SGAW_KAREN_FOLDER]: 'ksw',
   [FRENCH_FOLDER]: 'fr',
   [ALBANIAN_FOLDER]: 'sq',
   [HUNGARIAN_FOLDER]: 'hu',
@@ -344,12 +404,22 @@ const CONTACT_WHATSAPP_AUTO_MESSAGES: Record<string, string> = {
   ja: 'こんにちは、連絡を取りたいです。',
   sr: 'Здраво, желео/желела бих да ступим у контакт.',
   fa: 'سلام، مایلم ارتباط برقرار کنم.',
+  prs: 'سلام، میخواهم ارتباط بگیرم.',
   af: 'Hallo, ek wil graag kontak maak.',
   hi: 'नमस्ते, मैं संपर्क करना चाहता/चाहती हूँ।',
   bn: 'হ্যালো, আমি যোগাযোগ করতে চাই।',
+  ml: 'ഹലോ, ഞാൻ ബന്ധപ്പെടാൻ ആഗ്രഹിക്കുന്നു.',
+  he: 'שלום, אשמח ליצור קשר.',
+  tr: 'Merhaba, iletişime geçmek istiyorum.',
   id: 'Halo, saya ingin terhubung.',
   ms: 'Hai, saya ingin berhubung.',
   ur: 'ہیلو، میں رابطہ کرنا چاہتا/چاہتی ہوں۔',
+  mg: 'Salama, te-hifandray aho.',
+  lus: 'Chibai, contact ka duh.',
+  cnh: 'Hello, ka biak duh.',
+  zo: 'Hello, contact ka deih.',
+  nd: 'Sawubona, ngifuna ukuxhumana.',
+  ksw: 'Hello, I would like to connect.',
   fr: 'Bonjour, je souhaite entrer en contact.',
   sq: 'Përshëndetje, do të doja të lidhesha.',
   hu: 'Szia, szeretnék kapcsolatba lépni.',
@@ -382,12 +452,22 @@ const BOOK_TITLE_OVERRIDES: Record<string, string> = {
   [JAPANESE_FOLDER]: '各時代の大争闘',
   [SERBIAN_FOLDER]: 'Велика борба између Христа и Сотоне',
   [FARSI_FOLDER]: 'نبرد عظیم',
+  [DARI_FOLDER]: 'مبارزه ای بزرگ',
   [AFRIKAANS_FOLDER]: 'Die Groot Stryd',
   [HINDI_FOLDER]: 'महान संघर्ष',
   [BENGALI_FOLDER]: 'মহা বিবাদ',
+  [MALAYALAM_FOLDER]: 'വൻ പോരാട്ടം',
+  [HEBREW_FOLDER]: 'העימות הגדול',
+  [TURKISH_FOLDER]: 'Büyük Mücadele',
   [INDONESIAN_FOLDER]: 'Kemenangan Akhir',
   [MALAY_FOLDER]: 'Kontroversi Besar',
   [URDU_FOLDER]: 'عظیم کشمکش',
+  [MALAGASY_FOLDER]: 'Hery Mifanandrina',
+  [MIZO_FOLDER]: 'Indona Ropui',
+  [HAKHA_FOLDER]: 'Dohnak Lianngan',
+  [ZOMI_FOLDER]: 'Kidona Lianpi',
+  [NDEBELE_FOLDER]: 'Impikiswano Enkulu',
+  [SGAW_KAREN_FOLDER]: 'Great Controversy',
   [FRENCH_FOLDER]: 'La Tragédie des Siècles',
   [ALBANIAN_FOLDER]: 'Beteja e Madhe',
   [HUNGARIAN_FOLDER]: 'A nagy küzdelem',
@@ -420,12 +500,22 @@ const META_TAGLINES: Record<string, string> = {
   ja: '善と悪の間の宇宙的争闘',
   sr: 'Космички сукоб између добра и зла',
   fa: 'نبرد کیهانی میان خیر و شر',
+  prs: 'مبارزه کیهانی میان خیر و شر',
   af: 'Kosmiese konflik tussen goed en kwaad',
   hi: 'अच्छाई और बुराई के बीच ब्रह्मांडीय संघर्ष',
   bn: 'ভাল ও মন্দের মধ্যে মহাজাগতিক সংঘর্ষ',
+  ml: 'നന്മയും തിന്മയും തമ്മിലുള്ള മഹാപോരാട്ടം',
+  he: 'העימות הקוסמי בין טוב לרע',
+  tr: 'İyilik ile kötülük arasındaki kozmik mücadele',
   id: 'Konflik kosmik antara yang baik dan yang jahat',
   ms: 'Konflik kosmik antara yang baik dan yang jahat',
   ur: 'نیکی اور بدی کے درمیان کائناتی کشمکش',
+  mg: 'Ny ady lehibe eo amin’ny tsara sy ny ratsy',
+  lus: 'Ṭha leh ṭha lo inkara indona',
+  cnh: 'Pathian mi hna le Setan karah dohnak',
+  zo: 'Christ leh Satan kidona',
+  nd: 'Impikiswano phakathi kokuhle nokubi',
+  ksw: 'Cosmic conflict between good and evil',
   fr: 'Conflit cosmique entre le bien et le mal',
   sq: 'Konflikt kozmik ndërmjet së mirës dhe së keqes',
   hu: 'Kozmikus küzdelem a jó és a rossz között',
@@ -461,12 +551,22 @@ const LANGUAGE_URL_NAMES: Record<string, string> = {
   [JAPANESE_FOLDER]: '日本語',
   [SERBIAN_FOLDER]: 'Српски',
   [FARSI_FOLDER]: 'فارسی',
+  [DARI_FOLDER]: 'دری',
   [AFRIKAANS_FOLDER]: 'Afrikaans',
   [HINDI_FOLDER]: 'हिन्दी',
   [BENGALI_FOLDER]: 'বাংলা',
+  [MALAYALAM_FOLDER]: 'മലയാളം',
+  [HEBREW_FOLDER]: 'עברית',
+  [TURKISH_FOLDER]: 'Türkçe',
   [INDONESIAN_FOLDER]: 'Bahasa Indonesia',
   [MALAY_FOLDER]: 'Bahasa Melayu',
   [URDU_FOLDER]: 'اردو',
+  [MALAGASY_FOLDER]: 'Malagasy',
+  [MIZO_FOLDER]: 'Mizo',
+  [HAKHA_FOLDER]: 'Hakha',
+  [ZOMI_FOLDER]: 'Zomi',
+  [NDEBELE_FOLDER]: 'isiNdebele',
+  [SGAW_KAREN_FOLDER]: 'ကညီကျိာ်',
   [FRENCH_FOLDER]: 'Français',
   [ALBANIAN_FOLDER]: 'Shqip',
   [HUNGARIAN_FOLDER]: 'Magyar',
@@ -512,12 +612,22 @@ const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
   [JAPANESE_FOLDER]: '章',
   [SERBIAN_FOLDER]: 'Поглавље',
   [FARSI_FOLDER]: 'فصل',
+  [DARI_FOLDER]: 'باب',
   [AFRIKAANS_FOLDER]: 'Hoofstuk',
   [HINDI_FOLDER]: 'पाठ',
   [BENGALI_FOLDER]: 'অধ্যায়',
+  [MALAYALAM_FOLDER]: 'അദ്ധ്യായം',
+  [HEBREW_FOLDER]: 'פרק',
+  [TURKISH_FOLDER]: 'Bölüm',
   [INDONESIAN_FOLDER]: 'Bab',
   [MALAY_FOLDER]: 'Bab',
   [URDU_FOLDER]: 'باب',
+  [MALAGASY_FOLDER]: 'Toko',
+  [MIZO_FOLDER]: 'Bung',
+  [HAKHA_FOLDER]: 'Dal',
+  [ZOMI_FOLDER]: 'Khen',
+  [NDEBELE_FOLDER]: 'Isahluko',
+  [SGAW_KAREN_FOLDER]: 'Chapter',
   [FRENCH_FOLDER]: 'Chapitre',
   [ALBANIAN_FOLDER]: 'Kapitulli',
   [HUNGARIAN_FOLDER]: 'Fejezet',
@@ -550,12 +660,22 @@ const LANGUAGE_CONTENTS_LABELS: Record<string, string> = {
   [JAPANESE_FOLDER]: '目次',
   [SERBIAN_FOLDER]: 'Садржај',
   [FARSI_FOLDER]: 'فهرست',
+  [DARI_FOLDER]: 'فهرست',
   [AFRIKAANS_FOLDER]: 'Inhoud',
   [HINDI_FOLDER]: 'विषय सूची',
   [BENGALI_FOLDER]: 'সূচিপত্র',
+  [MALAYALAM_FOLDER]: 'ഉള്ളടക്കം',
+  [HEBREW_FOLDER]: 'תוכן העניינים',
+  [TURKISH_FOLDER]: 'İçindekiler',
   [INDONESIAN_FOLDER]: 'Daftar Isi',
   [MALAY_FOLDER]: 'Kandungan',
   [URDU_FOLDER]: 'فہرست',
+  [MALAGASY_FOLDER]: 'Votoaty',
+  [MIZO_FOLDER]: 'Thuziak',
+  [HAKHA_FOLDER]: 'Cawnnak',
+  [ZOMI_FOLDER]: 'Laisuahna',
+  [NDEBELE_FOLDER]: 'Okuqukethwe',
+  [SGAW_KAREN_FOLDER]: 'Contents',
   [FRENCH_FOLDER]: 'Sommaire',
   [ALBANIAN_FOLDER]: 'Përmbajtja',
   [HUNGARIAN_FOLDER]: 'Tartalomjegyzék',
@@ -588,12 +708,22 @@ const LANGUAGE_CONTINUE_LABELS: Record<string, string> = {
   [JAPANESE_FOLDER]: '続ける',
   [SERBIAN_FOLDER]: 'Настави',
   [FARSI_FOLDER]: 'ادامه',
+  [DARI_FOLDER]: 'ادامه',
   [AFRIKAANS_FOLDER]: 'Gaan voort',
   [HINDI_FOLDER]: 'जारी रखें',
   [BENGALI_FOLDER]: 'চালিয়ে যান',
+  [MALAYALAM_FOLDER]: 'തുടരുക',
+  [HEBREW_FOLDER]: 'המשך',
+  [TURKISH_FOLDER]: 'Devam et',
   [INDONESIAN_FOLDER]: 'Lanjutkan',
   [MALAY_FOLDER]: 'Teruskan',
   [URDU_FOLDER]: 'جاری رکھیں',
+  [MALAGASY_FOLDER]: 'Tohizo',
+  [MIZO_FOLDER]: 'Chhunzawm zel',
+  [HAKHA_FOLDER]: 'Thawnthoh',
+  [ZOMI_FOLDER]: 'Paito',
+  [NDEBELE_FOLDER]: 'Qhubeka',
+  [SGAW_KAREN_FOLDER]: 'Continue',
   [FRENCH_FOLDER]: 'Continuer',
   [ALBANIAN_FOLDER]: 'Vazhdo',
   [HUNGARIAN_FOLDER]: 'Folytatás',
@@ -834,6 +964,15 @@ const HERO_COPY: Record<string, {
     chooseLanguage: 'انتخاب زبان',
     availability: 'در ۳۰ زبان موجود است • در سراسر جهان خوانده می‌شود',
   },
+  prs: {
+    line1: 'امپراتوری‌ها برخاسته اند.',
+    line2: 'حقیقت سرکوب شده است.',
+    line3: 'نبوت تحقق یافته است.',
+    line4: 'بعد چه میاید؟',
+    startReading: 'شروع خواندن',
+    chooseLanguage: 'انتخاب زبان',
+    availability: 'در ۳۰ زبان موجود است • در سراسر جهان خوانده میشود',
+  },
   af: {
     line1: 'Ryke het opgestaan.',
     line2: 'Die waarheid is onderdruk.',
@@ -861,6 +1000,33 @@ const HERO_COPY: Record<string, {
     chooseLanguage: 'ভাষা বেছে নিন',
     availability: '৩০টি ভাষায় উপলভ্য • বিশ্বজুড়ে পড়া হয়',
   },
+  ml: {
+    line1: 'സാമ്രാജ്യങ്ങൾ ഉയർന്നു.',
+    line2: 'സത്യം അടിച്ചമർത്തപ്പെട്ടു.',
+    line3: 'പ്രവചനം നിറവേറി.',
+    line4: 'അടുത്തത് എന്ത്?',
+    startReading: 'വായന ആരംഭിക്കുക',
+    chooseLanguage: 'ഭാഷ തിരഞ്ഞെടുക്കുക',
+    availability: '30 ഭാഷകളിൽ ലഭ്യം • ലോകമെമ്പാടും വായിക്കപ്പെടുന്നു',
+  },
+  he: {
+    line1: 'אימפריות קמו.',
+    line2: 'האמת דוכאה.',
+    line3: 'הנבואה התגשמה.',
+    line4: 'מה הלאה?',
+    startReading: 'התחל לקרוא',
+    chooseLanguage: 'בחר שפה',
+    availability: 'זמין ב־30 שפות • נקרא ברחבי העולם',
+  },
+  tr: {
+    line1: 'İmparatorluklar yükseldi.',
+    line2: 'Gerçek bastırıldı.',
+    line3: 'Peygamberlik yerine geldi.',
+    line4: 'Sırada ne var?',
+    startReading: 'Okumaya başla',
+    chooseLanguage: 'Dil seç',
+    availability: '30 dilde mevcut • Dünya çapında okunuyor',
+  },
   id: {
     line1: 'Kerajaan telah bangkit.',
     line2: 'Kebenaran telah ditekan.',
@@ -878,6 +1044,60 @@ const HERO_COPY: Record<string, {
     startReading: 'مطالعہ شروع کریں',
     chooseLanguage: 'زبان منتخب کریں',
     availability: '30 زبانوں میں دستیاب • دنیا بھر میں پڑھی جاتی ہے',
+  },
+  mg: {
+    line1: 'Nisy fanjakana nifoha.',
+    line2: 'Voatsindry ny fahamarinana.',
+    line3: 'Efa tanteraka ny faminaniana.',
+    line4: 'Inona no manaraka?',
+    startReading: 'Atombohy ny famakiana',
+    chooseLanguage: 'Safidio ny fiteny',
+    availability: 'Amin’ny fiteny 30+ • Vakiana maneran-tany',
+  },
+  lus: {
+    line1: 'Kingdom-te an tho.',
+    line2: 'Thutak chu tiphuit a ni.',
+    line3: 'Hrilhlawkna a thlengfamkim.',
+    line4: 'Eng nge a lo thleng dawn?',
+    startReading: 'Chhiar tan rawh',
+    chooseLanguage: 'Ṭawng thlang rawh',
+    availability: 'Ṭawng 30+ ah a awm • Khawvel pumah chhiar a ni',
+  },
+  cnh: {
+    line1: 'Kingdom hna an tho.',
+    line2: 'Thutmaksar tiphuit a si.',
+    line3: 'Profeti a thlengfamkim.',
+    line4: 'Zeitindah a um hna lai?',
+    startReading: 'Cawn thawk',
+    chooseLanguage: 'Holh thim',
+    availability: 'Holh 30+ ah a um • Vawlei pumpik ah an cawn',
+  },
+  zo: {
+    line1: 'Kingdom te a tho.',
+    line2: 'Thumaan tiphuit a hi.',
+    line3: 'Genkholhna a tangtung.',
+    line4: 'Bang hiam a zom?',
+    startReading: 'Sim na pan',
+    chooseLanguage: 'Pau teel',
+    availability: 'Pau 30+ ah a om • Leitung pumpik ah a sim',
+  },
+  nd: {
+    line1: 'Imibuso iphakeme.',
+    line2: 'Iqiniso licindezelwe.',
+    line3: 'Isiprofetho sizalisekile.',
+    line4: 'Yini elandelayo?',
+    startReading: 'Qala ukufunda',
+    chooseLanguage: 'Khetha ulimi',
+    availability: 'Kutholakala ngezilimi ezingu-30+ • Kufundwa emhlabeni wonke',
+  },
+  ksw: {
+    line1: 'Empires have risen.',
+    line2: 'Truth has been suppressed.',
+    line3: 'Prophecy has been fulfilled.',
+    line4: 'What comes next?',
+    startReading: 'Start reading',
+    chooseLanguage: 'Choose language',
+    availability: 'Available in 30+ languages • Read worldwide',
   },
   fr: {
     line1: 'Des empires se sont levés.',
@@ -943,11 +1163,21 @@ const COPY_TOAST_LABELS: Record<string, string> = {
   ja: 'コピーしました',
   sr: 'Копирано',
   fa: 'کپی شد',
+  prs: 'کاپی شد',
   af: 'Gekopieer',
   hi: 'कॉपी किया गया',
   bn: 'কপি হয়েছে',
+  ml: 'പകർത്തി',
+  he: 'הועתק',
+  tr: 'Kopyalandı',
   id: 'Disalin',
   ur: 'کاپی ہو گیا',
+  mg: 'Nokopiana',
+  lus: 'Copy a ni',
+  cnh: 'Copy a si cang',
+  zo: 'Copy a hi ta',
+  nd: 'Kukopishelwe',
+  ksw: 'Copied',
   fr: 'Copié',
   sq: 'U kopjua',
   hu: 'Kimásolva',
@@ -980,11 +1210,21 @@ const AUDIO_AVAILABLE_LABELS: Record<string, string> = {
   ja: '音声あり',
   sr: 'Аудио доступан',
   fa: 'صوت در دسترس است',
+  prs: 'صوت موجود است',
   af: 'Klank beskikbaar',
   hi: 'ऑडियो उपलब्ध',
   bn: 'অডিও উপলভ্য',
+  ml: 'ഓഡിയോ ലഭ്യം',
+  he: 'אודיו זמין',
+  tr: 'Ses mevcut',
   id: 'Audio tersedia',
   ur: 'آڈیو دستیاب ہے',
+  mg: 'Misy audio',
+  lus: 'Audio a awm',
+  cnh: 'Audio a um',
+  zo: 'Audio a om',
+  nd: 'I-audio iyatholakala',
+  ksw: 'Audio available',
   fr: 'Audio disponible',
   sq: 'Audio i disponuesh',
   hu: 'Hanganyag elérhető',
@@ -1082,13 +1322,23 @@ const ROUTE_CHAPTER_PREFIX_OVERRIDES: Record<string, string> = {
   sr: 'poglavlje',
   ar: 'alfasl',
   fa: 'fasl',
+  prs: 'bab',
   am: 'meiraf',
   zh: 'zhang',
   ko: 'jang',
   ja: 'sho',
   hi: 'paath',
   bn: 'oddhay',
+  ml: 'adhyayam',
+  he: 'perek',
+  tr: 'bolum',
   ur: 'bab',
+  mg: 'toko',
+  lus: 'bung',
+  cnh: 'dal',
+  zo: 'khen',
+  nd: 'isahluko',
+  ksw: 'chapter',
 };
 
 function getChapterRoutePrefix(langKey: string) {
@@ -1354,7 +1604,7 @@ function applyDropcap(html: string, langKey: string, chapterIndex: number, toc: 
     const name = LANGUAGE_NAMES[langKey] || '';
     // Do not apply dropcap for Arabic/Chinese languages
     // (RTL and CJK layouts often need custom typography handling)
-    if (name.toLowerCase() === 'arabic' || name.toLowerCase() === 'farsi' || name.toLowerCase() === 'persian' || name.toLowerCase() === 'urdu' || langKey === CHINESE_FOLDER || langKey === JAPANESE_FOLDER || langKey === FARSI_FOLDER || langKey === HINDI_FOLDER || langKey === BENGALI_FOLDER || langKey === URDU_FOLDER) return html;
+    if (name.toLowerCase() === 'arabic' || name.toLowerCase() === 'farsi' || name.toLowerCase() === 'persian' || name.toLowerCase() === 'dari' || name.toLowerCase() === 'urdu' || name.toLowerCase() === 'hebrew' || langKey === CHINESE_FOLDER || langKey === JAPANESE_FOLDER || langKey === FARSI_FOLDER || langKey === DARI_FOLDER || langKey === HINDI_FOLDER || langKey === BENGALI_FOLDER || langKey === MALAYALAM_FOLDER || langKey === HEBREW_FOLDER || langKey === URDU_FOLDER || langKey === SGAW_KAREN_FOLDER) return html;
     if (typeof chapterIndex !== 'number' || chapterIndex < 0) return html;
     const doc = new DOMParser().parseFromString(html || '', 'text/html');
     // Strip any styles or stylesheet links from the parsed chapter to avoid
@@ -2078,6 +2328,76 @@ function parseFarsiBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; c
   return { toc, chapterIds, chapterHtml };
 }
 
+function parseDariBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
+  const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
+  const chapterMarker = /^\s*@@CHAPTER@@\s*(.+?)\s*$/;
+  const normalizeDariTitle = (s: string) =>
+    (s || '')
+      .replace(/^\s*[-:]+\s*/, '')
+      .replace(/\s*[-:]+\s*$/g, '')
+      .replace(/\s*[—–-]\s*/g, ' — ')
+      .replace(/[*]+.*$/u, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+  type Section = { id: string; title: string; lines: string[] };
+  const sections: Section[] = [];
+  let current: Section | null = null;
+  let sectionCount = 0;
+
+  const pushCurrent = () => {
+    if (!current) return;
+    sections.push(current);
+    current = null;
+  };
+
+  for (const line of lines) {
+    const trimmed = (line || '').trim();
+    const match = trimmed.match(chapterMarker);
+    if (match) {
+      pushCurrent();
+      sectionCount += 1;
+      current = {
+        id: `prs-ch-${sectionCount}`,
+        title: normalizeDariTitle(match[1] || ''),
+        lines: [],
+      };
+      continue;
+    }
+
+    if (current) current.lines.push(line);
+  }
+  pushCurrent();
+
+  const toParagraphs = (sectionLines: string[]) => {
+    const paras: string[] = [];
+    let buf: string[] = [];
+    const flush = () => {
+      const t = buf.join(' ').replace(/\s+/g, ' ').trim();
+      if (t) paras.push(`<p>${escapeHtml(t)}</p>`);
+      buf = [];
+    };
+
+    sectionLines.forEach((ln) => {
+      const t = (ln || '').trim();
+      if (!t) flush();
+      else buf.push(t);
+    });
+    flush();
+    return paras.join('\n');
+  };
+
+  const toc: TocEntry[] = sections.map((s) => ({ title: s.title, href: `#${s.id}` }));
+  const chapterIds = sections.map((s) => s.id);
+  const chapterHtml = sections.map((s) => {
+    const heading = `<h2 class="chapterhead">${escapeHtml(s.title)}</h2>`;
+    const body = toParagraphs(s.lines);
+    return `<div id="${s.id}">\n${heading}\n${body}\n</div>`;
+  });
+
+  return { toc, chapterIds, chapterHtml };
+}
+
 function parseAfrikaansBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
   const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
   const chapterMarker = /^\s*@@CHAPTER@@\s*(.+?)\s*$/;
@@ -2289,6 +2609,216 @@ function parseBengaliBook(raw: string): { toc: TocEntry[]; chapterIds: string[];
   return { toc, chapterIds, chapterHtml };
 }
 
+function parseTurkishBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
+  const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
+  const chapterMarker = /^\s*@@CHAPTER@@\s*(.+?)\s*$/;
+  const normalizeTurkishTitle = (s: string) =>
+    (s || '')
+      .replace(/^\s*[-:]+\s*/, '')
+      .replace(/\s*[-:]+\s*$/g, '')
+      .replace(/\s*[—–-]\s*/g, ' — ')
+      .replace(/[*]+.*$/u, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+  type Section = { id: string; title: string; lines: string[] };
+  const sections: Section[] = [];
+  let current: Section | null = null;
+  let sectionCount = 0;
+
+  const pushCurrent = () => {
+    if (!current) return;
+    sections.push(current);
+    current = null;
+  };
+
+  for (const line of lines) {
+    const trimmed = (line || '').trim();
+    const match = trimmed.match(chapterMarker);
+    if (match) {
+      pushCurrent();
+      sectionCount += 1;
+      current = {
+        id: `tr-ch-${sectionCount}`,
+        title: normalizeTurkishTitle(match[1] || ''),
+        lines: [],
+      };
+      continue;
+    }
+
+    if (current) current.lines.push(line);
+  }
+  pushCurrent();
+
+  const toParagraphs = (sectionLines: string[]) => {
+    const paras: string[] = [];
+    let buf: string[] = [];
+    const flush = () => {
+      const t = buf.join(' ').replace(/\s+/g, ' ').trim();
+      if (t) paras.push(`<p>${escapeHtml(t)}</p>`);
+      buf = [];
+    };
+
+    sectionLines.forEach((ln) => {
+      const t = (ln || '').trim();
+      if (!t) flush();
+      else buf.push(t);
+    });
+    flush();
+    return paras.join('\n');
+  };
+
+  const toc: TocEntry[] = sections.map((s) => ({ title: s.title, href: `#${s.id}` }));
+  const chapterIds = sections.map((s) => s.id);
+  const chapterHtml = sections.map((s) => {
+    const heading = `<h2 class="chapterhead">${escapeHtml(s.title)}</h2>`;
+    const body = toParagraphs(s.lines);
+    return `<div id="${s.id}">\n${heading}\n${body}\n</div>`;
+  });
+
+  return { toc, chapterIds, chapterHtml };
+}
+
+function parseHebrewBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
+  const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
+  const chapterMarker = /^\s*@@CHAPTER@@\s*(.+?)\s*$/;
+  const normalizeHebrewTitle = (s: string) =>
+    (s || '')
+      .replace(/^\s*[-:]+\s*/, '')
+      .replace(/\s*[-:]+\s*$/g, '')
+      .replace(/\s*[—–-]\s*/g, ' — ')
+      .replace(/[*]+.*$/u, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+  type Section = { id: string; title: string; lines: string[] };
+  const sections: Section[] = [];
+  let current: Section | null = null;
+  let sectionCount = 0;
+
+  const pushCurrent = () => {
+    if (!current) return;
+    sections.push(current);
+    current = null;
+  };
+
+  for (const line of lines) {
+    const trimmed = (line || '').trim();
+    const match = trimmed.match(chapterMarker);
+    if (match) {
+      pushCurrent();
+      sectionCount += 1;
+      current = {
+        id: `he-ch-${sectionCount}`,
+        title: normalizeHebrewTitle(match[1] || ''),
+        lines: [],
+      };
+      continue;
+    }
+
+    if (current) current.lines.push(line);
+  }
+  pushCurrent();
+
+  const toParagraphs = (sectionLines: string[]) => {
+    const paras: string[] = [];
+    let buf: string[] = [];
+    const flush = () => {
+      const t = buf.join(' ').replace(/\s+/g, ' ').trim();
+      if (t) paras.push(`<p>${escapeHtml(t)}</p>`);
+      buf = [];
+    };
+
+    sectionLines.forEach((ln) => {
+      const t = (ln || '').trim();
+      if (!t) flush();
+      else buf.push(t);
+    });
+    flush();
+    return paras.join('\n');
+  };
+
+  const toc: TocEntry[] = sections.map((s) => ({ title: s.title, href: `#${s.id}` }));
+  const chapterIds = sections.map((s) => s.id);
+  const chapterHtml = sections.map((s) => {
+    const heading = `<h2 class="chapterhead">${escapeHtml(s.title)}</h2>`;
+    const body = toParagraphs(s.lines);
+    return `<div id="${s.id}">\n${heading}\n${body}\n</div>`;
+  });
+
+  return { toc, chapterIds, chapterHtml };
+}
+
+function parseMalayalamBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
+  const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
+  const chapterMarker = /^\s*@@CHAPTER@@\s*(.+?)\s*$/;
+  const normalizeMalayalamTitle = (s: string) =>
+    (s || '')
+      .replace(/^\s*[-:]+\s*/, '')
+      .replace(/\s*[-:]+\s*$/g, '')
+      .replace(/\s*[—–-]\s*/g, ' — ')
+      .replace(/[*]+.*$/u, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+  type Section = { id: string; title: string; lines: string[] };
+  const sections: Section[] = [];
+  let current: Section | null = null;
+  let sectionCount = 0;
+
+  const pushCurrent = () => {
+    if (!current) return;
+    sections.push(current);
+    current = null;
+  };
+
+  for (const line of lines) {
+    const trimmed = (line || '').trim();
+    const match = trimmed.match(chapterMarker);
+    if (match) {
+      pushCurrent();
+      sectionCount += 1;
+      current = {
+        id: `ml-ch-${sectionCount}`,
+        title: normalizeMalayalamTitle(match[1] || ''),
+        lines: [],
+      };
+      continue;
+    }
+
+    if (current) current.lines.push(line);
+  }
+  pushCurrent();
+
+  const toParagraphs = (sectionLines: string[]) => {
+    const paras: string[] = [];
+    let buf: string[] = [];
+    const flush = () => {
+      const t = buf.join(' ').replace(/\s+/g, ' ').trim();
+      if (t) paras.push(`<p>${escapeHtml(t)}</p>`);
+      buf = [];
+    };
+
+    sectionLines.forEach((ln) => {
+      const t = (ln || '').trim();
+      if (!t) flush();
+      else buf.push(t);
+    });
+    flush();
+    return paras.join('\n');
+  };
+
+  const toc: TocEntry[] = sections.map((s) => ({ title: s.title, href: `#${s.id}` }));
+  const chapterIds = sections.map((s) => s.id);
+  const chapterHtml = sections.map((s) => {
+    const heading = `<h2 class="chapterhead">${escapeHtml(s.title)}</h2>`;
+    const body = toParagraphs(s.lines);
+    return `<div id="${s.id}">\n${heading}\n${body}\n</div>`;
+  });
+
+  return { toc, chapterIds, chapterHtml };
+}
+
 function parseIndonesianBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
   const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
   const chapterMarker = /^\s*@@CHAPTER@@\s*(.+?)\s*$/;
@@ -2427,6 +2957,100 @@ function parseUrduBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; ch
   });
 
   return { toc, chapterIds, chapterHtml };
+}
+
+
+function parseChapterMarkedBook(
+  raw: string,
+  idPrefix: string,
+  normalizeTitleFn?: (s: string) => string,
+): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
+  const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
+  const chapterMarker = /^\s*@@CHAPTER@@\s*(.+?)\s*$/;
+  const normalize =
+    normalizeTitleFn ||
+    ((title: string) =>
+      (title || '')
+        .replace(/^\s*[-:]+\s*/, '')
+        .replace(/\s*[-:]+\s*$/g, '')
+        .replace(/\s*[—–-]\s*/g, ' — ')
+        .replace(/[*]+.*$/u, '')
+        .replace(/\s+/g, ' ')
+        .trim());
+
+  type Section = { id: string; title: string; lines: string[] };
+  const sections: Section[] = [];
+  let current: Section | null = null;
+  let sectionCount = 0;
+
+  const pushCurrent = () => {
+    if (!current) return;
+    sections.push(current);
+    current = null;
+  };
+
+  for (const line of lines) {
+    const trimmed = (line || '').trim();
+    const match = trimmed.match(chapterMarker);
+    if (match) {
+      pushCurrent();
+      sectionCount += 1;
+      current = {
+        id: `${idPrefix}-ch-${sectionCount}`,
+        title: normalize(match[1] || ''),
+        lines: [],
+      };
+      continue;
+    }
+    if (current) current.lines.push(line);
+  }
+  pushCurrent();
+
+  const toParagraphs = (sectionLines: string[]) => {
+    const paras: string[] = [];
+    let buf: string[] = [];
+    const flush = () => {
+      const t = buf.join(' ').replace(/\s+/g, ' ').trim();
+      if (t) paras.push(`<p>${escapeHtml(t)}</p>`);
+      buf = [];
+    };
+    sectionLines.forEach((ln) => {
+      const t = (ln || '').trim();
+      if (!t) flush();
+      else buf.push(t);
+    });
+    flush();
+    return paras.join('\n');
+  };
+
+  const toc: TocEntry[] = sections.map((sec) => ({ title: sec.title, href: `#${sec.id}` }));
+  const chapterIds = sections.map((sec) => sec.id);
+  const chapterHtml = sections.map((sec) => {
+    const heading = `<h2 class="chapterhead">${escapeHtml(sec.title)}</h2>`;
+    const body = toParagraphs(sec.lines);
+    return `<div id="${sec.id}">\n${heading}\n${body}\n</div>`;
+  });
+
+  return { toc, chapterIds, chapterHtml };
+}
+
+function parseMalagasyBook(raw: string) {
+  return parseChapterMarkedBook(raw, 'mg');
+}
+function parseMizoBook(raw: string) {
+  return parseChapterMarkedBook(raw, 'lus');
+}
+function parseHakhaBook(raw: string) {
+  return parseChapterMarkedBook(raw, 'cnh');
+}
+function parseZomiBook(raw: string) {
+  return parseChapterMarkedBook(raw, 'zo');
+}
+function parseNdebeleBook(raw: string) {
+  return parseChapterMarkedBook(raw, 'nd');
+}
+function parseSgawKarenBook(raw: string) {
+  return parseChapterMarkedBook(raw, 'ksw');
 }
 
 export default function BookReader() {
@@ -2579,12 +3203,19 @@ export default function BookReader() {
     return clamped;
   };
 
-  // Handlers for next/prev chapter in the player.
-  // Audio chapter navigation is intentionally independent from reading chapter navigation.
+  // Keep reading chapter in sync when audio chapter changes (player next/prev / continue-play).
+  // Manual reading navigation still leaves audio alone so people can skim without interrupting.
+  const syncReadingToAudioChapter = (idx: number) => {
+    setChapterIdx(idx);
+    setShowOpeningToc(false);
+    scrollToTop();
+  };
+
   const handleNextChapter = (autoPlay = false) => {
     if (audioChapterIdx < toc.length - 1) {
       const nextIdx = getPlayableAudioChapterIndex(audioChapterIdx + 1);
       setAudioChapterIdx(nextIdx);
+      syncReadingToAudioChapter(nextIdx);
       if (autoPlay) setAudioAutoPlayRequest((v) => v + 1);
     }
   };
@@ -2592,6 +3223,7 @@ export default function BookReader() {
     if (audioChapterIdx > 0) {
       const prevIdx = getPlayableAudioChapterIndex(audioChapterIdx - 1);
       setAudioChapterIdx(prevIdx);
+      syncReadingToAudioChapter(prevIdx);
       if (autoPlay) setAudioAutoPlayRequest((v) => v + 1);
     }
   };
@@ -2947,12 +3579,14 @@ export default function BookReader() {
     }
   }, [isDark]);
 
-  // Handle RTL for Arabic and other RTL languages
+  // Handle RTL for Arabic, Hebrew, and other RTL languages
   useEffect(() => {
     const isArabic = lang && lang.toLowerCase().includes('alsra');
     const isFarsi = lang === FARSI_FOLDER;
+    const isDari = lang === DARI_FOLDER;
     const isUrdu = lang === URDU_FOLDER;
-    const isRTL = isArabic || isFarsi || isUrdu;
+    const isHebrew = lang === HEBREW_FOLDER;
+    const isRTL = isArabic || isFarsi || isDari || isUrdu || isHebrew;
     document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
   }, [lang]);
 
@@ -3421,7 +4055,7 @@ export default function BookReader() {
       return;
     }
 
-    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === KOREAN_FOLDER || lang === JAPANESE_FOLDER || lang === SERBIAN_FOLDER || lang === FARSI_FOLDER || lang === AFRIKAANS_FOLDER || lang === HINDI_FOLDER || lang === BENGALI_FOLDER || lang === INDONESIAN_FOLDER || lang === MALAY_FOLDER || lang === URDU_FOLDER || lang === ALBANIAN_FOLDER) {
+    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === KOREAN_FOLDER || lang === JAPANESE_FOLDER || lang === SERBIAN_FOLDER || lang === FARSI_FOLDER || lang === DARI_FOLDER || lang === AFRIKAANS_FOLDER || lang === HINDI_FOLDER || lang === BENGALI_FOLDER || lang === MALAYALAM_FOLDER || lang === HEBREW_FOLDER || lang === TURKISH_FOLDER || lang === INDONESIAN_FOLDER || lang === MALAY_FOLDER || lang === URDU_FOLDER || lang === MALAGASY_FOLDER || lang === MIZO_FOLDER || lang === HAKHA_FOLDER || lang === ZOMI_FOLDER || lang === NDEBELE_FOLDER || lang === SGAW_KAREN_FOLDER || lang === ALBANIAN_FOLDER) {
       const sourcePath =
         lang === AMHARIC_FOLDER
           ? AMHARIC_SOURCE_PATH
@@ -3435,12 +4069,20 @@ export default function BookReader() {
               ? SERBIAN_SOURCE_PATH
               : lang === FARSI_FOLDER
                 ? FARSI_SOURCE_PATH
+              : lang === DARI_FOLDER
+                ? DARI_SOURCE_PATH
                 : lang === AFRIKAANS_FOLDER
                   ? AFRIKAANS_SOURCE_PATH
                   : lang === HINDI_FOLDER
                     ? HINDI_SOURCE_PATH
                     : lang === BENGALI_FOLDER
                       ? BENGALI_SOURCE_PATH
+                      : lang === MALAYALAM_FOLDER
+                        ? MALAYALAM_SOURCE_PATH
+                      : lang === HEBREW_FOLDER
+                        ? HEBREW_SOURCE_PATH
+                      : lang === TURKISH_FOLDER
+                        ? TURKISH_SOURCE_PATH
                       : lang === INDONESIAN_FOLDER
                         ? INDONESIAN_SOURCE_PATH
                         : lang === MALAY_FOLDER
@@ -3467,19 +4109,39 @@ export default function BookReader() {
                   ? parseSerbianBook(raw)
                   : lang === FARSI_FOLDER
                     ? parseFarsiBook(raw)
+                  : lang === DARI_FOLDER
+                    ? parseDariBook(raw)
                     : lang === AFRIKAANS_FOLDER
                       ? parseAfrikaansBook(raw)
                       : lang === HINDI_FOLDER
                         ? parseHindiBook(raw)
                         : lang === BENGALI_FOLDER
                           ? parseBengaliBook(raw)
+                          : lang === MALAYALAM_FOLDER
+                            ? parseMalayalamBook(raw)
+                          : lang === HEBREW_FOLDER
+                            ? parseHebrewBook(raw)
+                          : lang === TURKISH_FOLDER
+                            ? parseTurkishBook(raw)
                           : lang === INDONESIAN_FOLDER
                             ? parseIndonesianBook(raw)
                             : lang === MALAY_FOLDER
                               ? parseIndonesianBook(raw)
                             : lang === URDU_FOLDER
                               ? parseUrduBook(raw)
-                              : parseIndonesianBook(raw);
+                              : lang === MALAGASY_FOLDER
+                                ? parseMalagasyBook(raw)
+                                : lang === MIZO_FOLDER
+                                  ? parseMizoBook(raw)
+                                  : lang === HAKHA_FOLDER
+                                    ? parseHakhaBook(raw)
+                                    : lang === ZOMI_FOLDER
+                                      ? parseZomiBook(raw)
+                                      : lang === NDEBELE_FOLDER
+                                        ? parseNdebeleBook(raw)
+                                        : lang === SGAW_KAREN_FOLDER
+                                          ? parseSgawKarenBook(raw)
+                                          : parseIndonesianBook(raw);
           setToc(parsed.toc);
           setChapterIds(parsed.chapterIds);
           setBookDoc(null);
@@ -4423,7 +5085,7 @@ export default function BookReader() {
   const nowPlayingAudioLabel = 'Now playing audio chapter';
   const selectedAudioLabel = 'Audio chapter selected';
   const developerCredit = getDeveloperCreditText(lang);
-  const isRtl = (lang || '').toLowerCase().includes('alsra') || lang === FARSI_FOLDER || lang === URDU_FOLDER;
+  const isRtl = (lang || '').toLowerCase().includes('alsra') || lang === FARSI_FOLDER || lang === DARI_FOLDER || lang === URDU_FOLDER || lang === HEBREW_FOLDER;
 
   const languageMenuFolders = useMemo(() => {
     const englishFolder = 'The Great Controversy - Ellen G. White 2';
@@ -4457,6 +5119,7 @@ export default function BookReader() {
   const openChapterAudioFromToc = (idx: number) => {
     const playableIdx = getPlayableAudioChapterIndex(idx);
     setAudioChapterIdx(playableIdx);
+    syncReadingToAudioChapter(playableIdx);
     setAudioUserExpanded(false);
     setAudioMinimized(true);
     setAudioHidden(false);

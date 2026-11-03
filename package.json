@@ -11,21 +11,29 @@
     "preview": "vite preview",
     "extract:sr": "node scripts/extract_serbian.js",
     "extract:fa": "node scripts/extract_farsi.js",
+    "extract:prs": "node scripts/extract_dari.js",
     "extract:af": "node scripts/extract_afrikaans.js",
     "extract:hi": "node scripts/extract_hindi.js",
     "extract:bn": "node scripts/extract_bengali.js",
+    "extract:ml": "node scripts/extract_malayalam.js",
+    "extract:he": "node scripts/extract_hebrew.js",
+    "extract:tr": "node scripts/extract_turkish.js",
     "extract:id": "node scripts/extract_indonesian.js",
     "extract:fr": "node scripts/extract_french.js",
-    "extract:all": "npm run extract:sr && npm run extract:fa && npm run extract:af && npm run extract:hi && npm run extract:bn && npm run extract:id && npm run extract:fr",
+    "extract:all": "npm run extract:sr && npm run extract:fa && npm run extract:prs && npm run extract:af && npm run extract:hi && npm run extract:bn && npm run extract:ml && npm run extract:he && npm run extract:tr && npm run extract:id && npm run extract:fr && npm run extract:mg-lus-cnh-zo-nd-ksw",
     "extract:all:parallel": "node scripts/extract_all_parallel.js",
     "extract:all:parallel:2": "EXTRACT_MAX_CONCURRENCY=2 node scripts/extract_all_parallel.js",
     "extract:all:parallel:4": "EXTRACT_MAX_CONCURRENCY=4 node scripts/extract_all_parallel.js",
     "extract:all:parallel:6": "EXTRACT_MAX_CONCURRENCY=6 node scripts/extract_all_parallel.js",
-    "og:generate": "node scripts/generate_og_assets.js"
+    "og:generate": "node scripts/generate_og_assets.js",
+    "extract:mg-lus-cnh-zo-nd-ksw": "node scripts/extract_batch_mg_lus_cnh_zo_nd_ksw.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
   "type": "commonjs",
   "dependencies": {
     "@vercel/analytics": "^1.6.1",
