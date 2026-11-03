@@ -1036,25 +1036,41 @@ html[data-theme='dark'] .reader-book-html .audio-sync-active{
   font-style:italic;
 }
 
-/* Script-aware stacks (system fallbacks keep offline weight low) */
+/* Script-aware stacks — webfonts loaded on demand in BookReader.tsx */
 .reader-root[data-script='arabic'] .reader-book-html,
-.reader-root[data-script='hebrew'] .reader-book-html{
-  font-family:'Noto Naskh Arabic','Noto Serif Hebrew',var(--font-body);
+.reader-root[data-script='arabic'] .reader-book-html .chapterhead{
+  font-family:'Noto Naskh Arabic','Scheherazade New','Traditional Arabic','Geeza Pro',serif;
   line-height:1.75;
   letter-spacing:0;
 }
-.reader-root[data-script='cjk'] .reader-book-html{
-  font-family:'Source Han Serif','Noto Serif CJK','Songti SC','Hiragino Mincho ProN','Yu Mincho',serif;
+.reader-root[data-script='hebrew'] .reader-book-html,
+.reader-root[data-script='hebrew'] .reader-book-html .chapterhead{
+  font-family:'Noto Serif Hebrew','Frank Ruhl Libre','Times New Roman',serif;
+  line-height:1.75;
+  letter-spacing:0;
+}
+.reader-root[data-script='cjk'] .reader-book-html,
+.reader-root[data-script='cjk'] .reader-book-html .chapterhead{
+  /* CJK webfonts are huge; prefer high-quality system serifs */
+  font-family:'Source Han Serif','Noto Serif CJK','Songti SC','Hiragino Mincho ProN','Yu Mincho','Apple SD Gothic Neo','Nanum Myeongjo',serif;
   line-height:1.85;
   letter-spacing:0.02em;
 }
-.reader-root[data-script='indic'] .reader-book-html{
+.reader-root[data-script='indic'] .reader-book-html,
+.reader-root[data-script='indic'] .reader-book-html .chapterhead{
   font-family:'Noto Serif Devanagari','Noto Serif Malayalam','Noto Serif Bengali',var(--font-body);
   line-height:1.8;
 }
-.reader-root[data-script='myanmar'] .reader-book-html{
-  font-family:'Noto Sans Myanmar','Myanmar Text',var(--font-body);
+.reader-root[data-script='myanmar'] .reader-book-html,
+.reader-root[data-script='myanmar'] .reader-book-html .chapterhead{
+  font-family:'Noto Sans Myanmar','Myanmar Text','Padauk',sans-serif;
   line-height:1.9;
+}
+.reader-root[data-script='ethiopic'] .reader-book-html,
+.reader-root[data-script='ethiopic'] .reader-book-html .chapterhead{
+  font-family:'Noto Serif Ethiopic','Abyssinica SIL','Nyala',serif;
+  line-height:1.85;
+  letter-spacing:0;
 }
 
 /* Chapter heading: small number above the visible title */

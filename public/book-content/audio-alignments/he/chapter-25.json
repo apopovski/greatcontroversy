@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 25,
+  "title": "פרק כ״ד — בקודש הקודשים",
+  "duration": 1624.955,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-24%20-%20%D7%91%D7%A7%D7%95%D7%93%D7%A9%20%D7%94%D7%A7%D7%95%D7%93%D7%A9%D7%99%D7%9D.mp3",
+  "cues": [
+    {
+      "id": "gc-p-26-1",
+      "start": 64.998,
+      "end": 133.555,
+      "chars": 586
+    },
+    {
+      "id": "gc-p-26-2",
+      "start": 133.555,
+      "end": 254.757,
+      "chars": 1036
+    },
+    {
+      "id": "gc-p-26-3",
+      "start": 254.757,
+      "end": 1624.955,
+      "chars": 11712
+    },
+    {
+      "id": "gc-p-26-4",
+      "start": 1624.955,
+      "end": 1624.955,
+      "chars": 5
+    }
+  ]
+}

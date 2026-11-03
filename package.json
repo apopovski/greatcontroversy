@@ -27,7 +27,9 @@
     "extract:all:parallel:6": "EXTRACT_MAX_CONCURRENCY=6 node scripts/extract_all_parallel.js",
     "og:generate": "node scripts/generate_og_assets.js",
     "extract:mg-lus-cnh-zo-nd-ksw": "node scripts/extract_batch_mg_lus_cnh_zo_nd_ksw.js",
-    "align:en": "node scripts/generate_en_audio_alignments.js"
+    "align:en": "node scripts/generate_audio_alignments.js en",
+    "align:lang": "node scripts/generate_audio_alignments.js",
+    "align:priority": "node scripts/generate_audio_alignments.js --txt-priority"
   },
   "keywords": [],
   "author": "",

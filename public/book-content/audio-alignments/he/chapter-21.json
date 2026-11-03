@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 21,
+  "title": "פרק כ — תחייה רוחנית כבירה",
+  "duration": 3382.003,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-20%20-%20%D7%AA%D7%97%D7%99%D7%99%D7%94%20%D7%A8%D7%95%D7%97%D7%A0%D7%99%D7%AA%20%D7%9B%D7%91%D7%99%D7%A8%D7%94.mp3",
+  "cues": [
+    {
+      "id": "gc-p-22-1",
+      "start": 135.28,
+      "end": 228.392,
+      "chars": 833
+    },
+    {
+      "id": "gc-p-22-2",
+      "start": 228.392,
+      "end": 558.921,
+      "chars": 2957
+    },
+    {
+      "id": "gc-p-22-3",
+      "start": 558.921,
+      "end": 630.907,
+      "chars": 644
+    },
+    {
+      "id": "gc-p-22-4",
+      "start": 630.907,
+      "end": 708.146,
+      "chars": 691
+    },
+    {
+      "id": "gc-p-22-5",
+      "start": 708.146,
+      "end": 800.587,
+      "chars": 827
+    },
+    {
+      "id": "gc-p-22-6",
+      "start": 800.587,
+      "end": 836.132,
+      "chars": 318
+    },
+    {
+      "id": "gc-p-22-7",
+      "start": 836.132,
+      "end": 955.4,
+      "chars": 1067
+    },
+    {
+      "id": "gc-p-22-8",
+      "start": 955.4,
+      "end": 1184.323,
+      "chars": 2048
+    },
+    {
+      "id": "gc-p-22-9",
+      "start": 1184.323,
+      "end": 1858.907,
+      "chars": 6035
+    },
+    {
+      "id": "gc-p-22-10",
+      "start": 1858.907,
+      "end": 2728.545,
+      "chars": 7780
+    },
+    {
+      "id": "gc-p-22-11",
+      "start": 2728.545,
+      "end": 3302.305,
+      "chars": 5133
+    },
+    {
+      "id": "gc-p-22-12",
+      "start": 3302.305,
+      "end": 3382.003,
+      "chars": 713
+    },
+    {
+      "id": "gc-p-22-13",
+      "start": 3382.003,
+      "end": 3382.003,
+      "chars": 5
+    }
+  ]
+}

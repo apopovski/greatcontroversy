@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 27,
+  "title": "פרק כ״ו — מלאכת תיקון",
+  "duration": 1644.364,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-26%20-%20%D7%9E%D7%9C%D7%90%D7%9B%D7%AA%20%D7%AA%D7%99%D7%A7%D7%95%D7%9F.mp3",
+  "cues": [
+    {
+      "id": "gc-p-28-1",
+      "start": 65.775,
+      "end": 110.166,
+      "chars": 389
+    },
+    {
+      "id": "gc-p-28-2",
+      "start": 110.166,
+      "end": 243.342,
+      "chars": 1167
+    },
+    {
+      "id": "gc-p-28-3",
+      "start": 243.342,
+      "end": 518.137,
+      "chars": 2408
+    },
+    {
+      "id": "gc-p-28-4",
+      "start": 518.137,
+      "end": 657.703,
+      "chars": 1223
+    },
+    {
+      "id": "gc-p-28-5",
+      "start": 657.703,
+      "end": 893.127,
+      "chars": 2063
+    },
+    {
+      "id": "gc-p-28-6",
+      "start": 893.127,
+      "end": 1528.192,
+      "chars": 5565
+    },
+    {
+      "id": "gc-p-28-7",
+      "start": 1528.192,
+      "end": 1644.364,
+      "chars": 1018
+    },
+    {
+      "id": "gc-p-28-8",
+      "start": 1644.364,
+      "end": 1644.364,
+      "chars": 6
+    }
+  ]
+}

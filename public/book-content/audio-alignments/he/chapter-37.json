@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 37,
+  "title": "פרק ל״ו — הסיבות והתכלית של העימות הממשמש ובא",
+  "duration": 1832.236,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-36%20-%20%D7%94%D7%A1%D7%99%D7%91%D7%95%D7%AA%20%D7%95%D7%94%D7%AA%D7%9B%D7%9C%D7%99%D7%AA%20%D7%A9%D7%9C%20%D7%94%D7%A2%D7%99%D7%9E%D7%95%D7%AA%20%D7%94%D7%9E%D7%9E%D7%A9%D7%9E%D7%A9%20%D7%95%D7%91%D7%90.mp3",
+  "cues": [
+    {
+      "id": "gc-p-38-1",
+      "start": 73.289,
+      "end": 158.388,
+      "chars": 799
+    },
+    {
+      "id": "gc-p-38-2",
+      "start": 158.388,
+      "end": 507.941,
+      "chars": 3282
+    },
+    {
+      "id": "gc-p-38-3",
+      "start": 507.941,
+      "end": 1010.542,
+      "chars": 4719
+    },
+    {
+      "id": "gc-p-38-4",
+      "start": 1010.542,
+      "end": 1632.538,
+      "chars": 5840
+    },
+    {
+      "id": "gc-p-38-5",
+      "start": 1632.538,
+      "end": 1832.236,
+      "chars": 1875
+    },
+    {
+      "id": "gc-p-38-6",
+      "start": 1832.237,
+      "end": 1832.237,
+      "chars": 5
+    }
+  ]
+}

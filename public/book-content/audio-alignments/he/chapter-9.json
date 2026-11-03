@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 9,
+  "title": "פרק ח — לותר לפני המועצה",
+  "duration": 2278.617,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-08%20-%20%D7%A8%D7%A7%20%D7%97%E2%80%94%D7%9C%D7%95%D7%AA%D7%A8%20%D7%9C%D7%A4%D7%A0%D7%99%20%D7%94%D7%9E%D7%95%D7%A2%D7%A6%D7%94.mp3",
+  "cues": [
+    {
+      "id": "gc-p-10-1",
+      "start": 91.145,
+      "end": 428.433,
+      "chars": 5673
+    },
+    {
+      "id": "gc-p-10-2",
+      "start": 428.433,
+      "end": 643.304,
+      "chars": 3614
+    },
+    {
+      "id": "gc-p-10-3",
+      "start": 643.304,
+      "end": 1541.73,
+      "chars": 15111
+    },
+    {
+      "id": "gc-p-10-4",
+      "start": 1541.73,
+      "end": 1618.725,
+      "chars": 1295
+    },
+    {
+      "id": "gc-p-10-5",
+      "start": 1618.725,
+      "end": 1688.347,
+      "chars": 1171
+    },
+    {
+      "id": "gc-p-10-6",
+      "start": 1688.347,
+      "end": 1758.563,
+      "chars": 1181
+    },
+    {
+      "id": "gc-p-10-7",
+      "start": 1758.563,
+      "end": 1993.589,
+      "chars": 3953
+    },
+    {
+      "id": "gc-p-10-8",
+      "start": 1993.589,
+      "end": 2278.617,
+      "chars": 4794
+    },
+    {
+      "id": "gc-p-10-9",
+      "start": 2278.617,
+      "end": 2278.617,
+      "chars": 5
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "lang": "ksw",
+  "chapterIdx": 20,
+  "title": "အဆၢဒိၣ် (၂၁) — တၢ်တတူၢ်လိာ်ဘၣ်တၢ်ဟ့ၣ်ပလီၢ်",
+  "duration": 2557.655,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/ksw/gc/GCsk-21%20-%20%E1%80%90%E1%81%A2%E1%80%BA%E1%80%90%E1%80%90%E1%80%B0%E1%81%A2%E1%80%BA%E1%80%9C%E1%80%AD%E1%80%AC%E1%80%BA%E1%80%98%E1%81%A3%E1%80%BA%E1%80%90%E1%81%A2%E1%80%BA%E1%80%9F%E1%80%B7%E1%81%A3%E1%80%BA%E1%80%95%E1%80%9C%E1%80%AE%E1%81%A2%E1%80%BA.mp3",
+  "cues": [
+    {
+      "id": "gc-p-21-1",
+      "start": 102.306,
+      "end": 497.499,
+      "chars": 690
+    },
+    {
+      "id": "gc-p-21-2",
+      "start": 497.499,
+      "end": 875.509,
+      "chars": 660
+    },
+    {
+      "id": "gc-p-21-3",
+      "start": 875.509,
+      "end": 1526.718,
+      "chars": 1137
+    },
+    {
+      "id": "gc-p-21-4",
+      "start": 1526.718,
+      "end": 1798.198,
+      "chars": 474
+    },
+    {
+      "id": "gc-p-21-5",
+      "start": 1798.198,
+      "end": 2129.243,
+      "chars": 578
+    },
+    {
+      "id": "gc-p-21-6",
+      "start": 2129.243,
+      "end": 2557.655,
+      "chars": 748
+    }
+  ]
+}

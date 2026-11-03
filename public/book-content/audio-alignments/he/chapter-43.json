@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 43,
+  "title": "פרק מ״ב — תום העימות",
+  "duration": 2858.64,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-42%20-%20%D7%AA%D7%95%D7%9D%20%D7%94%D7%A2%D7%99%D7%9E%D7%95%D7%AA.mp3",
+  "cues": [
+    {
+      "id": "gc-p-44-1",
+      "start": 114.346,
+      "end": 182.158,
+      "chars": 616
+    },
+    {
+      "id": "gc-p-44-2",
+      "start": 182.158,
+      "end": 224.98,
+      "chars": 389
+    },
+    {
+      "id": "gc-p-44-3",
+      "start": 224.98,
+      "end": 271.986,
+      "chars": 427
+    },
+    {
+      "id": "gc-p-44-4",
+      "start": 271.986,
+      "end": 287.508,
+      "chars": 141
+    },
+    {
+      "id": "gc-p-44-5",
+      "start": 287.508,
+      "end": 441.847,
+      "chars": 1402
+    },
+    {
+      "id": "gc-p-44-6",
+      "start": 441.847,
+      "end": 476.854,
+      "chars": 318
+    },
+    {
+      "id": "gc-p-44-7",
+      "start": 476.854,
+      "end": 1040.376,
+      "chars": 5119
+    },
+    {
+      "id": "gc-p-44-8",
+      "start": 1040.376,
+      "end": 1158.276,
+      "chars": 1071
+    },
+    {
+      "id": "gc-p-44-9",
+      "start": 1158.276,
+      "end": 1975.322,
+      "chars": 7422
+    },
+    {
+      "id": "gc-p-44-10",
+      "start": 1975.322,
+      "end": 2201.766,
+      "chars": 2057
+    },
+    {
+      "id": "gc-p-44-11",
+      "start": 2201.766,
+      "end": 2317.795,
+      "chars": 1054
+    },
+    {
+      "id": "gc-p-44-12",
+      "start": 2317.795,
+      "end": 2416.981,
+      "chars": 901
+    },
+    {
+      "id": "gc-p-44-13",
+      "start": 2416.981,
+      "end": 2688.339,
+      "chars": 2465
+    },
+    {
+      "id": "gc-p-44-14",
+      "start": 2688.339,
+      "end": 2817.578,
+      "chars": 1174
+    },
+    {
+      "id": "gc-p-44-15",
+      "start": 2817.578,
+      "end": 2858.64,
+      "chars": 373
+    }
+  ]
+}

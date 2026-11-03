@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "lang": "ml",
+  "chapterIdx": 32,
+  "title": "അദ്ധ്യായം 31 — ദുരാത്മാക്കളുടെ പ്രവർത്തനസംഘം",
+  "duration": 1052.212,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/malayalam/gc/31%20-%20%E0%B4%A6%E0%B5%81%E0%B4%B0%E0%B4%BE%E0%B4%A4%E0%B5%8D%E0%B4%AE%E0%B4%BE%E0%B4%95%E0%B5%8D%E0%B4%95%E0%B4%B3%E0%B5%81%E0%B4%9F%E0%B5%86%20%E0%B4%AA%E0%B5%8D%E0%B4%B0%E0%B4%B5%E0%B5%BC%E0%B4%A4%E0%B5%8D%E0%B4%A4%E0%B4%A8%E0%B4%B8%E0%B4%82%E0%B4%98%E0%B4%82.mp3",
+  "cues": [
+    {
+      "id": "gc-p-33-1",
+      "start": 42.088,
+      "end": 88.146,
+      "chars": 705
+    },
+    {
+      "id": "gc-p-33-2",
+      "start": 88.146,
+      "end": 125.449,
+      "chars": 571
+    },
+    {
+      "id": "gc-p-33-3",
+      "start": 125.449,
+      "end": 233.7,
+      "chars": 1657
+    },
+    {
+      "id": "gc-p-33-4",
+      "start": 233.7,
+      "end": 304.125,
+      "chars": 1078
+    },
+    {
+      "id": "gc-p-33-5",
+      "start": 304.125,
+      "end": 374.158,
+      "chars": 1072
+    },
+    {
+      "id": "gc-p-33-6",
+      "start": 374.158,
+      "end": 410.939,
+      "chars": 563
+    },
+    {
+      "id": "gc-p-33-7",
+      "start": 410.939,
+      "end": 460.066,
+      "chars": 752
+    },
+    {
+      "id": "gc-p-33-8",
+      "start": 460.066,
+      "end": 534.999,
+      "chars": 1147
+    },
+    {
+      "id": "gc-p-33-9",
+      "start": 534.999,
+      "end": 560.608,
+      "chars": 392
+    },
+    {
+      "id": "gc-p-33-10",
+      "start": 560.608,
+      "end": 622.933,
+      "chars": 954
+    },
+    {
+      "id": "gc-p-33-11",
+      "start": 622.933,
+      "end": 677.679,
+      "chars": 838
+    },
+    {
+      "id": "gc-p-33-12",
+      "start": 677.679,
+      "end": 753.265,
+      "chars": 1157
+    },
+    {
+      "id": "gc-p-33-13",
+      "start": 753.265,
+      "end": 811.8,
+      "chars": 896
+    },
+    {
+      "id": "gc-p-33-14",
+      "start": 811.8,
+      "end": 818.529,
+      "chars": 103
+    },
+    {
+      "id": "gc-p-33-15",
+      "start": 818.529,
+      "end": 847.666,
+      "chars": 446
+    },
+    {
+      "id": "gc-p-33-16",
+      "start": 847.666,
+      "end": 885.688,
+      "chars": 582
+    },
+    {
+      "id": "gc-p-33-17",
+      "start": 885.688,
+      "end": 933.574,
+      "chars": 733
+    },
+    {
+      "id": "gc-p-33-18",
+      "start": 933.574,
+      "end": 976.104,
+      "chars": 651
+    },
+    {
+      "id": "gc-p-33-19",
+      "start": 976.104,
+      "end": 1052.212,
+      "chars": 1165
+    }
+  ]
+}

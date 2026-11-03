@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 8,
+  "title": "פרק ז — הפרדותו של לותר מרומא",
+  "duration": 2812.743,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-07%20-%20%D7%94%D7%A4%D7%A8%D7%93%D7%95%D7%AA%D7%95%20%D7%A9%D7%9C%20%D7%9C%D7%95%D7%AA%D7%A8%20%D7%9E%D7%A8%D7%95%D7%9E%D7%90.mp3",
+  "cues": [
+    {
+      "id": "gc-p-9-1",
+      "start": 112.51,
+      "end": 810.373,
+      "chars": 9563
+    },
+    {
+      "id": "gc-p-9-2",
+      "start": 810.373,
+      "end": 2686.86,
+      "chars": 25714
+    },
+    {
+      "id": "gc-p-9-3",
+      "start": 2686.86,
+      "end": 2774.431,
+      "chars": 1200
+    },
+    {
+      "id": "gc-p-9-4",
+      "start": 2774.431,
+      "end": 2812.743,
+      "chars": 525
+    },
+    {
+      "id": "gc-p-9-5",
+      "start": 2812.743,
+      "end": 2812.743,
+      "chars": 5
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "lang": "ksw",
+  "chapterIdx": 2,
+  "title": "အဆၢဒိၣ် (၃) — တၢ်ဘိ:ကဒါ, ီၢ်တံၢ်, ီၢ်ဘၢတၢ်အမ့ၢ်အတီ",
+  "duration": 1948.642,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/ksw/gc/GCsk-03%20-%20%E1%80%90%E1%81%A2%E1%80%BA%E1%80%98%E1%80%AD%3A%E1%80%80%E1%80%92%E1%80%AB%2C%20%E1%80%AE%E1%81%A2%E1%80%BA%E1%80%90%E1%80%B6%E1%81%A2%E1%80%BA%2C%20%E1%80%AE%E1%81%A2%E1%80%BA%E1%80%98%E1%81%A2%E1%80%90%E1%81%A2%E1%80%BA%E1%80%A1%E1%80%99%E1%80%B7%E1%81%A2%E1%80%BA%E1%80%A1%E1%80%90%E1%80%AE.mp3",
+  "cues": [
+    {
+      "id": "gc-p-3-1",
+      "start": 77.946,
+      "end": 304.101,
+      "chars": 541
+    },
+    {
+      "id": "gc-p-3-2",
+      "start": 304.101,
+      "end": 497.65,
+      "chars": 463
+    },
+    {
+      "id": "gc-p-3-3",
+      "start": 497.65,
+      "end": 766.863,
+      "chars": 644
+    },
+    {
+      "id": "gc-p-3-4",
+      "start": 766.863,
+      "end": 1062.831,
+      "chars": 708
+    },
+    {
+      "id": "gc-p-3-5",
+      "start": 1062.831,
+      "end": 1260.142,
+      "chars": 472
+    },
+    {
+      "id": "gc-p-3-6",
+      "start": 1260.142,
+      "end": 1538.97,
+      "chars": 667
+    },
+    {
+      "id": "gc-p-3-7",
+      "start": 1538.97,
+      "end": 1666.47,
+      "chars": 305
+    },
+    {
+      "id": "gc-p-3-8",
+      "start": 1666.47,
+      "end": 1948.642,
+      "chars": 675
+    }
+  ]
+}

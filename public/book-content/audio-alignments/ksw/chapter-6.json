@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "lang": "ksw",
+  "chapterIdx": 6,
+  "title": "အဆၢဒိၣ် (၇) — လူသၢၣ်ဟ:ဖ:ဒီ:ရိမ့ၤ",
+  "duration": 2882.92,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/ksw/gc/GCsk-07%20-%20%E1%80%9C%E1%80%B0%E1%80%9E%E1%81%A2%E1%81%A3%E1%80%BA%E1%80%9F%3A%E1%80%96%3A%E1%80%92%E1%80%AE%3A%E1%80%9B%E1%80%AD%E1%80%99%E1%80%B7%E1%81%A4.mp3",
+  "cues": [
+    {
+      "id": "gc-p-7-1",
+      "start": 115.317,
+      "end": 475.207,
+      "chars": 355
+    },
+    {
+      "id": "gc-p-7-2",
+      "start": 475.207,
+      "end": 970.942,
+      "chars": 489
+    },
+    {
+      "id": "gc-p-7-3",
+      "start": 970.942,
+      "end": 1644.088,
+      "chars": 664
+    },
+    {
+      "id": "gc-p-7-4",
+      "start": 1644.088,
+      "end": 2073.928,
+      "chars": 424
+    },
+    {
+      "id": "gc-p-7-5",
+      "start": 2073.928,
+      "end": 2227.008,
+      "chars": 151
+    },
+    {
+      "id": "gc-p-7-6",
+      "start": 2227.008,
+      "end": 2882.92,
+      "chars": 647
+    }
+  ]
+}

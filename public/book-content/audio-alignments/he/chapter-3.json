@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 3,
+  "title": "פרק ב — רדיפות",
+  "duration": 1127.766,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-02%20-%20%D7%A8%D7%93%D7%99%D7%A4%D7%95%D7%AA.mp3",
+  "cues": [
+    {
+      "id": "gc-p-4-1",
+      "start": 45.111,
+      "end": 381.769,
+      "chars": 4419
+    },
+    {
+      "id": "gc-p-4-2",
+      "start": 381.769,
+      "end": 504.274,
+      "chars": 1608
+    },
+    {
+      "id": "gc-p-4-3",
+      "start": 504.274,
+      "end": 1078.627,
+      "chars": 7539
+    },
+    {
+      "id": "gc-p-4-4",
+      "start": 1078.627,
+      "end": 1097.673,
+      "chars": 250
+    },
+    {
+      "id": "gc-p-4-5",
+      "start": 1097.673,
+      "end": 1127.766,
+      "chars": 395
+    },
+    {
+      "id": "gc-p-4-6",
+      "start": 1127.766,
+      "end": 1127.766,
+      "chars": 5
+    }
+  ]
+}

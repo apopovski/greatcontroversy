@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 4,
+  "title": "פרק ג — הכפירה",
+  "duration": 1447.897,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-03%20-%20%D7%94%D7%9B%D7%A4%D7%99%D7%A8%D7%94.mp3",
+  "cues": [
+    {
+      "id": "gc-p-5-1",
+      "start": 57.916,
+      "end": 1004.439,
+      "chars": 12608
+    },
+    {
+      "id": "gc-p-5-2",
+      "start": 1004.439,
+      "end": 1322.9,
+      "chars": 4242
+    },
+    {
+      "id": "gc-p-5-3",
+      "start": 1322.9,
+      "end": 1447.897,
+      "chars": 1665
+    },
+    {
+      "id": "gc-p-5-4",
+      "start": 1447.897,
+      "end": 1447.897,
+      "chars": 5
+    }
+  ]
+}

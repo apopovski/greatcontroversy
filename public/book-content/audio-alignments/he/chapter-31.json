@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 31,
+  "title": "פרק ל — איבה בין האדם לשטן",
+  "duration": 1035.371,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-30%20-%20%D7%90%D7%99%D7%91%D7%94%20%D7%91%D7%99%D7%9F%20%D7%94%D7%90%D7%93%D7%9D%20%D7%9C%D7%A9%D7%98%D7%9F.mp3",
+  "cues": [
+    {
+      "id": "gc-p-32-1",
+      "start": 41.415,
+      "end": 142.165,
+      "chars": 878
+    },
+    {
+      "id": "gc-p-32-2",
+      "start": 142.165,
+      "end": 327.255,
+      "chars": 1613
+    },
+    {
+      "id": "gc-p-32-3",
+      "start": 327.255,
+      "end": 603.8,
+      "chars": 2410
+    },
+    {
+      "id": "gc-p-32-4",
+      "start": 603.8,
+      "end": 696.976,
+      "chars": 812
+    },
+    {
+      "id": "gc-p-32-5",
+      "start": 696.976,
+      "end": 788.316,
+      "chars": 796
+    },
+    {
+      "id": "gc-p-32-6",
+      "start": 788.316,
+      "end": 1035.371,
+      "chars": 2153
+    },
+    {
+      "id": "gc-p-32-7",
+      "start": 1035.371,
+      "end": 1035.371,
+      "chars": 5
+    }
+  ]
+}

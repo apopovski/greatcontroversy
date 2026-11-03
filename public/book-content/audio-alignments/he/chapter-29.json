@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 29,
+  "title": "פרק כ״ח — המשפט החוקר",
+  "duration": 2118.774,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-28%20-%20%D7%94%D7%9E%D7%A9%D7%A4%D7%98%20%D7%94%D7%97%D7%95%D7%A7%D7%A8.mp3",
+  "cues": [
+    {
+      "id": "gc-p-30-1",
+      "start": 84.751,
+      "end": 197.081,
+      "chars": 1004
+    },
+    {
+      "id": "gc-p-30-2",
+      "start": 197.081,
+      "end": 214.646,
+      "chars": 157
+    },
+    {
+      "id": "gc-p-30-3",
+      "start": 214.646,
+      "end": 372.513,
+      "chars": 1411
+    },
+    {
+      "id": "gc-p-30-4",
+      "start": 372.513,
+      "end": 2018.191,
+      "chars": 14709
+    },
+    {
+      "id": "gc-p-30-5",
+      "start": 2018.191,
+      "end": 2118.774,
+      "chars": 899
+    },
+    {
+      "id": "gc-p-30-6",
+      "start": 2118.774,
+      "end": 2118.774,
+      "chars": 5
+    }
+  ]
+}

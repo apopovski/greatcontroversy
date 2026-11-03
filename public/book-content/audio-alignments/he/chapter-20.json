@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 20,
+  "title": "פרק י״ט — אור זורח באפלה",
+  "duration": 1954.908,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-19%20-%20%D7%90%D7%95%D7%A8%20%D7%96%D7%95%D7%A8%D7%97%20%D7%91%D7%90%D7%A4%D7%9C%D7%94.mp3",
+  "cues": [
+    {
+      "id": "gc-p-21-1",
+      "start": 78.196,
+      "end": 1184,
+      "chars": 9602
+    },
+    {
+      "id": "gc-p-21-2",
+      "start": 1184,
+      "end": 1276.938,
+      "chars": 807
+    },
+    {
+      "id": "gc-p-21-3",
+      "start": 1276.938,
+      "end": 1315.172,
+      "chars": 332
+    },
+    {
+      "id": "gc-p-21-4",
+      "start": 1315.172,
+      "end": 1435.173,
+      "chars": 1042
+    },
+    {
+      "id": "gc-p-21-5",
+      "start": 1435.173,
+      "end": 1649.378,
+      "chars": 1860
+    },
+    {
+      "id": "gc-p-21-6",
+      "start": 1649.378,
+      "end": 1954.908,
+      "chars": 2653
+    },
+    {
+      "id": "gc-p-21-7",
+      "start": 1954.908,
+      "end": 1954.908,
+      "chars": 5
+    }
+  ]
+}

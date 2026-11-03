@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 22,
+  "title": "פרק כ״א — אזהרה שנדחתה",
+  "duration": 2920.028,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-21%20-%20%D7%90%D7%96%D7%94%D7%A8%D7%94%20%D7%A9%D7%A0%D7%93%D7%97%D7%AA%D7%94.mp3",
+  "cues": [
+    {
+      "id": "gc-p-23-1",
+      "start": 116.801,
+      "end": 277.538,
+      "chars": 1387
+    },
+    {
+      "id": "gc-p-23-2",
+      "start": 277.538,
+      "end": 440.014,
+      "chars": 1402
+    },
+    {
+      "id": "gc-p-23-3",
+      "start": 440.014,
+      "end": 730.778,
+      "chars": 2509
+    },
+    {
+      "id": "gc-p-23-4",
+      "start": 730.778,
+      "end": 1348.348,
+      "chars": 5329
+    },
+    {
+      "id": "gc-p-23-5",
+      "start": 1348.348,
+      "end": 1373.959,
+      "chars": 221
+    },
+    {
+      "id": "gc-p-23-6",
+      "start": 1373.959,
+      "end": 1383.346,
+      "chars": 81
+    },
+    {
+      "id": "gc-p-23-7",
+      "start": 1383.346,
+      "end": 1584.181,
+      "chars": 1733
+    },
+    {
+      "id": "gc-p-23-8",
+      "start": 1584.181,
+      "end": 1706.212,
+      "chars": 1053
+    },
+    {
+      "id": "gc-p-23-9",
+      "start": 1706.212,
+      "end": 2594.149,
+      "chars": 7662
+    },
+    {
+      "id": "gc-p-23-10",
+      "start": 2594.149,
+      "end": 2920.028,
+      "chars": 2812
+    },
+    {
+      "id": "gc-p-23-11",
+      "start": 2920.028,
+      "end": 2920.028,
+      "chars": 5
+    }
+  ]
+}

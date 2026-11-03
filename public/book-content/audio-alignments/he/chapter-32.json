@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 32,
+  "title": "פרק ל״א — חבר רוחות רעות",
+  "duration": 1120.008,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-31%20-%20%D7%97%D7%91%D7%A8%20%D7%A8%D7%95%D7%97%D7%95%D7%AA%20%D7%A8%D7%A2%D7%95%D7%AA.mp3",
+  "cues": [
+    {
+      "id": "gc-p-33-1",
+      "start": 44.8,
+      "end": 110.598,
+      "chars": 604
+    },
+    {
+      "id": "gc-p-33-2",
+      "start": 110.598,
+      "end": 1120.008,
+      "chars": 9266
+    },
+    {
+      "id": "gc-p-33-3",
+      "start": 1120.008,
+      "end": 1120.008,
+      "chars": 5
+    }
+  ]
+}

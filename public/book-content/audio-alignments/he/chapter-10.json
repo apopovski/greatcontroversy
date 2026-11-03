@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 10,
+  "title": "פרק ט — מתקן הדת השוויצרי",
+  "duration": 1680.622,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-09%20-%20%D7%9E%D7%AA%D7%A7%D7%9F%20%D7%94%D7%93%D7%AA%20%D7%94%D7%A9%D7%95%D7%95%D7%99%D7%A6%D7%A8%D7%99.mp3",
+  "cues": [
+    {
+      "id": "gc-p-11-1",
+      "start": 67.225,
+      "end": 348.786,
+      "chars": 3506
+    },
+    {
+      "id": "gc-p-11-2",
+      "start": 348.786,
+      "end": 1565.941,
+      "chars": 15156
+    },
+    {
+      "id": "gc-p-11-3",
+      "start": 1565.941,
+      "end": 1680.622,
+      "chars": 1428
+    },
+    {
+      "id": "gc-p-11-4",
+      "start": 1680.622,
+      "end": 1680.622,
+      "chars": 5
+    }
+  ]
+}

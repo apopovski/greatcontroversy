@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 11,
+  "title": "פרק י — התקדמות הרפורמציה בגרמניה",
+  "duration": 1866.718,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-10%20-%20%D7%94%D7%AA%D7%A7%D7%93%D7%9E%D7%95%D7%AA%20%D7%94%D7%A8%D7%A4%D7%95%D7%A8%D7%9E%D7%A6%D7%99%D7%94%20%D7%91%D7%92%D7%A8%D7%9E%D7%A0%D7%99%D7%94.mp3",
+  "cues": [
+    {
+      "id": "gc-p-12-1",
+      "start": 74.669,
+      "end": 807.135,
+      "chars": 7125
+    },
+    {
+      "id": "gc-p-12-2",
+      "start": 807.135,
+      "end": 867.891,
+      "chars": 591
+    },
+    {
+      "id": "gc-p-12-3",
+      "start": 867.891,
+      "end": 1406.37,
+      "chars": 5238
+    },
+    {
+      "id": "gc-p-12-4",
+      "start": 1406.37,
+      "end": 1866.718,
+      "chars": 4478
+    },
+    {
+      "id": "gc-p-12-5",
+      "start": 1866.718,
+      "end": 1866.718,
+      "chars": 5
+    }
+  ]
+}

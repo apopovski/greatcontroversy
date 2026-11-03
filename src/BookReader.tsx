@@ -3068,8 +3068,8 @@ export default function BookReader() {
     } catch {
       // ignore
     }
-    // Default: English only until cue-based sync lands for other languages.
-    return folder === ENGLISH_FOLDER;
+    // Default on for any language with known chapter audio.
+    return AUDIO_AVAILABLE_LANGUAGE_FOLDERS.has(folder);
   };
 
   const getReaderScriptFamily = (folder: string) => {
@@ -3079,7 +3079,17 @@ export default function BookReader() {
     if (code === 'zh' || code === 'ja' || code === 'ko' || code === 'cn' || code === 'kr') return 'cjk';
     if (code === 'hi' || code === 'bn' || code === 'ml') return 'indic';
     if (code === 'ksw') return 'myanmar';
+    if (code === 'am') return 'ethiopic';
     return 'latin';
+  };
+
+  const getAlignmentLangCode = (folder: string) => {
+    const code = (LANGUAGE_ABBREV[folder] || '').toLowerCase();
+    // Align folder abbreviations with audio-manifest / cue directory codes.
+    if (code === 'es') return 'sp';
+    if (code === 'zh') return 'cn';
+    if (code === 'ko') return 'kr';
+    return code || 'en';
   };
   type ReaderBookmark = { lang: string; chapterIdx: number; ts: number };
   type SearchResult = {
@@ -3349,18 +3359,18 @@ export default function BookReader() {
     setAudioSeekRequest({ token: Date.now(), time: Math.max(0, time) });
   }, []);
 
-  // Load per-chapter cue files when available (English Slice D).
+  // Load per-chapter cue files when present; otherwise approx sync uses live duration.
   useEffect(() => {
     let cancelled = false;
     audioCuesRef.current = null;
     setAudioCues(null);
 
     if (!isApproxAudioSyncEnabled(lang)) return;
-    const code = (LANGUAGE_ABBREV[lang] || '').toLowerCase();
-    if (code !== 'en') return;
+    const code = getAlignmentLangCode(lang);
+    if (!code) return;
 
     const chapterIdxForCues = audioChapterIdx;
-    const url = `/book-content/audio-alignments/en/chapter-${chapterIdxForCues}.json`;
+    const url = `/book-content/audio-alignments/${code}/chapter-${chapterIdxForCues}.json`;
     fetch(url)
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
@@ -3386,6 +3396,39 @@ export default function BookReader() {
       cancelled = true;
     };
   }, [lang, audioChapterIdx]);
+
+  // Load script webfonts only for the active writing system (keeps Latin payload light).
+  useEffect(() => {
+    const script = getReaderScriptFamily(lang);
+    const hrefByScript: Record<string, string> = {
+      arabic:
+        'https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600;700&display=swap',
+      hebrew:
+        'https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@400;600;700&display=swap',
+      indic:
+        'https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400;600;700&family=Noto+Serif+Bengali:wght@400;600;700&family=Noto+Serif+Malayalam:wght@400;600;700&display=swap',
+      myanmar:
+        'https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;600;700&display=swap',
+      ethiopic:
+        'https://fonts.googleapis.com/css2?family=Noto+Serif+Ethiopic:wght@400;600;700&display=swap',
+    };
+    const href = hrefByScript[script];
+    const linkId = 'gc-reader-script-font';
+    const existing = document.getElementById(linkId) as HTMLLinkElement | null;
+    if (!href) {
+      existing?.remove();
+      return;
+    }
+    if (existing) {
+      if (existing.getAttribute('href') !== href) existing.setAttribute('href', href);
+      return;
+    }
+    const link = document.createElement('link');
+    link.id = linkId;
+    link.rel = 'stylesheet';
+    link.href = href;
+    document.head.appendChild(link);
+  }, [lang]);
 
   // Pause auto-follow briefly when the reader scrolls manually.
   useEffect(() => {
@@ -5007,7 +5050,7 @@ export default function BookReader() {
     [htmlWithParagraphIds, lang, chapterIdx, toc]
   );
 
-  // Paragraph sync: prefer cue files, else approximate by text weight (English by default).
+  // Paragraph sync: prefer cue files, else approximate by text weight.
   useEffect(() => {
     if (!isApproxAudioSyncEnabled(lang) || showOpeningToc) {
       clearAudioSyncHighlight();

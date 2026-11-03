@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 24,
+  "title": "פרק כ״ג — סוגיית המקדש",
+  "duration": 2525.683,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-23%20-%20%D7%A1%D7%95%D7%92%D7%99%D7%99%D7%AA%20%D7%94%D7%9E%D7%A7%D7%93%D7%A9.mp3",
+  "cues": [
+    {
+      "id": "gc-p-25-1",
+      "start": 101.027,
+      "end": 514.1,
+      "chars": 3372
+    },
+    {
+      "id": "gc-p-25-2",
+      "start": 514.1,
+      "end": 1879.247,
+      "chars": 11144
+    },
+    {
+      "id": "gc-p-25-3",
+      "start": 1879.247,
+      "end": 1896.397,
+      "chars": 140
+    },
+    {
+      "id": "gc-p-25-4",
+      "start": 1896.397,
+      "end": 1960.22,
+      "chars": 521
+    },
+    {
+      "id": "gc-p-25-5",
+      "start": 1960.22,
+      "end": 2020,
+      "chars": 488
+    },
+    {
+      "id": "gc-p-25-6",
+      "start": 2020,
+      "end": 2525.683,
+      "chars": 4128
+    },
+    {
+      "id": "gc-p-25-7",
+      "start": 2525.683,
+      "end": 2525.683,
+      "chars": 5
+    }
+  ]
+}

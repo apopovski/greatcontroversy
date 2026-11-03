@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "lang": "ksw",
+  "chapterIdx": 12,
+  "title": "အဆၢဒိၣ် (၁၃) — နဲၣ်သလဲၣ်ဒီ:စကဲဒၣ်န့ဘံ, ါ",
+  "duration": 146.054,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/ksw/gc/GCsk-13%20-%20%E1%80%94%E1%80%B2%E1%81%A3%E1%80%BA%E1%80%9E%E1%80%9C%E1%80%B2%E1%81%A3%E1%80%BA%E1%80%92%E1%80%AE%3A%E1%80%85%E1%80%80%E1%80%B2%E1%80%92%E1%81%A3%E1%80%BA%E1%80%94%E1%80%B7%E1%80%98%E1%80%B6%2C%20%E1%80%AB.mp3",
+  "cues": [
+    {
+      "id": "gc-p-13-1",
+      "start": 5.842,
+      "end": 26.356,
+      "chars": 691
+    },
+    {
+      "id": "gc-p-13-2",
+      "start": 26.356,
+      "end": 37.37,
+      "chars": 371
+    },
+    {
+      "id": "gc-p-13-3",
+      "start": 37.37,
+      "end": 46.513,
+      "chars": 308
+    },
+    {
+      "id": "gc-p-13-4",
+      "start": 46.513,
+      "end": 66.047,
+      "chars": 658
+    },
+    {
+      "id": "gc-p-13-5",
+      "start": 66.047,
+      "end": 74.538,
+      "chars": 286
+    },
+    {
+      "id": "gc-p-13-6",
+      "start": 74.538,
+      "end": 88.758,
+      "chars": 479
+    },
+    {
+      "id": "gc-p-13-7",
+      "start": 88.758,
+      "end": 95.2,
+      "chars": 217
+    },
+    {
+      "id": "gc-p-13-8",
+      "start": 95.2,
+      "end": 110.607,
+      "chars": 519
+    },
+    {
+      "id": "gc-p-13-9",
+      "start": 110.607,
+      "end": 124.204,
+      "chars": 458
+    },
+    {
+      "id": "gc-p-13-10",
+      "start": 124.204,
+      "end": 136.999,
+      "chars": 431
+    },
+    {
+      "id": "gc-p-13-11",
+      "start": 136.999,
+      "end": 146.054,
+      "chars": 305
+    }
+  ]
+}

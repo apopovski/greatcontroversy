@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 23,
+  "title": "פרק כ״ב — הנבואות מתגשמות",
+  "duration": 3254.813,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-22%20-%20%D7%94%D7%A0%D7%91%D7%95%D7%90%D7%95%D7%AA%20%D7%9E%D7%AA%D7%92%D7%A9%D7%9E%D7%95%D7%AA.mp3",
+  "cues": [
+    {
+      "id": "gc-p-24-1",
+      "start": 130.193,
+      "end": 736.719,
+      "chars": 5031
+    },
+    {
+      "id": "gc-p-24-2",
+      "start": 736.719,
+      "end": 1172.657,
+      "chars": 3616
+    },
+    {
+      "id": "gc-p-24-3",
+      "start": 1172.657,
+      "end": 1388.214,
+      "chars": 1788
+    },
+    {
+      "id": "gc-p-24-4",
+      "start": 1388.214,
+      "end": 2059.119,
+      "chars": 5565
+    },
+    {
+      "id": "gc-p-24-5",
+      "start": 2059.119,
+      "end": 2708.685,
+      "chars": 5388
+    },
+    {
+      "id": "gc-p-24-6",
+      "start": 2708.685,
+      "end": 2991.273,
+      "chars": 2344
+    },
+    {
+      "id": "gc-p-24-7",
+      "start": 2991.273,
+      "end": 3024.186,
+      "chars": 273
+    },
+    {
+      "id": "gc-p-24-8",
+      "start": 3024.186,
+      "end": 3254.813,
+      "chars": 1913
+    },
+    {
+      "id": "gc-p-24-9",
+      "start": 3254.813,
+      "end": 3254.813,
+      "chars": 5
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "version": 1,
+  "lang": "ml",
+  "chapterIdx": 31,
+  "title": "അദ്ധ്യായം 30 — മനുഷ്യരും സാത്താനും തമ്മിലുള്ള ശത്രുത്വം",
+  "duration": 860.422,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/malayalam/gc/30%20-%20%E0%B4%AE%E0%B4%A8%E0%B5%81%E0%B4%B7%E0%B5%8D%E0%B4%AF%E0%B4%B0%E0%B5%81%E0%B4%82%20%E0%B4%B8%E0%B4%BE%E0%B4%A4%E0%B5%8D%E0%B4%A4%E0%B4%BE%E0%B4%A8%E0%B5%81%E0%B4%82%20%E0%B4%A4%E0%B4%AE%E0%B5%8D%E0%B4%AE%E0%B4%BF%E0%B4%B2%E0%B5%81%E0%B4%B3%E0%B5%8D%E0%B4%B3%20%E0%B4%B6%E0%B4%A4%E0%B5%8D%E0%B4%B0%E0%B5%81%E0%B4%A4%E0%B5%8D%E0%B4%B5%E0%B4%82.mp3",
+  "cues": [
+    {
+      "id": "gc-p-32-1",
+      "start": 34.417,
+      "end": 57.548,
+      "chars": 371
+    },
+    {
+      "id": "gc-p-32-2",
+      "start": 57.548,
+      "end": 107.054,
+      "chars": 794
+    },
+    {
+      "id": "gc-p-32-3",
+      "start": 107.054,
+      "end": 154.564,
+      "chars": 762
+    },
+    {
+      "id": "gc-p-32-4",
+      "start": 154.564,
+      "end": 185.302,
+      "chars": 493
+    },
+    {
+      "id": "gc-p-32-5",
+      "start": 185.302,
+      "end": 227.7,
+      "chars": 680
+    },
+    {
+      "id": "gc-p-32-6",
+      "start": 227.7,
+      "end": 246.28,
+      "chars": 298
+    },
+    {
+      "id": "gc-p-32-7",
+      "start": 246.28,
+      "end": 263.426,
+      "chars": 275
+    },
+    {
+      "id": "gc-p-32-8",
+      "start": 263.426,
+      "end": 272.404,
+      "chars": 144
+    },
+    {
+      "id": "gc-p-32-9",
+      "start": 272.404,
+      "end": 310.874,
+      "chars": 617
+    },
+    {
+      "id": "gc-p-32-10",
+      "start": 310.874,
+      "end": 364.37,
+      "chars": 858
+    },
+    {
+      "id": "gc-p-32-11",
+      "start": 364.37,
+      "end": 414.249,
+      "chars": 800
+    },
+    {
+      "id": "gc-p-32-12",
+      "start": 414.249,
+      "end": 450.848,
+      "chars": 587
+    },
+    {
+      "id": "gc-p-32-13",
+      "start": 450.848,
+      "end": 502.037,
+      "chars": 821
+    },
+    {
+      "id": "gc-p-32-14",
+      "start": 502.037,
+      "end": 574.737,
+      "chars": 1166
+    },
+    {
+      "id": "gc-p-32-15",
+      "start": 574.737,
+      "end": 612.895,
+      "chars": 612
+    },
+    {
+      "id": "gc-p-32-16",
+      "start": 612.895,
+      "end": 652.736,
+      "chars": 639
+    },
+    {
+      "id": "gc-p-32-17",
+      "start": 652.736,
+      "end": 696.193,
+      "chars": 697
+    },
+    {
+      "id": "gc-p-32-18",
+      "start": 696.193,
+      "end": 765.651,
+      "chars": 1114
+    },
+    {
+      "id": "gc-p-32-19",
+      "start": 765.651,
+      "end": 816.029,
+      "chars": 808
+    },
+    {
+      "id": "gc-p-32-20",
+      "start": 816.029,
+      "end": 860.422,
+      "chars": 712
+    }
+  ]
+}

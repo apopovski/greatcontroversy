@@ -1,0 +1,156 @@
+{
+  "version": 1,
+  "lang": "ml",
+  "chapterIdx": 1,
+  "title": "ആമുഖം",
+  "duration": 1082.808,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/malayalam/gc/00%20-%20%E0%B4%86%E0%B4%AE%E0%B5%81%E0%B4%96%E0%B4%82.mp3",
+  "cues": [
+    {
+      "id": "gc-p-2-1",
+      "start": 43.312,
+      "end": 78.349,
+      "chars": 558
+    },
+    {
+      "id": "gc-p-2-2",
+      "start": 78.349,
+      "end": 113.324,
+      "chars": 557
+    },
+    {
+      "id": "gc-p-2-3",
+      "start": 113.324,
+      "end": 150.998,
+      "chars": 600
+    },
+    {
+      "id": "gc-p-2-4",
+      "start": 150.998,
+      "end": 225.656,
+      "chars": 1189
+    },
+    {
+      "id": "gc-p-2-5",
+      "start": 225.656,
+      "end": 270.425,
+      "chars": 713
+    },
+    {
+      "id": "gc-p-2-6",
+      "start": 270.425,
+      "end": 302.323,
+      "chars": 508
+    },
+    {
+      "id": "gc-p-2-7",
+      "start": 302.323,
+      "end": 332.023,
+      "chars": 473
+    },
+    {
+      "id": "gc-p-2-8",
+      "start": 332.023,
+      "end": 363.606,
+      "chars": 503
+    },
+    {
+      "id": "gc-p-2-9",
+      "start": 363.606,
+      "end": 394.06,
+      "chars": 485
+    },
+    {
+      "id": "gc-p-2-10",
+      "start": 394.06,
+      "end": 443.853,
+      "chars": 793
+    },
+    {
+      "id": "gc-p-2-11",
+      "start": 443.853,
+      "end": 495.404,
+      "chars": 821
+    },
+    {
+      "id": "gc-p-2-12",
+      "start": 495.404,
+      "end": 563.217,
+      "chars": 1080
+    },
+    {
+      "id": "gc-p-2-13",
+      "start": 563.217,
+      "end": 612.759,
+      "chars": 789
+    },
+    {
+      "id": "gc-p-2-14",
+      "start": 612.759,
+      "end": 635.929,
+      "chars": 369
+    },
+    {
+      "id": "gc-p-2-15",
+      "start": 635.929,
+      "end": 658.345,
+      "chars": 357
+    },
+    {
+      "id": "gc-p-2-16",
+      "start": 658.345,
+      "end": 748.763,
+      "chars": 1440
+    },
+    {
+      "id": "gc-p-2-17",
+      "start": 748.763,
+      "end": 834.597,
+      "chars": 1367
+    },
+    {
+      "id": "gc-p-2-18",
+      "start": 834.597,
+      "end": 866.746,
+      "chars": 512
+    },
+    {
+      "id": "gc-p-2-19",
+      "start": 866.746,
+      "end": 916.351,
+      "chars": 790
+    },
+    {
+      "id": "gc-p-2-20",
+      "start": 916.351,
+      "end": 938.83,
+      "chars": 358
+    },
+    {
+      "id": "gc-p-2-21",
+      "start": 938.83,
+      "end": 998.229,
+      "chars": 946
+    },
+    {
+      "id": "gc-p-2-22",
+      "start": 998.229,
+      "end": 1029.939,
+      "chars": 505
+    },
+    {
+      "id": "gc-p-2-23",
+      "start": 1029.939,
+      "end": 1082.808,
+      "chars": 842
+    },
+    {
+      "id": "gc-p-2-24",
+      "start": 1082.808,
+      "end": 1082.808,
+      "chars": 14
+    }
+  ]
+}

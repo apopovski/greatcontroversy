@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "lang": "he",
+  "chapterIdx": 14,
+  "title": "פרק י״ג — הרפורמציה בהולנד ובסקנדינביה",
+  "duration": 1159.975,
+  "method": "proportional-v1",
+  "introRatio": 0.04,
+  "sourceAudioUrl": "https://ellenwhiteaudio.org/audio/he/gc/GC-13%20-%20%D7%94%D7%A8%D7%A4%D7%95%D7%A8%D7%9E%D7%A6%D7%99%D7%94%20%D7%91%D7%94%D7%95%D7%9C%D7%A0%D7%93%20%D7%95%D7%91%D7%A1%D7%A7%D7%A0%D7%93%D7%99%D7%A0%D7%91%D7%99%D7%94.mp3",
+  "cues": [
+    {
+      "id": "gc-p-15-1",
+      "start": 46.399,
+      "end": 298.297,
+      "chars": 2612
+    },
+    {
+      "id": "gc-p-15-2",
+      "start": 298.297,
+      "end": 329.06,
+      "chars": 319
+    },
+    {
+      "id": "gc-p-15-3",
+      "start": 329.06,
+      "end": 405.44,
+      "chars": 792
+    },
+    {
+      "id": "gc-p-15-4",
+      "start": 405.44,
+      "end": 554.052,
+      "chars": 1541
+    },
+    {
+      "id": "gc-p-15-5",
+      "start": 554.052,
+      "end": 615.29,
+      "chars": 635
+    },
+    {
+      "id": "gc-p-15-6",
+      "start": 615.29,
+      "end": 696.395,
+      "chars": 841
+    },
+    {
+      "id": "gc-p-15-7",
+      "start": 696.395,
+      "end": 817.04,
+      "chars": 1251
+    },
+    {
+      "id": "gc-p-15-8",
+      "start": 817.04,
+      "end": 1085.139,
+      "chars": 2780
+    },
+    {
+      "id": "gc-p-15-9",
+      "start": 1085.139,
+      "end": 1094.976,
+      "chars": 102
+    },
+    {
+      "id": "gc-p-15-10",
+      "start": 1094.976,
+      "end": 1159.975,
+      "chars": 674
+    },
+    {
+      "id": "gc-p-15-11",
+      "start": 1159.975,
+      "end": 1159.975,
+      "chars": 5
+    }
+  ]
+}
